@@ -1,0 +1,24 @@
+.rdt_TableHeadRow {
+    font-weight: bold;
+  
+  }
+ 
+  .rdt_TableCell div {
+    white-space: normal!important;
+    
+  }
+ .sub.rdt_TableHeadRow
+  {
+    display: none!important;
+  }
+  .rdt_TableHeadName{
+    padding-left: 40px;
+  }
+  .tableChild  {
+
+ 
+   overflow-y: auto!important;
+   max-height: 200px;
+
+  }
+  

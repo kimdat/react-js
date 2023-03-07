@@ -1,0 +1,12 @@
+.inventoriesOnline .inputCheckbox,.inventoriesOnline .filterColumn,.inventoriesOnline .filterComponent
+{
+    display: none;
+    width:0px  !important;
+}
+.inventoriesOnline .rdt_tableHead{
+    padding-left:25px;
+}
+.inventoriesOnline .card-body header
+{
+    display: none;
+}
