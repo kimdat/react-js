@@ -9,6 +9,7 @@
 .subMenuItemList {
     display: flex;
     flex-direction: column;
+    padding: 0;
 }
 
 .subMenuItem {
@@ -20,10 +21,12 @@
         padding: .8rem .8rem;
         width: 100%;
 
+        color: var(--text-secondary);
+
         &:hover,
         &:focus,
         &:active {
-            color: var(--text-primary) !important;
+            color: var(--text-secondary);
             background-color: #F9F9F9;
         }
     }

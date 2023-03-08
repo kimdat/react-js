@@ -240,7 +240,7 @@ const Inventories = React.memo(() => {
   return (
     <LoadingComponent isLoading={isLoading}>
       <MDBContainer fluid>
-        <MDBCard className="bg-white my-5 mx-auto">
+        <MDBCard className="bg-white mt-5 mx-auto" style={{ position: "static" }}>
           <MDBCardBody className="p-5 w-100 d-flex flex-column">
             <div style={{ display: "flex" }}>
               <ModalFileUpload

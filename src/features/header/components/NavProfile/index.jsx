@@ -39,11 +39,11 @@ const NavProfile = (props) => {
                     <h4 className={styles.titleText}>{email}</h4>
                 </div>
                 <button className={styles.button} type="button" title={signOut}>
-                    <a href="">{signOut}</a>
+                    <a href="/">{signOut}</a>
                 </button>
             </div>
             <div className={styles.profileActions}>
-                <a href="">{manageProfile}</a>
+                <a href="/">{manageProfile}</a>
             </div>
         </div>
     );

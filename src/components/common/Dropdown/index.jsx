@@ -3,7 +3,7 @@ import styles from './Dropdown.module.scss';
 import useOutsideClick from '../../../hooks/useOutsideClick';
 
 const Dropdown = (props) => {
-    const { toggle, subMenu } = props;
+    const { toggle, content } = props;
     const [open, setOpen] = React.useState(false);
     const handleClick = (e) => {
         setOpen(!open);
@@ -18,7 +18,7 @@ const Dropdown = (props) => {
                 {toggle}
             </div>
             <div className={styles.dropdownSubMenu} >
-                {subMenu}
+                {content}
             </div>
         </div>
     );

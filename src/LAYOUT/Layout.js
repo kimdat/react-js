@@ -1,5 +1,7 @@
 import Header from '../features/header/components/Header';
 import Footer from '../features/footer/components/Footer';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 function Layout(props) {
   const header = {
     logo: {
@@ -31,21 +33,17 @@ function Layout(props) {
     profile: {
       profileGreeting: (username) => `Xin chào, ${username}`,
       signOut: "Đăng xuất",
-      manageProfile: "Quản lý thông tin tài khoản"
+      manageProfile: "Quản lý thông tin tài khoản",
+      icon: <FontAwesomeIcon icon={faUser}/>
     }
   }
     return (
-      <div>
+      <>
         {/* Include footer or any other common elements */}
-        <div style={{zIndex: '9999!important',}}> 
         <Header {...header} />
-        </div>
-      
-        <div >
-          {props.children}
-        </div>
+        {props.children}
         <Footer/>
-      </div>
+      </>
     );
   }
   

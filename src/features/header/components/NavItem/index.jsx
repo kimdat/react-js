@@ -14,7 +14,7 @@ const NavItem = (props) => {
             {hasSubMenu &&
                 <Dropdown
                     toggle={<NavLink text={text} icon={icon} isToggle />}
-                    subMenu={<SubMenu navigations={navigations} />}
+                    content={<SubMenu navigations={navigations} />}
                 />
             }
         </li>

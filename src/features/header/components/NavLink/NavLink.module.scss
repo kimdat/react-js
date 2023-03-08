@@ -6,6 +6,14 @@
     height: 100%;
     outline-offset: -1px;
     transition: all .2s ease-in-out;
+
+    color: var(--text-primary);
+
+    &:hover,
+    &:focus,
+    &:active {
+        color: var(--bg-secondary);
+    }
 }
 
 .navLinkToggle {
