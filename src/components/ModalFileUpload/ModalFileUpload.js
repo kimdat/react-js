@@ -6,14 +6,15 @@ import Swale from "sweetalert2";
 import { FaPlus } from "react-icons/fa";
 
 import { api } from "../../Interceptor";
+import LoadingComponent from "../LoadingComponent/LoadingComponent";
 
-export const ModalFileUpload = ({ setIsLoading, loadData }) => {
+export const ModalFileUpload = ({ loadData }) => {
   const API_URL = api.defaults.baseURL;
   const [show, setShow] = useState(false);
   const [files, setFiles] = useState([]);
 
   const [importComponent, setImportComponent] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -170,14 +171,9 @@ export const ModalFileUpload = ({ setIsLoading, loadData }) => {
   }, []);
 
   const insertDataUpload = useCallback(
-    async (
-      fileUploadContents,
-      updateDuplicateDevices,
-      pathArray,
-      arrIndexesSuccess
-    ) => {
+    async (fileUploadContents, updateDuplicateDevices, messUpload) => {
       const formData = new FormData();
-
+      //update những thiết bị trùng
       const newUpdateDuplicateDevice = updateDuplicateDevices.reduce(
         (acc, item) => {
           acc[item.index] = item.duplicateNames;
@@ -185,6 +181,7 @@ export const ModalFileUpload = ({ setIsLoading, loadData }) => {
         },
         {}
       );
+      //nội dung file upload
       formData.append("fileUploadContents", JSON.stringify(fileUploadContents));
       if (updateDuplicateDevices.length > 0) {
         formData.append(
@@ -192,28 +189,36 @@ export const ModalFileUpload = ({ setIsLoading, loadData }) => {
           JSON.stringify(newUpdateDuplicateDevice)
         );
       }
-      formData.append("pathArray", JSON.stringify(pathArray));
-      formData.append("arrIndexesSuccess", JSON.stringify(arrIndexesSuccess));
-
+      formData.append("messUpload", JSON.stringify(messUpload));
       try {
         const { data } = await api.post(`${API_URL}insertDataUpload`, formData);
-        console.log(data);
+        //nếu có file bị lỗi
         if (data.Error) {
           const dataErr = data.Error;
-          const fileNames = dataErr.map((err) => {
+          const fileNamesErr = dataErr.map((err) => {
             const index = parseInt(err.FileErrorIndex);
             const file = files[index];
             return file.name;
           });
-          const errorText = `Error when upload files: ${fileNames.join(", ")}`;
-
+          const errorText = `${
+            fileUploadContents.length - fileNamesErr.length
+          } file update success! <br/> ${
+            fileNamesErr.length
+          } file error when upload: ${fileNamesErr.join(", ")}`;
           Swale.fire({
-            icon: "error",
-            text: `${errorText}`,
+            title: "Have file error!",
+            icon: "info",
+            html: `${errorText}`,
           });
-          return false;
+        } else {
+          Swale.fire({
+            icon: "success",
+            text: "import success",
+          });
         }
-        return true;
+        setFiles([]);
+        handleClose(true);
+        loadData();
       } catch (err) {
         console.error(err);
         const message = err?.response?.data?.error ?? err?.error ?? err;
@@ -221,11 +226,9 @@ export const ModalFileUpload = ({ setIsLoading, loadData }) => {
           icon: "error",
           text: `Error insertDataUpload ${message}`,
         });
-        setIsLoading(false);
-        return false;
       }
     },
-    [API_URL, files, setIsLoading]
+    [API_URL, files, loadData]
   );
   const MAX_FILES_PER_REQUEST = 20;
   const uploadFile = useCallback(
@@ -235,13 +238,13 @@ export const ModalFileUpload = ({ setIsLoading, loadData }) => {
         handleClose();
         return;
       }
-      setIsLoading(true);
       try {
+        setIsLoading(true);
         const formData = new FormData(); // Tạo ra một instance mới của FormData
         const numRequests = Math.ceil(
           filesParam.length / MAX_FILES_PER_REQUEST
         );
-        const responseArray = [];
+        const promises = [];
         for (let i = 0; i < numRequests; i++) {
           formData.delete("files[]"); // Xóa giá trị của "files[]" trước đó trong FormData
           const start = i * MAX_FILES_PER_REQUEST;
@@ -249,37 +252,29 @@ export const ModalFileUpload = ({ setIsLoading, loadData }) => {
           for (let j = start; j < end && j < filesParam.length; j++) {
             formData.append("files[]", filesParam[j]);
           }
-          const response = await api.post(`${API_URL}fileupload`, formData);
-          responseArray.push({ index: i, data: response.data });
+          promises.push(api.post(`${API_URL}fileupload`, formData));
         }
-        //những file upload thành công
-        let arrIndexesSuccess = [];
-        const pathArray = responseArray
+        const responseArray = await Promise.all(
+          promises.map((p) => p.catch((error) => ({ error })))
+        );
+        //gộp tất cả reponse lại khi upload file
+        const messUpload = responseArray
           .map((response, index) => {
             const data = response.data;
-            const indexesSuccces = data
-              .map((item) => index * MAX_FILES_PER_REQUEST + item.indexSuccess)
-              .filter((item) => !isNaN(item));
-            arrIndexesSuccess = arrIndexesSuccess.concat(indexesSuccces);
-            return data;
+            return data
+              .map((item) => ({
+                ...item,
+                indexPath: index * MAX_FILES_PER_REQUEST + item.indexPath,
+              }))
+              .filter((item) => !isNaN(item.indexPath));
           })
           .flat();
-
-        const flagInsertData = await insertDataUpload(
+        //insert data sau khi upload
+        await insertDataUpload(
           fileUploadContents,
           updateDuplicateDevices,
-          pathArray,
-          arrIndexesSuccess
+          messUpload
         );
-        //nếu insert false thì return
-        if (!flagInsertData) return;
-        setFiles([]);
-        Swale.fire({
-          icon: "success",
-          text: "import success",
-        });
-        handleClose(true);
-        loadData();
         setIsLoading(false);
         return;
       } catch (err) {
@@ -293,7 +288,7 @@ export const ModalFileUpload = ({ setIsLoading, loadData }) => {
         return;
       }
     },
-    [loadData, API_URL, insertDataUpload, setIsLoading]
+    [API_URL, insertDataUpload, setIsLoading]
   );
   const doImport = useCallback(
     async (fileUploadContents, filesParam) => {
@@ -390,14 +385,6 @@ export const ModalFileUpload = ({ setIsLoading, loadData }) => {
       return;
     }
     try {
-      /*const results = await Promise.allSettled(files.map(file => readFileUpload(file)));
-                const filesDataNameToImport = results.map((result, index) => {
-                if (result.status === 'fulfilled') {
-                return { data: result.value, file: files[index] };
-                } else {
-                return { error: result.reason, file: files[index] };
-                }
-                });*/
       const filesDataNameToImport = await Promise.all(
         files.map((file, index) => {
           return readFileUpload(file)
@@ -499,26 +486,28 @@ export const ModalFileUpload = ({ setIsLoading, loadData }) => {
           <FaPlus />
         </div>
       </Button>
-      <Modal show={show} onHide={handleClose} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Import file</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {show && (
-            <React.Suspense fallback={<div>Loading...</div>}>
-              {importComponent}
-            </React.Suspense>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={importFile}>
-            Import
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <LoadingComponent isLoading={isLoading}>
+        <Modal show={show} onHide={handleClose} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Import file</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {show && (
+              <React.Suspense fallback={<div>Loading...</div>}>
+                {importComponent}
+              </React.Suspense>
+            )}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={importFile}>
+              Import
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </LoadingComponent>
     </div>
   );
 };
