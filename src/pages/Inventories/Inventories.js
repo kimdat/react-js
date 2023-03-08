@@ -4,7 +4,7 @@ import Swale from "sweetalert2";
 import { api } from "../../Interceptor";
 
 import { MDBContainer } from "mdb-react-ui-kit";
-import { ModalFileUpload } from "./../../components/ModalFileUpload/ModalFileUpload";
+import { ModalFileUpload } from "../../components/ModalFileUpload/ModalFileUpload";
 import { MDBCard } from "mdb-react-ui-kit";
 import { MDBCardBody } from "mdb-react-ui-kit";
 import ExportExcel from "./../../components/ExportExcel/ExportExcel";
@@ -238,25 +238,22 @@ const Inventories = React.memo(() => {
   );
 
   return (
-    <LoadingComponent isLoading={isLoading}>
-      <MDBContainer fluid>
-        <MDBCard className="bg-white my-5 mx-auto">
-          <MDBCardBody className="p-5 w-100 d-flex flex-column">
-            <div style={{ display: "flex" }}>
-              <ModalFileUpload
-                setIsLoading={setIsLoading}
-                loadData={loadData}
-              />
-              <ExportExcel row={dataFilterNotPag} setIsLoading={setIsLoading} />
-              <DeleteRow
-                setIsLoading={setIsLoading}
-                loadData={loadData}
-                data={searchApiData}
-                rowsId={checkedRows}
-                setSearchApiData={setSearchApiData}
-                setCheckedRows={setCheckedRows}
-              />
-            </div>
+    <MDBContainer fluid>
+      <MDBCard className="bg-white my-5 mx-auto" style={{ position: "static" }}>
+        <MDBCardBody className="p-5 w-100 d-flex flex-column">
+          <div style={{ display: "flex" }}>
+            <ModalFileUpload loadData={loadData} />
+            <ExportExcel row={dataFilterNotPag} setIsLoading={setIsLoading} />
+            <DeleteRow
+              setIsLoading={setIsLoading}
+              loadData={loadData}
+              data={searchApiData}
+              rowsId={checkedRows}
+              setSearchApiData={setSearchApiData}
+              setCheckedRows={setCheckedRows}
+            />
+          </div>
+          <LoadingComponent isLoading={isLoading}>
             <InventoriesComponent
               handleFilterColumn={handleFilterColumn}
               handleFilter={handleFilter}
@@ -279,10 +276,10 @@ const Inventories = React.memo(() => {
               rowExpand={rowExpand}
               setRowExpand={setRowExpand}
             />
-          </MDBCardBody>
-        </MDBCard>
-      </MDBContainer>
-    </LoadingComponent>
+          </LoadingComponent>
+        </MDBCardBody>
+      </MDBCard>
+    </MDBContainer>
   );
 });
 export default Inventories;
