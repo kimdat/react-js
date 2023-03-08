@@ -39,7 +39,7 @@ const NavProfile = (props) => {
                     <h4 className={styles.titleText}>{email}</h4>
                 </div>
                 <button className={styles.button} type="button" title={signOut}>
-                    <a href="/">{signOut}</a>
+                    <a href="/logout">{signOut}</a>
                 </button>
             </div>
             <div className={styles.profileActions}>
