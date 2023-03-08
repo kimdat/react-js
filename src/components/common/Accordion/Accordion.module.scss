@@ -1,0 +1,59 @@
+.accordion {
+    user-select: none;
+
+    &[data-open="false"] {
+        .iconSubMenu {
+            &:after {
+                transform: rotate(-0.25turn);
+            }
+        }
+
+        .accordionHeader {
+            background-color: transparent;
+        }
+
+        .accordionBody {
+            height: 0;
+            visibility: hidden;
+        }
+    }
+
+    &[data-open="true"] {
+
+        .accordionHeader {
+            background-color: rgba(0, 0, 0, .04);
+        }
+
+        .accordionBody {
+            height: auto;
+            visibility: visible;
+        }
+    }
+}
+
+.accordionHeader {
+    position: relative;
+}
+
+.iconSubMenu {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50px;
+    height: 50px;
+    border-left: 1px solid rgba(129, 129, 129, .2);
+    color: #2d2a2a;
+    text-align: center;
+    line-height: 50px;
+    cursor: pointer;
+    transition: background-color .25s ease, color .25s ease;
+    backface-visibility: hidden;
+
+    &:after {
+        display: inline-block;
+        font-weight: 700;
+        font-size: 17px;
+        transition: transform .25s ease;
+        content: "\23F7";
+    }
+}

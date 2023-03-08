@@ -1,0 +1,11 @@
+.sideNavList {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+
+    a:hover,
+    a:focus {
+        color: var(--text-primary);
+    }
+}

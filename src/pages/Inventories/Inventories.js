@@ -238,6 +238,7 @@ const Inventories = React.memo(() => {
   );
 
   return (
+<<<<<<< HEAD
     <MDBContainer fluid>
       <MDBCard className="bg-white my-5 mx-auto" style={{ position: "static" }}>
         <MDBCardBody className="p-5 w-100 d-flex flex-column">
@@ -254,6 +255,27 @@ const Inventories = React.memo(() => {
             />
           </div>
           <LoadingComponent isLoading={isLoading}>
+=======
+    <LoadingComponent isLoading={isLoading}>
+      <MDBContainer fluid>
+        <MDBCard className="bg-white mt-5 mx-auto" style={{ position: "static" }}>
+          <MDBCardBody className="p-5 w-100 d-flex flex-column">
+            <div style={{ display: "flex" }}>
+              <ModalFileUpload
+                setIsLoading={setIsLoading}
+                loadData={loadData}
+              />
+              <ExportExcel row={dataFilterNotPag} setIsLoading={setIsLoading} />
+              <DeleteRow
+                setIsLoading={setIsLoading}
+                loadData={loadData}
+                data={searchApiData}
+                rowsId={checkedRows}
+                setSearchApiData={setSearchApiData}
+                setCheckedRows={setCheckedRows}
+              />
+            </div>
+>>>>>>> 6fa9c238bb54277762e99fd5b0382e3dc0809145
             <InventoriesComponent
               handleFilterColumn={handleFilterColumn}
               handleFilter={handleFilter}

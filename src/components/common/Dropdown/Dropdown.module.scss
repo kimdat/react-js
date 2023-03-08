@@ -1,0 +1,38 @@
+.dropdownWrapper {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+
+  &[data-open="true"],
+  &:hover {
+    .dropdownSubMenu {
+      visibility: visible;
+      opacity: 1;
+      transform: translateY(0px);
+    }
+  }
+
+  &[data-open="false"] {
+    .dropdownSubMenu {
+      visibility: hidden;
+      opacity: 0;
+      transform: translateY(15px);
+    }
+  }
+}
+
+.dropdownToggle {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.dropdownSubMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: .08rem;
+  transition: opacity .2s ease, visibility .2s ease, transform .2s ease;
+}

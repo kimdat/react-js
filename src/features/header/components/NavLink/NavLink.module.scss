@@ -1,0 +1,36 @@
+.navLink {
+    font-family: Arial, Helvetica, sans-serif;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    outline-offset: -1px;
+    transition: all .2s ease-in-out;
+
+    color: var(--text-primary);
+
+    &:hover,
+    &:focus,
+    &:active {
+        color: var(--bg-secondary);
+    }
+}
+
+.navLinkToggle {
+    &:after {
+        margin-left: 5px;
+        color: rgba(82, 82, 82, .45);
+        font-weight: 600;
+        font-style: normal;
+        content: "\23F7";
+    }
+}
+
+.navLinkText {
+    font-family: inherit;
+    font-size: .7rem;
+}
+
+.navLinkIcon {
+    margin-right: .5rem;
+}

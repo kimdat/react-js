@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Login } from "./pages/Login/Login";
+import LogoutPage from "./pages/Logout";
 import Inventories from "./pages/Inventories/Inventories";
 import Layout from "./LAYOUT/Layout.js";
 import Inventories1 from "./pages/Inventories1";
@@ -19,14 +20,11 @@ function App() {
       <Router>
         <Routes>
           <Route exact path="/" element={<Login />}></Route>
+          <Route exact path="/logout" element={<LogoutPage />} />
           <Route
             exact
             path="/inventories"
-            element={
-              <Layout>
-                <Inventories />
-              </Layout>
-            }
+            element={<Layout><Inventories /></Layout>}
           ></Route>
           <Route
             exact

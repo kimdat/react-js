@@ -1,0 +1,9 @@
+.navItem {
+    display: flex;
+    align-items: center;
+    padding: 0 .9rem;
+}
+
+.active a {
+    color: var(--secondary-color);
+}
