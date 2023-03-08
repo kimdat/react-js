@@ -1,0 +1,40 @@
+.sideNavItem {
+    font-size: 0.75rem;
+}
+
+.sideNavLink {
+    display: inline-grid;
+    grid-template-columns: 2rem auto;
+
+    width: 100%;
+    padding-top: 5px;
+    padding-right: 20px;
+    padding-bottom: 5px;
+    padding-left: 20px;
+    min-height: 50px;
+    border-bottom: 1px solid rgba(129, 129, 129, .2);
+
+    outline-offset: -3px;
+
+    &:active,
+    &:hover {
+        background-color: rgba(0, 0, 0, .04);
+    }
+}
+
+.sideNavIcon {
+    margin-right: .5rem;
+    display: flex;
+    align-items: center;
+}
+
+
+.sideNavText {
+    display: flex;
+    align-items: center;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: .2px;
+    font-weight: 600;
+    line-height: 1.3;
+}

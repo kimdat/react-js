@@ -1,0 +1,15 @@
+.navLogo {
+    padding: .5rem 0;
+    padding-right: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navLogoLink {
+    display: inline-block;
+
+    img {
+        width: 100px;
+    }
+}

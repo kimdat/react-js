@@ -24,7 +24,10 @@ function App() {
             path="/inventories"
             element={
               <Layout>
+             
                 <Inventories />
+               
+               
               </Layout>
             }
           ></Route>

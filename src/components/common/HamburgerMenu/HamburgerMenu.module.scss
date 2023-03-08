@@ -1,0 +1,77 @@
+.modalOverlay {
+    background-color: rgba(0, 0, 0, .7);
+    position: fixed;
+    inset: 0;
+
+    &[data-state="open"] {
+        animation: hamburgerOverlayShow 250ms ease-in-out;
+    }
+
+    &[data-state="closed"] {
+        animation: hamburgerOverlayHide 250ms ease-in-out;
+    }
+
+    @keyframes hamburgerOverlayShow {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes hamburgerOverlayHide {
+        from {
+            opacity: 1;
+        }
+
+        to {
+            opacity: 0;
+        }
+    }
+}
+
+.modalContent {
+    position: fixed;
+    left: 0px;
+    transform-origin: left top;
+
+    height: 100%;
+    min-width: 18rem;
+    overflow-y: auto;
+
+    background-color: #fff;
+
+    &[data-state="open"] {
+        animation: hamburgerContentShow 250ms ease-in-out;
+    }
+
+    &[data-state="closed"] {
+        animation: hamburgerContentHide 250ms ease-in-out;
+    }
+
+    @keyframes hamburgerContentShow {
+        from {
+            opacity: 0;
+            transform: translateX(-100%);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0px);
+        }
+    }
+
+    @keyframes hamburgerContentHide {
+        from {
+            opacity: 1;
+            transform: translateX(0px);
+        }
+
+        to {
+            opacity: 0;
+            transform: translateX(-100%);
+        }
+    }
+}

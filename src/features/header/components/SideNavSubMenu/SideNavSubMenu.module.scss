@@ -1,0 +1,34 @@
+.sideNavSubMenuList {
+    display: flex;
+    flex-direction: column;
+}
+
+.sideNavSubMenuItem {
+    padding-left: .5rem;
+    font-size: .825em;
+
+    &:active,
+    &:hover,
+    &:focus a {
+        background-color: rgba(0, 0, 0, .04);
+    }
+}
+
+.sideNavSubMenuLink {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding-top: 5px;
+    padding-right: 20px;
+    padding-bottom: 5px;
+    padding-left: 20px;
+    min-height: 50px;
+    border-bottom: 1px solid rgba(129, 129, 129, .2);
+
+    color: var(--text-secondary) !important;
+    text-transform: none !important;
+}
+
+.sideNavSubMenuIcon {
+    margin-right: .5rem;
+}
