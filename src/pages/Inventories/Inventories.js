@@ -79,6 +79,7 @@ const Inventories = React.memo(() => {
   const loadData = useCallback(async () => {
     try {
       const { data } = await api.get(API_URL + "devices");
+      console.log(data);
       setCurrentPage(1);
       setRowsPerPage(10);
       setRowExpand([]);
@@ -179,6 +180,8 @@ const Inventories = React.memo(() => {
       }
       //data
       updateState(data.total_records, data.searchapidata, data.devices);
+      setCurrentPage(page);
+      setRowsPerPage(rowsPerPage);
     },
     [apiFilterData, updateState]
   );
@@ -191,15 +194,12 @@ const Inventories = React.memo(() => {
         rowsPerPage,
         !isExpandedAll
       );
-      setCurrentPage(page);
     },
     [dataFilter, rowsPerPage, isExpandedAll]
   );
 
   const handleRowsPerPageChange = useCallback(
     (newRowsPerPage) => {
-      console.log(isExpandedAll);
-      setRowsPerPage(newRowsPerPage);
       dataFilter(
         filterTextRef.current,
         inputRef.current,
@@ -244,14 +244,7 @@ const Inventories = React.memo(() => {
           <div style={{ display: "flex" }}>
             <ModalFileUpload loadData={loadData} />
             <ExportExcel row={dataFilterNotPag} setIsLoading={setIsLoading} />
-            <DeleteRow
-              setIsLoading={setIsLoading}
-              loadData={loadData}
-              data={searchApiData}
-              rowsId={checkedRows}
-              setSearchApiData={setSearchApiData}
-              setCheckedRows={setCheckedRows}
-            />
+            <DeleteRow loadData={loadData} rowsId={checkedRows} />
           </div>
           <LoadingComponent isLoading={isLoading}>
             <InventoriesComponent
