@@ -4,7 +4,7 @@ import Swale from "sweetalert2";
 import { api } from "../../Interceptor";
 
 import { MDBContainer } from "mdb-react-ui-kit";
-import { ModalFileUpload } from "../../components/ModalFileUpload/ModalFileUpload";
+import { ModalFileUpload } from "./../../components/ModalFileUpload/ModalFileUpload";
 import { MDBCard } from "mdb-react-ui-kit";
 import { MDBCardBody } from "mdb-react-ui-kit";
 import ExportExcel from "./../../components/ExportExcel/ExportExcel";
@@ -12,7 +12,6 @@ import DeleteRow from "./../../components/DeleteRow/deleteRow";
 import LoadingComponent from "../../components/LoadingComponent/LoadingComponent";
 import InventoriesComponent from "./../../components/InventoriesComponent/InventoriesComponent";
 const API_URL = api.defaults.baseURL;
-
 const Inventories = React.memo(() => {
   const [searchApiData, setSearchApiData] = useState([]);
   const [isExpandedAll, setIsExpandedAll] = useState([]);
@@ -80,7 +79,6 @@ const Inventories = React.memo(() => {
   const loadData = useCallback(async () => {
     try {
       const { data } = await api.get(API_URL + "devices");
-      console.log(data);
       setCurrentPage(1);
       setRowsPerPage(10);
       setRowExpand([]);
@@ -89,7 +87,7 @@ const Inventories = React.memo(() => {
       swaleError(err, "loadData() ");
     }
   }, [swaleError, updateState]);
-
+  console.log("inven");
   useEffect(() => {
     loadData();
   }, [loadData]);
@@ -181,8 +179,6 @@ const Inventories = React.memo(() => {
       }
       //data
       updateState(data.total_records, data.searchapidata, data.devices);
-      setCurrentPage(page);
-      setRowsPerPage(rowsPerPage);
     },
     [apiFilterData, updateState]
   );
@@ -195,12 +191,15 @@ const Inventories = React.memo(() => {
         rowsPerPage,
         !isExpandedAll
       );
+      setCurrentPage(page);
     },
     [dataFilter, rowsPerPage, isExpandedAll]
   );
 
   const handleRowsPerPageChange = useCallback(
     (newRowsPerPage) => {
+      console.log(isExpandedAll);
+      setRowsPerPage(newRowsPerPage);
       dataFilter(
         filterTextRef.current,
         inputRef.current,
@@ -239,43 +238,51 @@ const Inventories = React.memo(() => {
   );
 
   return (
-    <MDBContainer fluid>
-      <MDBCard className="bg-white my-5 mx-auto" style={{ position: "static" }}>
-        <MDBCardBody className="p-5 w-100 d-flex flex-column">
-          <div style={{ display: "flex" }}>
-            <ModalFileUpload loadData={loadData} />
-            <ExportExcel row={dataFilterNotPag} setIsLoading={setIsLoading} />
-            <DeleteRow loadData={loadData} rowsId={checkedRows} />
-          </div>
-          <LoadingComponent isLoading={isLoading}>
-            {searchApiData.length > 0 && (
-              <InventoriesComponent
-                handleFilterColumn={handleFilterColumn}
-                handleFilter={handleFilter}
-                checkAll={checkAll}
-                handleCheckAll={handleCheckAll}
-                checkedRows={checkedRows}
-                handleCheck={handleCheck}
-                getChildren={getChildren}
-                getExpandAll={getExpandAll}
-                totalRow={totalRow}
-                currentPage={currentPage}
-                handlePageChange={handlePageChange}
-                rowsPerPage={rowsPerPage}
-                handleRowsPerPageChange={handleRowsPerPageChange}
+  zz
+      <MDBContainer fluid>
+        <MDBCard className="bg-white my-5 mx-auto">
+          <MDBCardBody className="p-5 w-100 d-flex flex-column">
+            <div style={{ display: "flex" }}>
+              <ModalFileUpload
                 setIsLoading={setIsLoading}
-                searchApiData={searchApiData}
-                setSearchApiData={setSearchApiData}
-                isExpandedAll={isExpandedAll}
-                setIsExpandedAll={setIsExpandedAll}
-                rowExpand={rowExpand}
-                setRowExpand={setRowExpand}
+                loadData={loadData}
               />
-            )}
-          </LoadingComponent>
-        </MDBCardBody>
-      </MDBCard>
-    </MDBContainer>
+              <ExportExcel row={dataFilterNotPag} setIsLoading={setIsLoading} />
+              <DeleteRow
+                setIsLoading={setIsLoading}
+                loadData={loadData}
+                data={searchApiData}
+                rowsId={checkedRows}
+                setSearchApiData={setSearchApiData}
+                setCheckedRows={setCheckedRows}
+              />
+            </div>
+            <InventoriesComponent
+              handleFilterColumn={handleFilterColumn}
+              handleFilter={handleFilter}
+              checkAll={checkAll}
+              handleCheckAll={handleCheckAll}
+              checkedRows={checkedRows}
+              handleCheck={handleCheck}
+              getChildren={getChildren}
+              getExpandAll={getExpandAll}
+              totalRow={totalRow}
+              currentPage={currentPage}
+              handlePageChange={handlePageChange}
+              rowsPerPage={rowsPerPage}
+              handleRowsPerPageChange={handleRowsPerPageChange}
+              setIsLoading={setIsLoading}
+              searchApiData={searchApiData}
+              setSearchApiData={setSearchApiData}
+              isExpandedAll={isExpandedAll}
+              setIsExpandedAll={setIsExpandedAll}
+              rowExpand={rowExpand}
+              setRowExpand={setRowExpand}
+            />
+          </MDBCardBody>
+        </MDBCard>
+      </MDBContainer>
+    </LoadingComponent>
   );
 });
 export default Inventories;

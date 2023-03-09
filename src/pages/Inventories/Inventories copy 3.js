@@ -12,7 +12,6 @@ import DeleteRow from "./../../components/DeleteRow/deleteRow";
 import LoadingComponent from "../../components/LoadingComponent/LoadingComponent";
 import InventoriesComponent from "./../../components/InventoriesComponent/InventoriesComponent";
 const API_URL = api.defaults.baseURL;
-
 const Inventories = React.memo(() => {
   const [searchApiData, setSearchApiData] = useState([]);
   const [isExpandedAll, setIsExpandedAll] = useState([]);
@@ -89,7 +88,7 @@ const Inventories = React.memo(() => {
       swaleError(err, "loadData() ");
     }
   }, [swaleError, updateState]);
-
+  console.log("inven");
   useEffect(() => {
     loadData();
   }, [loadData]);
