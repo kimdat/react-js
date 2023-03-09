@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from "react";
+import React, { useState, useRef, useCallback } from "react";
 
 import Swale from "sweetalert2";
 import { api } from "../../Interceptor";
@@ -14,7 +14,37 @@ import InventoriesComponent from "./../../components/InventoriesComponent/Invent
 const API_URL = api.defaults.baseURL;
 
 const Inventories = React.memo(() => {
-  const [searchApiData, setSearchApiData] = useState([]);
+  const [apiData, setApiData] = useState(null);
+
+  const loadData = React.useCallback(async () => {
+    try {
+      const { data } = await api.get(API_URL + "devices");
+      setApiData(data);
+    } catch (err) {
+      Swale.fire({
+        icon: "error",
+        text: `Error when fetchData() ${err}`,
+      });
+    }
+  }, []);
+
+  React.useEffect(() => {
+    loadData();
+  }, [loadData]);
+  return (
+    <div>
+      {apiData ? (
+        <InventoriesChild data={apiData} />
+      ) : (
+        <div>Loading data...</div>
+      )}
+    </div>
+  );
+});
+
+const InventoriesChild = React.memo(({ data }) => {
+  const [searchApiData, setSearchApiData] = useState(data.inventories);
+
   const [isExpandedAll, setIsExpandedAll] = useState([]);
   const filterTextRef = useRef("");
   const inputRef = useRef({});
@@ -22,11 +52,11 @@ const Inventories = React.memo(() => {
   const [checkAll, setCheckAll] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [totalRow, setToTalRow] = useState(0);
+  const [totalRow, setToTalRow] = useState(data.total_row);
   const [isLoading, setIsLoading] = useState(false);
   const [rowExpand, setRowExpand] = useState([]);
   //Data chưa phân trang
-  const [dataFilterNotPag, setDataFilterNotPag] = useState([]);
+  const [dataFilterNotPag, setDataFilterNotPag] = useState(data.devices);
   //Thông báo lỗi
   const swaleError = useCallback((err, nameFunction) => {
     console.log(err);
@@ -90,9 +120,6 @@ const Inventories = React.memo(() => {
     }
   }, [swaleError, updateState]);
 
-  useEffect(() => {
-    loadData();
-  }, [loadData]);
   //api lấy data khi expand all
   const getExpandAll = useCallback(async () => {
     // gọi API để lấy dữ liệu con
