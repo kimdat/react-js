@@ -7,7 +7,10 @@ import instance from "../../Interceptor";
 
 const API_URL = instance.defaults.baseURL;
 
-const ExportExcel = React.memo(({ row, setIsLoading }) => {
+const ExportExcel = React.memo(({ row, setIsLoading, flagOnline }) => {
+  if (flagOnline) {
+    instance.defaults.headers.common["flagOnline"] = true;
+  }
   const handleExport = async () => {
     try {
       const rowId = row.map((i) => i.id);

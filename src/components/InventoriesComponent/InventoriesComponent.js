@@ -91,16 +91,19 @@ const InventoriesComponent = React.memo(
     ]);
     //cột columm kèm thông tin filter
     const createColumnChildToFilter = useCallback(
-      (columnName) => {
+      (columnName, width) => {
         return {
           name: (
             <FilterColumn
+              width={width}
               column={columnName}
+              nameCoLumn={columnName}
               handleFilterColumn={handleFilterColumn}
             ></FilterColumn>
           ),
           selector: (row) => row[columnName],
           style: { display: "none" },
+          width: width,
         };
       },
       [handleFilterColumn]
@@ -127,12 +130,13 @@ const InventoriesComponent = React.memo(
                 />
               </div>
             ),
-          width: "50px",
+          width: "4%",
         },
         {
           name: (
             <FilterColumn
               column="Name"
+              nameCoLumn="Device Name"
               handleFilterColumn={handleFilterColumn}
             ></FilterColumn>
           ),
@@ -142,16 +146,22 @@ const InventoriesComponent = React.memo(
             }
             return (
               <div>
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <Button variant="link" onClick={() => toggleRowDetails(row)}>
+                <Button
+                  style={{ padding: "0px" }}
+                  variant="link"
+                  onClick={() => toggleRowDetails(row)}
+                >
+                  <div style={{ display: "flex", alignItems: "center" }}>
                     {rowExpand.some((item) => item === row.id) ? (
                       <FontAwesomeIcon icon={faChevronDown} />
                     ) : (
                       <FontAwesomeIcon icon={faChevronRight} />
                     )}
-                  </Button>
-                  {row.Name}
-                </div>
+                    <div style={{ color: "black", paddingLeft: "5px" }}>
+                      {row.Name}
+                    </div>
+                  </div>
+                </Button>
               </div>
             );
           },
@@ -165,12 +175,17 @@ const InventoriesComponent = React.memo(
                 fontWeight: "bold", // example of additional styles
               },
             },
+            {
+              when: (row) => !row.hasOwnProperty("statusNotFound"),
+              style: { width: "14%!important" },
+            },
           ],
         },
-        createColumnChildToFilter("VID"),
-        createColumnChildToFilter("Serial"),
-        createColumnChildToFilter("PID"),
-        createColumnChildToFilter("CDESC"),
+        createColumnChildToFilter("SLOT", "18%"),
+        createColumnChildToFilter("PID", "14%"),
+        createColumnChildToFilter("Serial", "14%"),
+
+        createColumnChildToFilter("DESCRIPTION", "35%"),
       ],
       [
         handleFilterColumn,

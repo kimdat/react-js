@@ -1,7 +1,6 @@
 import React, { Suspense, useMemo } from "react";
 
 const ExpandableRowLazyComponent = React.memo(({ row }) => {
-  console.log(row);
   const ExpandRowComponent = useMemo(
     () => React.lazy(() => import("./ExpandRowComponent")),
     []

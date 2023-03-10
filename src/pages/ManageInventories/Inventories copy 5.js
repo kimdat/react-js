@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useMemo } from "react";
 
 import Swale from "sweetalert2";
 import { api } from "../../Interceptor";
@@ -19,10 +19,8 @@ const Inventories = React.memo(() => {
   const loadData = React.useCallback(async () => {
     try {
       const { data } = await api.get(API_URL + "devices");
-      console.log(data);
       setApiData(data);
     } catch (err) {
-      console.log(err.response);
       Swale.fire({
         icon: "error",
         text: `Error when fetchData() ${err}`,
@@ -46,6 +44,7 @@ const Inventories = React.memo(() => {
 
 const InventoriesChild = React.memo(({ data }) => {
   const [searchApiData, setSearchApiData] = useState(data.inventories);
+
   const [isExpandedAll, setIsExpandedAll] = useState([]);
   const filterTextRef = useRef("");
   const inputRef = useRef({});
@@ -115,8 +114,8 @@ const InventoriesChild = React.memo(({ data }) => {
       console.log(data);
       setRowExpand([]);
       updateState(data.total_row, data.inventories, data.devices);
-      // setCurrentPage(1);
-      //  setRowsPerPage(10);
+      setCurrentPage(1);
+      setRowsPerPage(10);
     } catch (err) {
       swaleError(err, "loadDataChild() ");
     }
@@ -178,7 +177,7 @@ const InventoriesChild = React.memo(({ data }) => {
         };
 
         const { data } = await api.get(urlFilterData, { params });
-
+        console.log(data);
         return data;
       } catch (err) {
         swaleError(err, "apiFilterData() ");

@@ -11,14 +11,12 @@
   {
     display: none!important;
   }
-  .rdt_TableHeadName{
-    padding-left: 40px;
-  }
+
   .tableChild  {
 
  
    overflow-y: auto!important;
-   max-height: 200px;
+   max-height:200px;
 
   }
   

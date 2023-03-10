@@ -13,7 +13,10 @@ import LoadingComponent from "../../components/LoadingComponent/LoadingComponent
 import InventoriesComponent from "../../components/InventoriesComponent/InventoriesComponent";
 const API_URL = api.defaults.baseURL;
 
-const Inventories = React.memo(() => {
+const Inventories = React.memo(({ flagOnline = false }) => {
+  if (flagOnline) {
+    api.defaults.headers.common["flagOnline"] = true;
+  }
   const [apiData, setApiData] = useState(null);
 
   const loadData = React.useCallback(async () => {
@@ -36,7 +39,7 @@ const Inventories = React.memo(() => {
   return (
     <div>
       {apiData ? (
-        <InventoriesChild data={apiData} />
+        <InventoriesChild data={apiData} flagOnline={flagOnline} />
       ) : (
         <div>Loading data...</div>
       )}
@@ -44,7 +47,7 @@ const Inventories = React.memo(() => {
   );
 });
 
-const InventoriesChild = React.memo(({ data }) => {
+const InventoriesChild = React.memo(({ data, flagOnline }) => {
   const [searchApiData, setSearchApiData] = useState(data.inventories);
   const [isExpandedAll, setIsExpandedAll] = useState([]);
   const filterTextRef = useRef("");
@@ -273,8 +276,8 @@ const InventoriesChild = React.memo(({ data }) => {
       <MDBCard className="bg-white my-5 mx-auto" style={{ position: "static" }}>
         <MDBCardBody className="p-5 w-100 d-flex flex-column">
           <div style={{ display: "flex" }}>
-            <ModalFileUpload loadData={loadDataChild} />
-            <ExportExcel row={dataFilterNotPag} setIsLoading={setIsLoading} />
+            {!flagOnline && <ModalFileUpload loadData={loadDataChild} />}
+            <ExportExcel row={dataFilterNotPag} setIsLoading={setIsLoading} flagOnline={flagOnline}/>
             <DeleteRow loadData={loadDataChild} rowsId={checkedRows} />
           </div>
           <LoadingComponent isLoading={isLoading}>

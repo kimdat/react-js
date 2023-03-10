@@ -192,6 +192,7 @@ export const ModalFileUpload = ({ loadData }) => {
       formData.append("messUpload", JSON.stringify(messUpload));
       try {
         const { data } = await api.post(`${API_URL}insertDataUpload`, formData);
+
         //nếu có file bị lỗi
         if (data.Error) {
           const dataErr = data.Error;

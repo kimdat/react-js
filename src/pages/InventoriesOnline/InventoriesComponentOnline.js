@@ -4,36 +4,35 @@ import InventoriesComponent from "../../components/InventoriesComponent/Inventor
 
 import LoadingComponent from "../../components/LoadingComponent/LoadingComponent";
 import "./InventoriesOnline.css";
-//lấy data trang đầu
-function filterData(data) {
-  return data.slice(0, 10);
-}
-//những hàng được expand
-function rowExpandData(data) {
-  return data.map((item) => item.id);
-}
 
-const InventoriesComponentOnline = React.memo(({ data }) => {
+const InventoriesComponentOnline = React.memo(({ apiData }) => {
+  
   const [rowExpand, setRowExpand] = useState([]);
+  //datapage hiện tại
   const [searchApiData, setSearchApiData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   //số row mỗi page
   const [rowsPerPage, setRowsPerPage] = useState(10);
   //tổng row
-  const [totalRow] = useState(data.length);
+  const [totalRow, setToTalRow] = useState(0);
   //Mở rộng hết
   const [isExpandedAll, setIsExpandedAll] = useState(false);
   //Hàm loading
   const [isLoading, setIsLoading] = useState(false);
+  //tổng data
+  const [dataAll, setDataAll] = useState([]);
+  useEffect(() => {
+    setSearchApiData(apiData.dataShow);
+    setRowExpand(apiData.row_expand);
+    setToTalRow(apiData.totalRow);
+    setDataAll(apiData.data);
+  }, [apiData]);
   const handlePageChange = () => {};
   const handleRowsPerPageChange = () => {};
-  useEffect(() => {
-    setRowExpand(rowExpandData(data));
-    setSearchApiData(filterData(data));
-  }, [data]);
+
   return (
     <div>
-      {data.length > 0 && (
+      {searchApiData.length > 0 && (
         <LoadingComponent isLoading={isLoading}>
           <MDBContainer fluid>
             <MDBRow className="d-flex justify-content-center align-items-center h-100">
