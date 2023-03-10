@@ -13,6 +13,13 @@ const ExportExcel = React.memo(({ row, setIsLoading, flagOffline }) => {
   }
   const handleExport = async () => {
     try {
+      if (row.length === 0 || typeof row[0] == "undefined") {
+        Swal.fire({
+          icon: "error",
+          text: "Please choose device to delete",
+        });
+        return;
+      }
       const rowId = row.map((i) => i.id);
 
       const formData = new FormData();
