@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { MDBContainer, MDBRow, MDBCardBody } from "mdb-react-ui-kit";
 import InventoriesComponent from "../../components/InventoriesComponent/InventoriesComponent";
 
@@ -6,7 +6,6 @@ import LoadingComponent from "../../components/LoadingComponent/LoadingComponent
 import "./InventoriesOnline.css";
 
 const InventoriesComponentOnline = React.memo(({ apiData }) => {
-  
   const [rowExpand, setRowExpand] = useState([]);
   //datapage hiện tại
   const [searchApiData, setSearchApiData] = useState([]);
@@ -24,11 +23,31 @@ const InventoriesComponentOnline = React.memo(({ apiData }) => {
   useEffect(() => {
     setSearchApiData(apiData.dataShow);
     setRowExpand(apiData.row_expand);
-    setToTalRow(apiData.totalRow);
+    setToTalRow(apiData.total_row);
     setDataAll(apiData.data);
   }, [apiData]);
-  const handlePageChange = () => {};
-  const handleRowsPerPageChange = () => {};
+  const handleDatatable = useCallback(
+    (currentPage, rowsPerPage) => {
+      const start = (currentPage - 1) * rowsPerPage;
+      const end = start + rowsPerPage;
+      setSearchApiData(dataAll.slice(start, end));
+    },
+    [dataAll]
+  );
+  const handlePageChange = useCallback(
+    (page) => {
+      setCurrentPage(page);
+      handleDatatable(page, rowsPerPage);
+    },
+    [handleDatatable, rowsPerPage]
+  );
+  const handleRowsPerPageChange = useCallback(
+    (data) => {
+      setRowsPerPage(data);
+      handleDatatable(currentPage, data);
+    },
+    [handleDatatable, currentPage]
+  );
 
   return (
     <div>

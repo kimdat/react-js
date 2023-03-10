@@ -15,7 +15,18 @@ const InventoriesOnline = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const inputs2 = ["  10.0.137.133  ", " 10.0.137.13444  "];
+      const inputs2 = [
+        "  10.0.137.133  ",
+        " 10.0.137.13444  ",
+        "10.0.137.133t ",
+        "10.0.137.1334 ",
+        "10.0.137.1335 ",
+        "10.0.137.1336 ",
+        "10.0.137.1337 ",
+        "10.0.137.13389 ",
+        "10.0.137.1338 ",
+        "10.0.137.1339 ",
+      ];
 
       // const inputs2 = inputs.ip;
       const formData = new FormData();
@@ -62,14 +73,23 @@ const InventoriesOnline = () => {
 
     try {
       const inputs = ["10.0.137.133", "10.0.137.134"];
-      /*const { data } = await api.post(API_URL + "createOnline", inputs);
-      console.log(data);
-      //nếu cha insert thành công
-      if (data[0].Name !== "") {
-        setSearchApiData(data);
+
+      const pust = [];
+      for (let index = 0; index < 12; index++) {
+        const data = {
+          ip: "1",
+          id: "123" + Math.random(0, 100),
+          Name: "",
+          children: [],
+        };
+        pust.push(data);
       }
-      //nếu như searchapidata đang có dữ liệu
-      else if (searchApiData.length > 0) setSearchApiData([]);*/
+      pust.total_row = 100;
+      pust.row_expand = [];
+      pust.dataShow = pust.slice(0, 10);
+      pust.data = pust;
+      console.log(pust);
+      setApiData(pust);
     } catch (error) {
       console.log("Err");
       console.log(error);

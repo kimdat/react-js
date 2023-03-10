@@ -13,9 +13,9 @@ import LoadingComponent from "../../components/LoadingComponent/LoadingComponent
 import InventoriesComponent from "../../components/InventoriesComponent/InventoriesComponent";
 const API_URL = api.defaults.baseURL;
 
-const Inventories = React.memo(({ flagOnline = false }) => {
-  if (flagOnline) {
-    api.defaults.headers.common["flagOnline"] = true;
+const Inventories = React.memo(({ flagOffline = false }) => {
+  if (flagOffline) {
+    api.defaults.headers.common["flagOffline"] = true;
   }
   const [apiData, setApiData] = useState(null);
 
@@ -39,7 +39,7 @@ const Inventories = React.memo(({ flagOnline = false }) => {
   return (
     <div>
       {apiData ? (
-        <InventoriesChild data={apiData} flagOnline={flagOnline} />
+        <InventoriesChild data={apiData} flagOffline={flagOffline} />
       ) : (
         <div>Loading data...</div>
       )}
@@ -47,7 +47,7 @@ const Inventories = React.memo(({ flagOnline = false }) => {
   );
 });
 
-const InventoriesChild = React.memo(({ data, flagOnline }) => {
+const InventoriesChild = React.memo(({ data, flagOffline }) => {
   const [searchApiData, setSearchApiData] = useState(data.inventories);
   const [isExpandedAll, setIsExpandedAll] = useState([]);
   const filterTextRef = useRef("");
@@ -276,8 +276,12 @@ const InventoriesChild = React.memo(({ data, flagOnline }) => {
       <MDBCard className="bg-white my-5 mx-auto" style={{ position: "static" }}>
         <MDBCardBody className="p-5 w-100 d-flex flex-column">
           <div style={{ display: "flex" }}>
-            {!flagOnline && <ModalFileUpload loadData={loadDataChild} />}
-            <ExportExcel row={dataFilterNotPag} setIsLoading={setIsLoading} flagOnline={flagOnline}/>
+            {flagOffline && <ModalFileUpload loadData={loadDataChild} />}
+            <ExportExcel
+              row={dataFilterNotPag}
+              setIsLoading={setIsLoading}
+              flagOffline={flagOffline}
+            />
             <DeleteRow loadData={loadDataChild} rowsId={checkedRows} />
           </div>
           <LoadingComponent isLoading={isLoading}>
