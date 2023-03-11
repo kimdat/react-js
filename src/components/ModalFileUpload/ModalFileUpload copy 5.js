@@ -2,6 +2,7 @@ import React, { useState, useCallback } from "react";
 import { Button } from "react-bootstrap";
 import { Modal } from "react-bootstrap";
 import Swale from "sweetalert2";
+
 import { api } from "../../Interceptor";
 import LoadingComponent from "../LoadingComponent/LoadingComponent";
 import FileUpload from "../FileUpload/FileUpload.js";
@@ -9,6 +10,7 @@ export const ModalFileUpload = ({ loadData, show, handleClose }) => {
   const API_URL = api.defaults.baseURL;
   const [files, setFiles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
   const removeFile = useCallback(
     (filename) => {
       setFiles((files) => files.filter((file) => file.name !== filename));
@@ -183,6 +185,7 @@ export const ModalFileUpload = ({ loadData, show, handleClose }) => {
       formData.append("messUpload", JSON.stringify(messUpload));
       try {
         const { data } = await api.post(`${API_URL}insertDataUpload`, formData);
+
         //nếu có file bị lỗi
         if (data.Error) {
           const dataErr = data.Error;
@@ -304,6 +307,7 @@ export const ModalFileUpload = ({ loadData, show, handleClose }) => {
               filesParam[index].name
             }" contains existing devices: ${duplicateNames.join(",")}`;
           });
+
           const swalTitle =
             filesParam.length === 1
               ? "Existing Device!"
@@ -320,11 +324,11 @@ export const ModalFileUpload = ({ loadData, show, handleClose }) => {
           if (result) {
             await uploadFile(fileUploadContents, filesParam, duplicateDevices);
           } else {
-            //index những file trùng
-            const indexesRemoved = duplicateDevices.map((item) => item.index);
+            //update những file không trùng
+            const indexes = duplicateDevices.map((item) => item.index);
             const dataRemoveIndexes = await removeIndexes(
               fileUploadContents,
-              indexesRemoved,
+              indexes,
               filesParam
             );
             await uploadFile(
@@ -359,20 +363,19 @@ export const ModalFileUpload = ({ loadData, show, handleClose }) => {
       return;
     }
     setIsLoading(true);
-    const invalidFiles = files.filter((file) => {
-      const { name, size } = file;
+    // Check file extensions and size
+    const isAllFilesValid = files.every((file) => {
       const isValidExtension = [".txt", ".log"].includes(
-        name.slice(name.lastIndexOf("."))
+        file.name.slice(file.name.lastIndexOf("."))
       );
-      const isValidSize = size < 20 * 1024 * 1024; // 20MB
-      return !isValidExtension || !isValidSize;
+      const isValidSize = file.size < 20 * 1024 * 1024; // 20MB
+      return isValidExtension && isValidSize;
     });
-    if (invalidFiles.length > 0) {
+    if (!isAllFilesValid) {
       Swale.fire({
         icon: "error",
         text: "You have choosen fize size >=20MB or file not allowed.Only accep txt,log",
       });
-      setIsLoading(false);
       return;
     }
     try {
@@ -387,9 +390,11 @@ export const ModalFileUpload = ({ loadData, show, handleClose }) => {
       const accepted = filesDataNameToImport.filter((file) => !file.error);
       let filesParam = accepted.map((file) => file.file);
       let filesDataNameToImportParam = accepted.map((file) => file.data);
+
       //Nếu có file lỗi
       if (rejected.length > 0) {
         const reasons = rejected.map(({ error }) => `${error}<br/>`).join("");
+        const rejectedIndexes = rejected.map(({ index }) => index);
         const result = await confirmSwale(
           `${reasons}Do you want to import the rest of the files?`,
           "Some files could not be read or have incorrect format"
@@ -398,6 +403,16 @@ export const ModalFileUpload = ({ loadData, show, handleClose }) => {
           setIsLoading(false);
           return;
         }
+        const dataRemoveIndexes = await removeIndexes(
+          filesDataNameToImportParam,
+          rejectedIndexes,
+          filesParam
+        );
+        console.log(filesParam);
+
+        filesDataNameToImportParam = dataRemoveIndexes.filesDataNameToImport;
+        filesParam = dataRemoveIndexes.filesToImport;
+        console.log(filesParam);
       }
       //tìm file duplicate
       const { indexes, valueMap } = findDuplicateFilesIndexes(

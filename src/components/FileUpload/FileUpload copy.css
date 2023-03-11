@@ -12,6 +12,28 @@
 }
 
 
+@media only screen and (min-width: 600px) {
+  .file-card {
+    flex-direction: row;
+  }
+}
+
+.file-card .file-inputs {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-basis: 100%;
+  margin-top: 1em;
+}
+
+@media only screen and (min-width: 600px) {
+  .file-card .file-inputs {
+    margin-top: 0;
+    margin-left: 1em;
+    flex-basis: auto;
+  }
+}
 .file-card.drop-zone {
   border-color: #48bb78;
   background-color: #9ae6b4;

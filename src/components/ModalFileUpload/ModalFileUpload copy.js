@@ -1,20 +1,30 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { Button } from "react-bootstrap";
 import { Modal } from "react-bootstrap";
 import Swale from "sweetalert2";
+
+import { FaPlus } from "react-icons/fa";
+
 import { api } from "../../Interceptor";
 import LoadingComponent from "../LoadingComponent/LoadingComponent";
 import FileUpload from "../FileUpload/FileUpload.js";
-export const ModalFileUpload = ({ loadData, show, handleClose }) => {
+
+export const ModalFileUpload = ({ loadData }) => {
+  console.log("update");
   const API_URL = api.defaults.baseURL;
+  const [show, setShow] = useState(false);
   const [files, setFiles] = useState([]);
+  const [importComponent, setImportComponent] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   const removeFile = useCallback(
     (filename) => {
       setFiles((files) => files.filter((file) => file.name !== filename));
     },
     [setFiles]
   );
+
   const parseCsvFile = useCallback(async (data) => {
     // Tách chuỗi thành các dòng và loại bỏ các ký tự thừa
     try {
@@ -153,7 +163,6 @@ export const ModalFileUpload = ({ loadData, show, handleClose }) => {
   );
   const removeIndexes = useCallback(async (data, indexes, files) => {
     const filteredData = data.filter((_, index) => !indexes.includes(index));
-
     const filteredFiles = files.filter((_, index) => !indexes.includes(index));
     return {
       filesToImport: filteredFiles,
@@ -183,6 +192,7 @@ export const ModalFileUpload = ({ loadData, show, handleClose }) => {
       formData.append("messUpload", JSON.stringify(messUpload));
       try {
         const { data } = await api.post(`${API_URL}insertDataUpload`, formData);
+
         //nếu có file bị lỗi
         if (data.Error) {
           const dataErr = data.Error;
@@ -219,7 +229,7 @@ export const ModalFileUpload = ({ loadData, show, handleClose }) => {
         });
       }
     },
-    [API_URL, files, loadData, handleClose]
+    [API_URL, files, loadData]
   );
   const MAX_FILES_PER_REQUEST = 20;
   const uploadFile = useCallback(
@@ -279,7 +289,7 @@ export const ModalFileUpload = ({ loadData, show, handleClose }) => {
         return;
       }
     },
-    [API_URL, insertDataUpload, setIsLoading, handleClose]
+    [API_URL, insertDataUpload, setIsLoading]
   );
   const doImport = useCallback(
     async (fileUploadContents, filesParam) => {
@@ -304,6 +314,7 @@ export const ModalFileUpload = ({ loadData, show, handleClose }) => {
               filesParam[index].name
             }" contains existing devices: ${duplicateNames.join(",")}`;
           });
+
           const swalTitle =
             filesParam.length === 1
               ? "Existing Device!"
@@ -320,11 +331,11 @@ export const ModalFileUpload = ({ loadData, show, handleClose }) => {
           if (result) {
             await uploadFile(fileUploadContents, filesParam, duplicateDevices);
           } else {
-            //index những file trùng
-            const indexesRemoved = duplicateDevices.map((item) => item.index);
+            //update những file không trùng
+            const indexes = duplicateDevices.map((item) => item.index);
             const dataRemoveIndexes = await removeIndexes(
               fileUploadContents,
-              indexesRemoved,
+              indexes,
               filesParam
             );
             await uploadFile(
@@ -359,20 +370,19 @@ export const ModalFileUpload = ({ loadData, show, handleClose }) => {
       return;
     }
     setIsLoading(true);
-    const invalidFiles = files.filter((file) => {
-      const { name, size } = file;
+    // Check file extensions and size
+    const isAllFilesValid = files.every((file) => {
       const isValidExtension = [".txt", ".log"].includes(
-        name.slice(name.lastIndexOf("."))
+        file.name.slice(file.name.lastIndexOf("."))
       );
-      const isValidSize = size < 20 * 1024 * 1024; // 20MB
-      return !isValidExtension || !isValidSize;
+      const isValidSize = file.size < 20 * 1024 * 1024; // 20MB
+      return isValidExtension && isValidSize;
     });
-    if (invalidFiles.length > 0) {
+    if (!isAllFilesValid) {
       Swale.fire({
         icon: "error",
         text: "You have choosen fize size >=20MB or file not allowed.Only accep txt,log",
       });
-      setIsLoading(false);
       return;
     }
     try {
@@ -387,9 +397,11 @@ export const ModalFileUpload = ({ loadData, show, handleClose }) => {
       const accepted = filesDataNameToImport.filter((file) => !file.error);
       let filesParam = accepted.map((file) => file.file);
       let filesDataNameToImportParam = accepted.map((file) => file.data);
+
       //Nếu có file lỗi
       if (rejected.length > 0) {
         const reasons = rejected.map(({ error }) => `${error}<br/>`).join("");
+        const rejectedIndexes = rejected.map(({ index }) => index);
         const result = await confirmSwale(
           `${reasons}Do you want to import the rest of the files?`,
           "Some files could not be read or have incorrect format"
@@ -398,6 +410,13 @@ export const ModalFileUpload = ({ loadData, show, handleClose }) => {
           setIsLoading(false);
           return;
         }
+        const dataRemoveIndexes = await removeIndexes(
+          filesDataNameToImportParam,
+          rejectedIndexes,
+          filesParam
+        );
+        filesDataNameToImportParam = dataRemoveIndexes.filesDataNameToImport;
+        filesParam = dataRemoveIndexes.filesToImport;
       }
       //tìm file duplicate
       const { indexes, valueMap } = findDuplicateFilesIndexes(
@@ -450,26 +469,33 @@ export const ModalFileUpload = ({ loadData, show, handleClose }) => {
 
   return (
     <div>
+      <Button
+        variant="primary"
+        style={{ borderRadius: "10px" }}
+        onClick={handleShow}
+      >
+        <div>
+          <FaPlus />
+        </div>
+      </Button>
       <LoadingComponent isLoading={isLoading}>
         <Modal show={show} onHide={handleClose} centered>
           <Modal.Header closeButton>
             <Modal.Title>Import file</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {show && (
-              <FileUpload
-                files={files}
-                setFiles={setFiles}
-                removeFile={removeFile}
-              />
-            )}
+            <FileUpload
+              files={files}
+              setFiles={setFiles}
+              removeFile={removeFile}
+            />
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
             <Button variant="primary" onClick={importFile}>
-              Import
+              Importimport FileUpload from './../FileUpload/FileUpload';
             </Button>
           </Modal.Footer>
         </Modal>

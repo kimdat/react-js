@@ -35,6 +35,7 @@ const InventoriesComponent = React.memo(
     rowExpand = [],
     setRowExpand = () => {},
   }) => {
+    console.log("invComponent");
     //xử lý đóng/mở  con từng dòng
     const toggleRowDetails = useCallback(
       async (row) => {
@@ -130,7 +131,7 @@ const InventoriesComponent = React.memo(
                 />
               </div>
             ),
-          width: "4%",
+          width: "5.5%",
         },
         {
           name: (
@@ -184,8 +185,7 @@ const InventoriesComponent = React.memo(
         createColumnChildToFilter("SLOT", "18%"),
         createColumnChildToFilter("PID", "14%"),
         createColumnChildToFilter("Serial", "14%"),
-
-        createColumnChildToFilter("DESCRIPTION", "35%"),
+        createColumnChildToFilter("DESCRIPTION", "34%"),
       ],
       [
         handleFilterColumn,
