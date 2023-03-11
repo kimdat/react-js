@@ -4,13 +4,16 @@ import Swale from "sweetalert2";
 import { api } from "../../Interceptor";
 
 import { MDBContainer } from "mdb-react-ui-kit";
-import { ModalFileUpload } from "../../components/ModalFileUpload/ModalFileUpload";
+
 import { MDBCard } from "mdb-react-ui-kit";
 import { MDBCardBody } from "mdb-react-ui-kit";
 import ExportExcel from "../../components/ExportExcel/ExportExcel";
 import DeleteRow from "../../components/DeleteRow/deleteRow";
 import LoadingComponent from "../../components/LoadingComponent/LoadingComponent";
 import InventoriesComponent from "../../components/InventoriesComponent/InventoriesComponent";
+const ModalFileUpload = React.lazy(() =>
+  import("../../components/ModalFileUpload/ModalFileUpload")
+);
 const API_URL = api.defaults.baseURL;
 
 const Inventories = React.memo(({ flagOffline = false }) => {
