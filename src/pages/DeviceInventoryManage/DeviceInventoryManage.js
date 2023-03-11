@@ -244,6 +244,11 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
         return;
       }
       const valueSearch = e.target.value;
+      if (
+        valueSearch.trim().toLowerCase() ===
+        filterTextRef.current.trim().toLowerCase()
+      )
+        return;
       filterTextRef.current = valueSearch;
       dataFilter(valueSearch, inputRef.current);
     },
@@ -256,8 +261,13 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
         return;
       }
       const name = e.target.name;
-      const value = e.target.value;
+      const value = e.target.value.trim();
       const newInputs = { ...inputRef.current, [name]: value };
+      if (
+        JSON.stringify(inputRef.current).toLowerCase() ===
+        JSON.stringify(newInputs).toLowerCase()
+      )
+        return;
       inputRef.current = newInputs;
       dataFilter(filterTextRef.current, newInputs);
     },
