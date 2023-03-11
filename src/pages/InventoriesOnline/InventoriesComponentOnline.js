@@ -34,6 +34,7 @@ const InventoriesComponentOnline = React.memo(({ apiData }) => {
     },
     [dataAll]
   );
+  console.log("iv");
   const handlePageChange = useCallback(
     (page) => {
       setCurrentPage(page);

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from "react";
+import React, { useState, useRef, useCallback } from "react";
 
 import Swale from "sweetalert2";
 import { api } from "../../Interceptor";
@@ -11,15 +11,20 @@ import ExportExcel from "../../components/ExportExcel/ExportExcel";
 import DeleteRow from "../../components/DeleteRow/deleteRow";
 import LoadingComponent from "../../components/LoadingComponent/LoadingComponent";
 import InventoriesComponent from "../../components/InventoriesComponent/InventoriesComponent";
-import ImportFile from "./../../components/ImportFile/ImportFile";
+const ModalFileUpload = React.lazy(() =>
+  import("../../components/ModalFileUpload/ModalFileUpload")
+);
 const API_URL = api.defaults.baseURL;
+
 const Inventories = React.memo(({ flagOffline = false }) => {
   if (flagOffline) {
     api.defaults.headers.common["flagOffline"] = true;
   }
   const [apiData, setApiData] = useState(null);
+
   const loadData = React.useCallback(async () => {
     try {
+ 
       const { data } = await api.get(API_URL + "devices");
       console.log(data);
       setApiData(data);
@@ -31,15 +36,21 @@ const Inventories = React.memo(({ flagOffline = false }) => {
       });
     }
   }, []);
-  useEffect(() => {
+
+  React.useEffect(() => {
     loadData();
   }, [loadData]);
   return (
     <div>
-      {apiData && <InventoriesChild data={apiData} flagOffline={flagOffline} />}
+      {apiData ? (
+        <InventoriesChild data={apiData} flagOffline={flagOffline} />
+      ) : (
+        <div>Loading data...</div>
+      )}
     </div>
   );
 });
+
 const InventoriesChild = React.memo(({ data, flagOffline }) => {
   const [searchApiData, setSearchApiData] = useState(data.inventories);
   const [isExpandedAll, setIsExpandedAll] = useState([]);
@@ -104,7 +115,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
     //bỏ checkbox checkall
     setCheckAll(false);
   }, []);
-  console.log("invChild");
+  console.log("inv");
   const loadDataChild = useCallback(async () => {
     try {
       const { data } = await api.get(API_URL + "devices");
@@ -269,7 +280,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
       <MDBCard className="bg-white my-5 mx-auto" style={{ position: "static" }}>
         <MDBCardBody className="p-5 w-100 d-flex flex-column">
           <div style={{ display: "flex" }}>
-            {flagOffline && <ImportFile loadData={loadDataChild} />}
+            {flagOffline && <ModalFileUpload loadData={loadDataChild} />}
             <ExportExcel
               row={dataFilterNotPag}
               setIsLoading={setIsLoading}
