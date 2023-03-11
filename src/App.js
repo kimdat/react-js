@@ -1,16 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, lazy } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Layout from "./LAYOUT/Layout.js";
-const Login = React.lazy(() => import("./pages/Login/Login"));
-const Inventories = React.lazy(() =>
+
+const Inventories = lazy(() =>
   import("./pages/DeviceInventoryManage/DeviceInventoryManage")
 );
-const InventoriesOnline = React.lazy(() =>
+const InventoriesOnline = lazy(() =>
   import("./pages/InventoriesOnline/InventoriesOnline")
 );
-
+const Login = lazy(() => import("./pages/Login/Login"));
 function App() {
   const isLoggedIn = !!localStorage.getItem("email");
   useEffect(() => {
