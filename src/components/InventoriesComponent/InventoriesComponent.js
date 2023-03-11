@@ -92,13 +92,13 @@ const InventoriesComponent = React.memo(
     ]);
     //cột columm kèm thông tin filter
     const createColumnChildToFilter = useCallback(
-      (columnName, width) => {
+      (columnName, width, nameTitle) => {
         return {
           name: (
             <FilterColumn
               width={width}
               column={columnName}
-              nameCoLumn={columnName}
+              nameTitle={nameTitle}
               handleFilterColumn={handleFilterColumn}
             ></FilterColumn>
           ),
@@ -137,7 +137,7 @@ const InventoriesComponent = React.memo(
           name: (
             <FilterColumn
               column="Name"
-              nameCoLumn="Device Name"
+              nameTitle="Device Name"
               handleFilterColumn={handleFilterColumn}
             ></FilterColumn>
           ),
@@ -182,10 +182,10 @@ const InventoriesComponent = React.memo(
             },
           ],
         },
-        createColumnChildToFilter("SLOT", "18%"),
-        createColumnChildToFilter("PID", "14%"),
-        createColumnChildToFilter("Serial", "14%"),
-        createColumnChildToFilter("DESCRIPTION", "34%"),
+        createColumnChildToFilter("InventoriesName", "18%", "SLOT"),
+        createColumnChildToFilter("PID", "14%", "PID"),
+        createColumnChildToFilter("Serial", "14%", "Serial"),
+        createColumnChildToFilter("CDESC", "34%", "DESCRIPTION"),
       ],
       [
         handleFilterColumn,

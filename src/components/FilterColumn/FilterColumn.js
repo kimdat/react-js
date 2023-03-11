@@ -1,10 +1,10 @@
 import React from "react";
 
 export const FilterColumn = React.memo(
-  ({ column, handleFilterColumn, nameCoLumn }) => {
+  ({ column, handleFilterColumn, nameTitle }) => {
     return (
       <span className={`rdt_TableHead${column} rdt_tableHead`}>
-        {nameCoLumn}
+        {nameTitle}
         <br />
         <input
           style={{ maxWidth: "120px" }}
