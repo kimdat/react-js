@@ -17,23 +17,25 @@ const Inventories = React.memo(({ flagOffline = false }) => {
   if (flagOffline) {
     api.defaults.headers.common["flagOffline"] = true;
   }
+  console.log("iv");
   const [apiData, setApiData] = useState(null);
-  const loadData = React.useCallback(async () => {
-    try {
-      const { data } = await api.get(API_URL + "devices");
-      console.log(data);
-      setApiData(data);
-    } catch (err) {
-      console.log(err.response);
-      Swale.fire({
-        icon: "error",
-        text: `Error when fetchData() ${err}`,
-      });
-    }
-  }, []);
+
   useEffect(() => {
+    const loadData = async () => {
+      try {
+        const { data } = await api.get(API_URL + "devices");
+        console.log(data);
+        setApiData(data);
+      } catch (err) {
+        console.log(err.response);
+        Swale.fire({
+          icon: "error",
+          text: `Error when fetchData() ${err}`,
+        });
+      }
+    };
     loadData();
-  }, [loadData]);
+  }, []);
   return (
     <div>
       {apiData && <InventoriesChild data={apiData} flagOffline={flagOffline} />}
