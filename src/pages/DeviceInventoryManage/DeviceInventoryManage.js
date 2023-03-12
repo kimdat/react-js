@@ -36,12 +36,49 @@ const Inventories = React.memo(({ flagOffline = false }) => {
     };
     loadData();
   }, []);
+
   return (
     <div>
       {apiData && <InventoriesChild data={apiData} flagOffline={flagOffline} />}
     </div>
   );
 });
+/*class Inventories extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      apiData: null,
+    };
+    this.loaded = false;
+  }
+
+  async componentDidMount() {
+    try {
+      const { data } = await api.get(API_URL + "devices");
+      this.loaded = true;
+      this.setState({ apiData: data });
+    } catch (err) {
+      console.log(err.response);
+      Swale.fire({
+        icon: "error",
+        text: `Error when fetchData() ${err}`,
+      });
+    }
+  }
+  render() {
+    if (this.state.apiData != null) {
+      return <div>Loading...</div>;
+    }
+    console.log("123");
+    const { apiData } = this.state;
+    return (
+      <>
+        <div>{apiData && <InventoriesChild data={apiData} />}</div>
+      </>
+    );
+  }
+}*/
 const InventoriesChild = React.memo(({ data, flagOffline }) => {
   const [searchApiData, setSearchApiData] = useState(data.inventories);
   const [isExpandedAll, setIsExpandedAll] = useState([]);
@@ -54,6 +91,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
   const [totalRow, setToTalRow] = useState(data.total_row);
   const [isLoading, setIsLoading] = useState(false);
   const [rowExpand, setRowExpand] = useState([]);
+  const isSearchRef = useRef(false);
   //Data chưa phân trang
   const [dataFilterNotPag, setDataFilterNotPag] = useState(data.devices);
   //Thông báo lỗi
@@ -106,20 +144,6 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
     //bỏ checkbox checkall
     setCheckAll(false);
   }, []);
-  console.log("invChild");
-  const loadDataChild = useCallback(async () => {
-    try {
-      const { data } = await api.get(API_URL + "devices");
-      console.log(data);
-      setRowExpand([]);
-      updateState(data.total_row, data.inventories, data.devices);
-      // setCurrentPage(1);
-      //  setRowsPerPage(10);
-    } catch (err) {
-      swaleError(err, "loadDataChild() ");
-    }
-  }, [swaleError, updateState]);
-
   //api lấy data khi expand all
   const getExpandAll = useCallback(async () => {
     // gọi API để lấy dữ liệu con
@@ -214,8 +238,25 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
     },
     [apiFilterData, updateState]
   );
+  const loadDataChild = useCallback(async () => {
+    try {
+      const { data } = await api.get(API_URL + "devices");
+      console.log(data);
+      setRowExpand([]);
+      updateState(data.total_row, data.inventories, data.devices);
+      setCurrentPage(1);
+      setRowsPerPage(10);
+      isSearchRef.current = true;
+    } catch (err) {
+      swaleError(err, "loadDataChild() ");
+    }
+  }, [swaleError, updateState]);
   const handlePageChange = useCallback(
     (page) => {
+      if (isSearchRef.current) {
+        isSearchRef.current = false;
+        return; // Nếu là search thì không thực hiện gọi hàm dataFilter
+      }
       dataFilter(
         filterTextRef.current,
         inputRef.current,
@@ -229,6 +270,10 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
 
   const handleRowsPerPageChange = useCallback(
     (newRowsPerPage) => {
+      if (isSearchRef.current) {
+        isSearchRef.current = false;
+        return; // Nếu là search thì không thực hiện gọi hàm dataFilter
+      }
       dataFilter(
         filterTextRef.current,
         inputRef.current,
@@ -245,6 +290,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
       if (e.key !== "Enter") {
         return;
       }
+      isSearchRef.current = true;
       const valueSearch = e.target.value;
       if (
         valueSearch.trim().toLowerCase() ===
@@ -262,6 +308,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
       if (e.key !== "Enter") {
         return;
       }
+      isSearchRef.current = true;
       const name = e.target.name;
       const value = e.target.value.trim();
       const newInputs = { ...inputRef.current, [name]: value };
