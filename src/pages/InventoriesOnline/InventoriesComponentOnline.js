@@ -1,43 +1,11 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { MDBContainer, MDBRow, MDBCardBody } from "mdb-react-ui-kit";
 import InventoriesComponent from "../../components/InventoriesComponent/InventoriesComponent";
 
 import LoadingComponent from "../../components/LoadingComponent/LoadingComponent";
 import "./InventoriesOnline.css";
-const InventoriesComponentOnline = React.memo(({ apiData }) => {
-  console.log("invComponentOnline");
-  //những row được expand
-  const [rowExpand, setRowExpand] = useState([]);
-  //datapage hiện tại
-  const [searchApiData, setSearchApiData] = useState([]);
-  //tổng row
-  const [totalRow, setToTalRow] = useState(0);
-  //tổng data
-  const [dataAll, setDataAll] = useState([]);
-  useEffect(() => {
-    setSearchApiData(apiData.dataShow);
-    setRowExpand(apiData.row_expand);
-    setToTalRow(apiData.total_row);
-    setDataAll(apiData.data);
-  }, [apiData]);
 
-  return (
-    <div>
-      {searchApiData.length > 0 && (
-        <InventoriesComponentOnlineChild
-          searchApiData={searchApiData}
-          setSearchApiData={setSearchApiData}
-          totalRow={totalRow}
-          rowExpand={rowExpand}
-          setRowExpand={setRowExpand}
-          dataAll={dataAll}
-        />
-      )}
-    </div>
-  );
-});
-
-const InventoriesComponentOnlineChild = React.memo(
+const InventoriesComponentOnline = React.memo(
   ({
     searchApiData,
     setSearchApiData,
