@@ -42,9 +42,10 @@ const InventoriesComponentOnline = React.memo(
     const handleRowsPerPageChange = useCallback(
       (data) => {
         setRowsPerPage(data);
-        handleDatatable(currentPage, data);
+        const totalPages = totalRow / data;
+        handleDatatable(currentPage > totalPages ? 1 : currentPage, data);
       },
-      [handleDatatable, currentPage]
+      [handleDatatable, currentPage, totalRow]
     );
 
     return (
