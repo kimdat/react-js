@@ -20,8 +20,7 @@ const DataExecute = forwardRef((props, ref) => {
         username: "epnm",
         password: "epnm@890!",
         port: 22,
-        deviceName: "",
-        showName: "shoasdasdw run hostname",
+        deviceName: "abc",
       };
       const device2 = {
         device_type: "cisco_xr",
@@ -29,8 +28,7 @@ const DataExecute = forwardRef((props, ref) => {
         username: "epnm",
         password: "epnm@890!",
         port: 22,
-        deviceName: "",
-        showName: "show run | s hostname",
+        deviceName: "desse",
       };
       device_list.push(device1);
       device_list.push(device2);
