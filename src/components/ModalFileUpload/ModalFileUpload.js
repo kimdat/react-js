@@ -6,6 +6,7 @@ import { api } from "../../Interceptor";
 import LoadingComponent from "../LoadingComponent/LoadingComponent";
 import FileUpload from "../FileUpload/FileUpload.js";
 export const ModalFileUpload = ({ loadData, show, handleClose }) => {
+  console.log("modalfileupload");
   const API_URL = api.defaults.baseURL;
   const [files, setFiles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -42,7 +43,13 @@ export const ModalFileUpload = ({ loadData, show, handleClose }) => {
           const deviceName = match[0].split("#")[0];
           if (!deviceNames.includes(deviceName)) {
             deviceNames.push(deviceName);
-            lineIndex += 2;
+            lineIndex += 1;
+            while (
+              lineIndex < lines.length - 1 &&
+              !lines[lineIndex].startsWith("NAME")
+            ) {
+              lineIndex++;
+            }
             while (
               lineIndex < lines.length - 1 &&
               lines[lineIndex].startsWith("NAME")
