@@ -274,15 +274,17 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
         isSearchRef.current = false;
         return; // Nếu là search thì không thực hiện gọi hàm dataFilter
       }
+      const totalPages = Math.ceil(totalRow / newRowsPerPage);
+      //nếu current page lớn hơn totalpage thì page là 1
       dataFilter(
         filterTextRef.current,
         inputRef.current,
-        currentPage,
+        currentPage > totalPages ? 1 : currentPage,
         newRowsPerPage,
         !isExpandedAll
       );
     },
-    [dataFilter, currentPage, isExpandedAll]
+    [dataFilter, currentPage, isExpandedAll, totalRow]
   );
   //search text
   const handleFilter = useCallback(
