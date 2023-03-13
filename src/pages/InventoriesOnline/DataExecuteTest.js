@@ -2,8 +2,8 @@ import React, { useState, forwardRef, useCallback } from "react";
 import InventoriesComponentOnline from "./InventoriesComponentOnline";
 import { api } from "../../Interceptor";
 import Swale from "sweetalert2";
-const API_URL = api.defaults.baseURL;
-const DataExecute = forwardRef((props, ref) => {
+
+const DataExecuteTest = forwardRef((props, ref) => {
   const [rowExpand, setRowExpand] = useState([]);
   //datapage hiện tại
   const [searchApiData, setSearchApiData] = useState([]);
@@ -13,33 +13,19 @@ const DataExecute = forwardRef((props, ref) => {
   const [dataAll, setDataAll] = useState([]);
   const getExecute = async () => {
     try {
-      const device_list = [];
-      const device1 = {
-        device_type: "cisco_xr",
-        ip: "10.0.137.200",
-        username: "epnm",
-        password: "epnm@890!",
-        port: 22,
-        deviceName: "",
-        showName: "shoasdasdw run hostname",
-      };
-      const device2 = {
-        device_type: "cisco_xr",
-        ip: "10.0.137.141",
-        username: "epnm",
-        password: "epnm@890!",
-        port: 22,
-        deviceName: "",
-        showName: "show run | s hostname",
-      };
-      device_list.push(device1);
-      device_list.push(device2);
-
-      const formData = new FormData();
-      formData.append("device_list", JSON.stringify(device_list));
-      const { data } = await api.post(API_URL + "createOnline", formData);
-      console.log(data);
-      //các thiết bị thành công
+      const pust = [];
+      for (let index = 0; index < 12; index++) {
+        const data = {
+          ip: "1" + Math.random(0, 100),
+          id: "123" + Math.random(0, 100),
+          Name: Math.random(0, 100),
+          children: [],
+        };
+        pust.push(data);
+      }
+      const data = {};
+      data.success = pust;
+      data.fail = [];
       const dataSuccess = data.success;
       const dataFail = data.fail;
       if (dataFail.length > 0) {
@@ -90,4 +76,4 @@ const DataExecute = forwardRef((props, ref) => {
     </>
   );
 });
-export default DataExecute;
+export default DataExecuteTest;

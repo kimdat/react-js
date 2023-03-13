@@ -2,6 +2,7 @@ import { MDBBtn, MDBCard, MDBCardBody, MDBContainer } from "mdb-react-ui-kit";
 import React, { createRef } from "react";
 
 import DataExecute from "./DataExecute";
+import DataExecuteTest from "./DataExecuteTest";
 
 const InventoriesOnline = () => {
   console.log("invonline");
