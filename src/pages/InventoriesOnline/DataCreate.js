@@ -37,14 +37,14 @@ const DataCreate = memo(({ device_list = {} }) => {
       const device = {
         device_type: "cisco_xr",
         ip: "10.0.137.200",
-        deviceName: "asdas",
+        deviceName: "asd",
         port: 22,
         username: "epnm",
         password: "epnm@890!",
       };
 
       //nếu trùng thì xử lý
-      if (checkDuplicate(device) === true) {
+      if ((await checkDuplicate(device)) === true) {
         handleDuplicate();
         return;
       }
