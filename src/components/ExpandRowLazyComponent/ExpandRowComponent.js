@@ -6,42 +6,46 @@ const ExpandRowComponent = React.memo(({ row }) => {
     () => [
       {
         name: "",
-        selector: "",
+        width: "100px",
       },
-
+      {
+        name: "Name",
+      },
       {
         name: "Name",
         selector: (row) => row["Name"],
-        width: "18%",
       },
       {
         name: "PID",
         selector: (row) => row["PID"],
-        width: "14%",
       },
       {
         name: "Serial",
         selector: (row) => row["Serial"],
-        width: "14%",
       },
 
       {
         name: "CDESC",
         selector: (row) => row["CDESC"],
-        width: "33%",
+        width: "44.4%",
       },
     ],
     []
   );
 
   return (
-    <DataTable
-      striped
-      className="tableChild"
-      noTableHead
-      data={row}
-      columns={columnsChild}
-    ></DataTable>
+    <div style={{ maxHeight: "300px" }}>
+      <DataTable
+        striped
+        className="tableChild"
+        noTableHead
+        dense={true}
+        highlightOnHover
+        data={row}
+        responsive={true}
+        columns={columnsChild}
+      ></DataTable>
+    </div>
   );
 });
 

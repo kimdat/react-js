@@ -1,19 +1,5 @@
-.inventoriesOnline .inputCheckbox,.inventoriesOnline .filterComponent
-{
-    display: none;
-   
-}
-.inventoriesOnline .filterColumn
-{
-   opacity: 0;
- 
-}
-.inventoriesOnline .card-body header
-{
-    display: none;
-    padding-left: 20px;
-}
-.inventoriesOnline .tableChild
-{
-    max-height: 300px!important;
+
+
+.InventoriesComponentOnline .filterComponent,.InventoriesComponentOnline input{
+  display: none;
 }

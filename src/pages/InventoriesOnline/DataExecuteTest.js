@@ -1,6 +1,6 @@
 import React, { useState, forwardRef, useCallback } from "react";
 import InventoriesComponentOnline from "./InventoriesComponentOnline";
-import { api } from "../../Interceptor";
+
 import Swale from "sweetalert2";
 
 const DataExecuteTest = forwardRef((props, ref) => {
@@ -27,6 +27,7 @@ const DataExecuteTest = forwardRef((props, ref) => {
       data.success = pust;
       data.fail = [];
       const dataSuccess = data.success;
+      console.log(dataSuccess);
       const dataFail = data.fail;
       if (dataFail.length > 0) {
         const messFail = dataFail.map((i) => i.ip);

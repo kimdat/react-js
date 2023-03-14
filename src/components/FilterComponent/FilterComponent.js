@@ -14,6 +14,8 @@ const Input = styled.input.attrs((props) => ({
   border-bottom-right-radius: 0;
   border: 1px solid #e5e5e5;
   padding: 0 32px 0 16px;
+  margin-left: 10px;
+  
 `;
 
 const FilterComponent = React.memo(({ filterText, onFilter }) => {

@@ -3,8 +3,7 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Layout from "./LAYOUT/Layout.js";
-
-
+import ComponentB from "./pages/Test/Test";
 const Inventories = lazy(() =>
   import("./pages/DeviceInventoryManage/DeviceInventoryManage")
 );
@@ -12,7 +11,6 @@ const InventoriesOnline = lazy(() =>
   import("./pages/InventoriesOnline/InventoriesOnline")
 );
 const Login = lazy(() => import("./pages/Login/Login"));
-
 function App() {
   const isLoggedIn = !!localStorage.getItem("email");
   useEffect(() => {
@@ -25,7 +23,6 @@ function App() {
       <Router>
         <Routes>
           <Route exact path="/" element={<Login />}></Route>
-        
           <Route
             exact
             path="/inventories"
@@ -57,6 +54,7 @@ function App() {
               </Layout>
             }
           ></Route>
+          <Route exact path="/TEST" element={<ComponentB />}></Route>
         </Routes>
       </Router>
     </div>

@@ -7,26 +7,22 @@ import instance from "../../Interceptor";
 
 const API_URL = instance.defaults.baseURL;
 
-const ExportExcel = React.memo(({ row, setIsLoading, flagOffline }) => {
-  if (flagOffline) {
-    instance.defaults.headers.common["flagOffline"] = true;
-  }
+const ExcelSSH = React.memo(({ row, setIsLoading }) => {
   const handleExport = async () => {
     try {
       if (row.length === 0 || typeof row[0] == "undefined") {
         Swal.fire({
           icon: "error",
-          text: "No have device to export",
+          text: "No have device to export ",
         });
         return;
       }
-      const rowId = row.map((i) => i.id);
-
+      console.log(row);
       const formData = new FormData();
-      formData.append("rowId", JSON.stringify(rowId));
+      formData.append("row", JSON.stringify(row));
       setIsLoading(true);
       const response = await instance.post(
-        `${API_URL}exportFileExcel`,
+        `${API_URL}exportFileExcelSSH`,
         formData
       );
       console.log(response.data);
@@ -66,4 +62,4 @@ const ExportExcel = React.memo(({ row, setIsLoading, flagOffline }) => {
   );
 });
 
-export default ExportExcel;
+export default ExcelSSH;

@@ -14,9 +14,8 @@
 
   .tableChild  {
 
- 
-   overflow-y: auto!important;
-   max-height:200px;
+    overflow-y: auto!important;
+   max-height:250px;
 
   }
   

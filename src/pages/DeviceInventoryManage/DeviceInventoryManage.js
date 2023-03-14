@@ -3,7 +3,7 @@ import React, { useState, useRef, useCallback, useEffect } from "react";
 import Swale from "sweetalert2";
 import { api } from "../../Interceptor";
 
-import { MDBContainer } from "mdb-react-ui-kit";
+import { MDBCardHeader, MDBContainer } from "mdb-react-ui-kit";
 
 import { MDBCard } from "mdb-react-ui-kit";
 import { MDBCardBody } from "mdb-react-ui-kit";
@@ -23,6 +23,15 @@ const Inventories = React.memo(({ flagOffline = false }) => {
   useEffect(() => {
     const loadData = async () => {
       try {
+        /*const promises = [];
+        for (let i = 0; i < 100; i++) {
+          promises.push(api.get(API_URL + "devices"));
+        }
+
+        const responseArray = await Promise.all(
+          promises.map((p) => p.catch((error) => ({ error })))
+        );
+        console.log(responseArray);*/
         const { data } = await api.get(API_URL + "devices");
         console.log(data);
         setApiData(data);
@@ -107,14 +116,11 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
   const handleCheckAll = useCallback(async () => {
     setCheckAll(!checkAll);
     if (!checkAll) {
-      setIsLoading(true);
       try {
         setCheckedRows(
           searchApiData.map(({ id, Name }) => ({ id: id, name: Name }))
         );
-        setIsLoading(false);
       } catch (error) {
-        setIsLoading(false);
         swaleError(error, "handcheckall");
       }
     } else {
@@ -191,6 +197,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
       try {
         console.log("apifilterData");
         const urlFilterData = `${API_URL}filterData`;
+
         const params = {
           valueSearch: valueSearch,
           valueColumn: JSON.stringify(valueColumn),
@@ -200,7 +207,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
         };
 
         const { data } = await api.get(urlFilterData, { params });
-
+        console.log(data);
         return data;
       } catch (err) {
         swaleError(err, "apiFilterData() ");
@@ -328,8 +335,11 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
   return (
     <MDBContainer fluid>
       <MDBCard className="bg-white my-5 mx-auto" style={{ position: "static" }}>
-        <MDBCardBody className="p-5 w-100 d-flex flex-column">
-          <div style={{ display: "flex" }}>
+        <MDBCardHeader style={{ textAlign: "center" }}>
+          DEVICE INVENTORY
+        </MDBCardHeader>
+        <MDBCardBody>
+          <div style={{ display: "flex", float: "right" }}>
             {flagOffline && <ImportFile loadData={loadDataChild} />}
             <ExportExcel
               row={dataFilterNotPag}
@@ -338,32 +348,34 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
             />
             <DeleteRow loadData={loadDataChild} rowsId={checkedRows} />
           </div>
-          <LoadingComponent isLoading={isLoading}>
-            {searchApiData.length > 0 && (
-              <InventoriesComponent
-                handleFilterColumn={handleFilterColumn}
-                handleFilter={handleFilter}
-                checkAll={checkAll}
-                handleCheckAll={handleCheckAll}
-                checkedRows={checkedRows}
-                handleCheck={handleCheck}
-                getChildren={getChildren}
-                getExpandAll={getExpandAll}
-                totalRow={totalRow}
-                currentPage={currentPage}
-                handlePageChange={handlePageChange}
-                rowsPerPage={rowsPerPage}
-                handleRowsPerPageChange={handleRowsPerPageChange}
-                setIsLoading={setIsLoading}
-                searchApiData={searchApiData}
-                setSearchApiData={setSearchApiData}
-                isExpandedAll={isExpandedAll}
-                setIsExpandedAll={setIsExpandedAll}
-                rowExpand={rowExpand}
-                setRowExpand={setRowExpand}
-              />
-            )}
-          </LoadingComponent>
+          <div>
+            <LoadingComponent isLoading={isLoading}>
+              {searchApiData.length > 0 && (
+                <InventoriesComponent
+                  handleFilterColumn={handleFilterColumn}
+                  handleFilter={handleFilter}
+                  checkAll={checkAll}
+                  handleCheckAll={handleCheckAll}
+                  checkedRows={checkedRows}
+                  handleCheck={handleCheck}
+                  getChildren={getChildren}
+                  getExpandAll={getExpandAll}
+                  totalRow={totalRow}
+                  currentPage={currentPage}
+                  handlePageChange={handlePageChange}
+                  rowsPerPage={rowsPerPage}
+                  handleRowsPerPageChange={handleRowsPerPageChange}
+                  setIsLoading={setIsLoading}
+                  searchApiData={searchApiData}
+                  setSearchApiData={setSearchApiData}
+                  isExpandedAll={isExpandedAll}
+                  setIsExpandedAll={setIsExpandedAll}
+                  rowExpand={rowExpand}
+                  setRowExpand={setRowExpand}
+                />
+              )}
+            </LoadingComponent>
+          </div>
         </MDBCardBody>
       </MDBCard>
     </MDBContainer>

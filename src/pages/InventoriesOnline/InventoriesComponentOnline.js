@@ -1,9 +1,10 @@
 import React, { useState, useCallback } from "react";
-import { MDBContainer, MDBRow, MDBCardBody } from "mdb-react-ui-kit";
+
 import InventoriesComponent from "../../components/InventoriesComponent/InventoriesComponent";
 
 import LoadingComponent from "../../components/LoadingComponent/LoadingComponent";
 import "./InventoriesOnline.css";
+import ExcelSSH from "./ExcelSSH";
 
 const InventoriesComponentOnline = React.memo(
   ({
@@ -14,7 +15,7 @@ const InventoriesComponentOnline = React.memo(
     setRowExpand,
     dataAll,
   }) => {
-    console.log("invcomponentchild");
+    console.log("invcomponentchild1");
     const [currentPage, setCurrentPage] = useState(1);
     //số row mỗi page
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -49,29 +50,26 @@ const InventoriesComponentOnline = React.memo(
     );
 
     return (
-      <div>
+      <div className="InventoriesComponentOnline">
         {searchApiData.length > 0 && (
           <LoadingComponent isLoading={isLoading}>
-            <MDBContainer fluid>
-              <MDBRow className="d-flex justify-content-center align-items-center h-100">
-                <MDBCardBody>
-                  <InventoriesComponent
-                    totalRow={totalRow}
-                    currentPage={currentPage}
-                    handlePageChange={handlePageChange}
-                    rowsPerPage={rowsPerPage}
-                    handleRowsPerPageChange={handleRowsPerPageChange}
-                    setIsLoading={setIsLoading}
-                    searchApiData={searchApiData}
-                    setSearchApiData={setSearchApiData}
-                    isExpandedAll={isExpandedAll}
-                    setIsExpandedAll={setIsExpandedAll}
-                    rowExpand={rowExpand}
-                    setRowExpand={setRowExpand}
-                  />
-                </MDBCardBody>
-              </MDBRow>
-            </MDBContainer>
+            <div style={{ float: "right" }}>
+              <ExcelSSH setIsLoading={setIsLoading} row={dataAll} />
+            </div>
+            <InventoriesComponent
+              totalRow={totalRow}
+              currentPage={currentPage}
+              handlePageChange={handlePageChange}
+              rowsPerPage={rowsPerPage}
+              handleRowsPerPageChange={handleRowsPerPageChange}
+              setIsLoading={setIsLoading}
+              searchApiData={searchApiData}
+              setSearchApiData={setSearchApiData}
+              isExpandedAll={isExpandedAll}
+              setIsExpandedAll={setIsExpandedAll}
+              rowExpand={rowExpand}
+              setRowExpand={setRowExpand}
+            />
           </LoadingComponent>
         )}
       </div>

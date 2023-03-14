@@ -238,13 +238,13 @@ export const ModalFileUpload = ({ loadData, show, handleClose }) => {
       }
       try {
         setIsLoading(true);
-        const formData = new FormData(); // Tạo ra một instance mới của FormData
+        // Tạo ra một instance mới của FormData
         const numRequests = Math.ceil(
           filesParam.length / MAX_FILES_PER_REQUEST
         );
         const promises = [];
         for (let i = 0; i < numRequests; i++) {
-          formData.delete("files[]"); // Xóa giá trị của "files[]" trước đó trong FormData
+          const formData = new FormData();
           const start = i * MAX_FILES_PER_REQUEST;
           const end = start + MAX_FILES_PER_REQUEST;
           for (let j = start; j < end && j < filesParam.length; j++) {
@@ -259,6 +259,7 @@ export const ModalFileUpload = ({ loadData, show, handleClose }) => {
         const messUpload = responseArray
           .map((response, index) => {
             const data = response.data;
+            console.log(data);
             return data
               .map((item) => ({
                 ...item,
@@ -267,6 +268,7 @@ export const ModalFileUpload = ({ loadData, show, handleClose }) => {
               .filter((item) => !isNaN(item.indexPath));
           })
           .flat();
+
         //insert data sau khi upload
         await insertDataUpload(
           fileUploadContents,

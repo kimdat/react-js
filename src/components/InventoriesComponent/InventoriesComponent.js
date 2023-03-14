@@ -36,6 +36,7 @@ const InventoriesComponent = React.memo(
     setRowExpand = () => {},
   }) => {
     console.log("invComponent");
+
     //xử lý đóng/mở  con từng dòng
     const toggleRowDetails = useCallback(
       async (row) => {
@@ -51,6 +52,7 @@ const InventoriesComponent = React.memo(
           newSearchApiData[rowIndex].children = newChildren;
           setSearchApiData(newSearchApiData); // sử dụng setSearchApiData như một state updater function
         }
+
         if (rowExpand.some((item) => item === row.id)) {
           setRowExpand(rowExpand.filter((rowId) => rowId !== row.id));
         } else {
@@ -102,13 +104,13 @@ const InventoriesComponent = React.memo(
               handleFilterColumn={handleFilterColumn}
             ></FilterColumn>
           ),
-          selector: (row) => row[columnName],
           style: { display: "none" },
-          width: width,
+          width: width === "" ? undefined : width,
         };
       },
       [handleFilterColumn]
     );
+
     const columns = useMemo(
       () => [
         {
@@ -131,7 +133,12 @@ const InventoriesComponent = React.memo(
                 />
               </div>
             ),
-          width: "5.5%",
+          width: "50px",
+        },
+        {
+          name: "NO",
+          selector: (row) => row.STT,
+          width: "50px",
         },
         {
           name: (
@@ -178,14 +185,13 @@ const InventoriesComponent = React.memo(
             },
             {
               when: (row) => !row.hasOwnProperty("statusNotFound"),
-              style: { width: "14%!important" },
             },
           ],
         },
-        createColumnChildToFilter("InventoriesName", "18%", "SLOT"),
-        createColumnChildToFilter("PID", "14%", "PID"),
-        createColumnChildToFilter("Serial", "14%", "Serial"),
-        createColumnChildToFilter("CDESC", "34%", "DESCRIPTION"),
+        createColumnChildToFilter("InventoriesName", "", "SLOT"),
+        createColumnChildToFilter("PID", "", "PID"),
+        createColumnChildToFilter("Serial", "", "Serial"),
+        createColumnChildToFilter("CDESC", "45%", "DESCRIPTION"),
       ],
       [
         handleFilterColumn,
@@ -204,28 +210,30 @@ const InventoriesComponent = React.memo(
     );
     return (
       <div>
-        <Button
-          style={{
-            with: "100%",
-            maxWidth: "200px",
-            marginTop: "20px",
-            marginBottom: "10px",
-          }}
-          variant={isExpandedAll ? "success" : "secondary"}
-          onClick={handleExpandAll}
-        >
-          {!isExpandedAll ? (
-            <>
-              <FaAngleDoubleDown /> Close All
-            </>
-          ) : (
-            <>
-              <FaAngleDoubleRight /> Expand All
-            </>
-          )}
-        </Button>
+        <div>
+          <Button
+            style={{
+              with: "100%",
+              maxWidth: "200px",
+            }}
+            variant={isExpandedAll ? "success" : "secondary"}
+            onClick={handleExpandAll}
+          >
+            {!isExpandedAll ? (
+              <>
+                <FaAngleDoubleDown /> Close All
+              </>
+            ) : (
+              <>
+                <FaAngleDoubleRight /> Expand All
+              </>
+            )}
+          </Button>
 
+          <FilterComponent onFilter={handleFilter} />
+        </div>
         <DataTable
+          highlightOnHover
           paginationDefaultPage={currentPage}
           paginationTotalRows={totalRow}
           paginationPerPage={rowsPerPage}
@@ -240,15 +248,11 @@ const InventoriesComponent = React.memo(
           expandableRowExpanded={(row) =>
             rowExpand.some((item) => item === row.id)
           }
+          responsive={true}
+          dense={true}
           expandableRowsComponent={expandableRowsComponent}
           className="my-custom-data-table"
           striped
-          subHeader
-          subHeaderComponent={
-            <div>
-              <FilterComponent onFilter={handleFilter} />
-            </div>
-          }
         />
       </div>
     );
