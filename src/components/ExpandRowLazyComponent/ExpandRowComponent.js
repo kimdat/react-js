@@ -1,16 +1,14 @@
 import React, { useMemo } from "react";
 import DataTable from "react-data-table-component";
 
+import "./ExpandRowComponent.css";
 const ExpandRowComponent = React.memo(({ row }) => {
   const columnsChild = useMemo(
     () => [
       {
-        name: "",
-        width: "130px",
+        width: "105px",
       },
-      {
-        name: "Name",
-      },
+      {},
       {
         name: "Name",
         selector: (row) => row["Name"],
@@ -27,18 +25,19 @@ const ExpandRowComponent = React.memo(({ row }) => {
       {
         name: "CDESC",
         selector: (row) => row["CDESC"],
-        width: "44.4%",
+        width: "44%",
       },
     ],
     []
   );
 
   return (
-    <div style={{ maxHeight: "300px" }}>
+    <div>
       <DataTable
         striped
-        className="tableChild"
         noTableHead
+        fixedHeader={true}
+        fixedHeaderScrollHeight="300px"
         dense={true}
         highlightOnHover
         data={row}
