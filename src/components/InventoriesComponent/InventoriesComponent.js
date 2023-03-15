@@ -138,7 +138,7 @@ const InventoriesComponent = React.memo(
         {
           name: "NO",
           selector: (row) => row.STT,
-          width: "50px",
+          width: "80px",
         },
         {
           name: (
