@@ -12,6 +12,7 @@ import DeleteRow from "../../components/DeleteRow/deleteRow";
 import LoadingComponent from "../../components/LoadingComponent/LoadingComponent";
 import InventoriesComponent from "../../components/InventoriesComponent/InventoriesComponent";
 import ImportFile from "./../../components/ImportFile/ImportFile";
+import { debounce } from "lodash";
 const API_URL = api.defaults.baseURL;
 const Inventories = React.memo(({ flagOffline = false }) => {
   if (flagOffline) {
@@ -39,7 +40,7 @@ const Inventories = React.memo(({ flagOffline = false }) => {
         console.log(err.response);
         Swale.fire({
           icon: "error",
-          text: `Error when fetchData() ${err}`,
+          text: `Error when fetchData() ${err.response}`,
         });
       }
     };
@@ -224,6 +225,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
       pageRows = 10,
       flagShowChild = true
     ) => {
+      setIsLoading(true);
       const data = await apiFilterData(
         valueSearch,
         valueColumn,
@@ -242,6 +244,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
       updateState(data.total_records, data.searchapidata, data.devices);
       setCurrentPage(page);
       setRowsPerPage(pageRows);
+      setIsLoading(false);
     },
     [apiFilterData, updateState]
   );
@@ -258,41 +261,47 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
       swaleError(err, "loadDataChild() ");
     }
   }, [swaleError, updateState]);
+  const debouncedPageChange = useRef(null);
+
   const handlePageChange = useCallback(
     (page) => {
       if (isSearchRef.current) {
         isSearchRef.current = false;
-        return; // Nếu là search thì không thực hiện gọi hàm dataFilter
+        return;
       }
-      dataFilter(
-        filterTextRef.current,
-        inputRef.current,
-        page,
-        rowsPerPage,
-        !isExpandedAll
-      );
+      if (!debouncedPageChange.current) {
+        debouncedPageChange.current = debounce((page) => {
+          dataFilter(
+            filterTextRef.current,
+            inputRef.current,
+            page,
+            rowsPerPage,
+            !isExpandedAll
+          );
+          debouncedPageChange.current = null;
+        }, 500);
+      }
+      debouncedPageChange.current(page); // Gọi hàm debounce
     },
     [dataFilter, rowsPerPage, isExpandedAll]
   );
 
-  const handleRowsPerPageChange = useCallback(
-    (newRowsPerPage) => {
-      if (isSearchRef.current) {
-        isSearchRef.current = false;
-        return; // Nếu là search thì không thực hiện gọi hàm dataFilter
-      }
-      const totalPages = Math.ceil(totalRow / newRowsPerPage);
-      //nếu current page lớn hơn totalpage thì page là 1
-      dataFilter(
-        filterTextRef.current,
-        inputRef.current,
-        currentPage > totalPages ? 1 : currentPage,
-        newRowsPerPage,
-        !isExpandedAll
-      );
-    },
-    [dataFilter, currentPage, isExpandedAll, totalRow]
-  );
+  const handleRowsPerPageChange = (newRowsPerPage) => {
+    if (isSearchRef.current) {
+      isSearchRef.current = false;
+      return; // Nếu là search thì không thực hiện gọi hàm dataFilter
+    }
+    const totalPages = Math.ceil(totalRow / newRowsPerPage);
+    //nếu current page lớn hơn totalpage thì page là 1
+    dataFilter(
+      filterTextRef.current,
+      inputRef.current,
+      currentPage > totalPages ? 1 : currentPage,
+      newRowsPerPage,
+      !isExpandedAll
+    );
+  };
+
   //search text
   const handleFilter = useCallback(
     async (e) => {
@@ -351,28 +360,30 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
           <div>
             <LoadingComponent isLoading={isLoading}>
               {searchApiData.length > 0 && (
-                <InventoriesComponent
-                  handleFilterColumn={handleFilterColumn}
-                  handleFilter={handleFilter}
-                  checkAll={checkAll}
-                  handleCheckAll={handleCheckAll}
-                  checkedRows={checkedRows}
-                  handleCheck={handleCheck}
-                  getChildren={getChildren}
-                  getExpandAll={getExpandAll}
-                  totalRow={totalRow}
-                  currentPage={currentPage}
-                  handlePageChange={handlePageChange}
-                  rowsPerPage={rowsPerPage}
-                  handleRowsPerPageChange={handleRowsPerPageChange}
-                  setIsLoading={setIsLoading}
-                  searchApiData={searchApiData}
-                  setSearchApiData={setSearchApiData}
-                  isExpandedAll={isExpandedAll}
-                  setIsExpandedAll={setIsExpandedAll}
-                  rowExpand={rowExpand}
-                  setRowExpand={setRowExpand}
-                />
+                <div className="manageDeviceInventory">
+                  <InventoriesComponent
+                    handleFilterColumn={handleFilterColumn}
+                    handleFilter={handleFilter}
+                    checkAll={checkAll}
+                    handleCheckAll={handleCheckAll}
+                    checkedRows={checkedRows}
+                    handleCheck={handleCheck}
+                    getChildren={getChildren}
+                    getExpandAll={getExpandAll}
+                    totalRow={totalRow}
+                    currentPage={currentPage}
+                    handlePageChange={handlePageChange}
+                    rowsPerPage={rowsPerPage}
+                    handleRowsPerPageChange={handleRowsPerPageChange}
+                    setIsLoading={setIsLoading}
+                    searchApiData={searchApiData}
+                    setSearchApiData={setSearchApiData}
+                    isExpandedAll={isExpandedAll}
+                    setIsExpandedAll={setIsExpandedAll}
+                    rowExpand={rowExpand}
+                    setRowExpand={setRowExpand}
+                  />
+                </div>
               )}
             </LoadingComponent>
           </div>

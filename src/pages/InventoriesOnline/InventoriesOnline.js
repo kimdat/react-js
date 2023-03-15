@@ -20,13 +20,17 @@ const InventoriesOnline = () => {
   const deviceRef = createRef();
   const handleButtonClick = () => {
     const checkedRow = deviceRef.current.checkedRows;
-    if (checkedRow.length === 0) {
+    if (
+      checkedRow.length === 0 ||
+      checkedRow[0].hasOwnProperty("statusNotFound")
+    ) {
       Swal.fire({
         icon: "error",
         text: "Please choose one device",
       });
       return;
     }
+    console.log(checkedRow);
 
     const rowCheck = checkedRow.map((item) => {
       return {
