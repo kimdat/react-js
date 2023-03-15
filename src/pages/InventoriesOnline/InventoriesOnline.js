@@ -8,7 +8,7 @@ import {
   MDBRow,
 } from "mdb-react-ui-kit";
 import React, { createRef } from "react";
-import DataCreate from "./DataCreate";
+import DataCreateUpdate from "./DataCreateUpdate";
 
 import DataExecute from "./DataExecute";
 
@@ -50,8 +50,8 @@ const InventoriesOnline = () => {
 
   return (
     <div>
-      <DataCreate />
-
+      <DataCreateUpdate />
+      <DataCreateUpdate flagUpdate={true} />
       <MDBContainer fluid>
         <MDBCard style={{ marginBottom: "-30px" }}>
           <MDBCardHeader style={{ textAlign: "center" }}>
