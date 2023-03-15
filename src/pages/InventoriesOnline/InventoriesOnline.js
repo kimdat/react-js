@@ -14,7 +14,6 @@ import DataExecute from "./DataExecute";
 
 import DevicesOnline from "./DeviceOnline";
 import Swal from "sweetalert2";
-import DataExecuteTest from "./DataExecuteTest";
 
 const InventoriesOnline = () => {
   const childRef = createRef();
@@ -28,10 +27,10 @@ const InventoriesOnline = () => {
       });
       return;
     }
-    const jsonId = {};
+
     const rowCheck = checkedRow.map((item) => {
-      jsonId[item.Ip] = item.id;
       return {
+        id: item.id,
         device_type: item.Device_type,
         ip: item.Ip,
         deviceName: item.Name,
@@ -42,7 +41,7 @@ const InventoriesOnline = () => {
     });
 
     // Gọi hàm handleClick() trong component con
-    childRef.current.handleClick(rowCheck, jsonId);
+    childRef.current.handleClick(rowCheck);
   };
 
   return (
