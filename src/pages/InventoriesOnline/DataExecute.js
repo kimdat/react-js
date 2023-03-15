@@ -24,7 +24,6 @@ const DataExecute = memo(
       try {
         setIsLoading(true);
         const formData = new FormData();
-
         formData.append("ip", JSON.stringify(device_list));
         const { data } = await axios.post(
           "http://localhost/NETMIKO/home.py",
@@ -84,7 +83,6 @@ const DataExecute = memo(
       }
     };
     const handleClick = useCallback(async (rowCheck) => {
-      console.log(rowCheck);
       getExecute(rowCheck);
     }, []);
     useImperativeHandle(ref, () => ({
