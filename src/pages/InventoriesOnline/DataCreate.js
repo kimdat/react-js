@@ -34,17 +34,17 @@ const DataCreate = memo(({ device_list = {} }) => {
   const getCreate = useCallback(async () => {
     try {
       const formData = new FormData();
-      const device = {
+      const device_list = {
         device_type: "cisco_xr",
         ip: "10.0.137.200",
-        deviceName: "asd",
+        deviceName: "asasdasd",
         port: 22,
         username: "epnm",
         password: "epnm@890!",
       };
 
       //nếu trùng thì xử lý
-      if ((await checkDuplicate(device)) === true) {
+      if ((await checkDuplicate(device_list)) === true) {
         handleDuplicate();
         return;
       }
@@ -74,7 +74,7 @@ const DataCreate = memo(({ device_list = {} }) => {
         text: `Error getCreate fnc ${message}`,
       });
     }
-  }, [handleDuplicate, checkDuplicate, device_list]);
+  }, [handleDuplicate, checkDuplicate]);
   return (
     <MDBBtn type="submit" form="formLogin" size="lg" onClick={getCreate}>
       Create
