@@ -6,7 +6,7 @@ const ExpandRowComponent = React.memo(({ row }) => {
     () => [
       {
         name: "",
-        width: "100px",
+        width: "130px",
       },
       {
         name: "Name",
