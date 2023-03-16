@@ -1,0 +1,45 @@
+.deviceListTable {
+    display: block;
+    max-width: -moz-fit-content;
+    max-width: fit-content;
+    overflow-x: auto;
+    white-space: nowrap;
+
+    th {
+        font-weight: 700 !important;
+    }
+
+    th,
+    td {
+        padding: 0 !important;
+    }
+}
+
+.deviceListTableHead {
+    height: 5rem;
+    vertical-align: middle !important;
+    position: sticky;
+}
+
+.deviceListTableCol {
+    resize: horizontal;
+    overflow: auto;
+    padding-right: 10px;
+}
+
+.textFilter {
+    label {
+        margin-bottom: 0;
+    }
+}
+
+.selectFilter {
+    label {
+        margin-bottom: 0;
+    }
+}
+
+.statusIcon {
+    display: inline-block;
+    margin-right: .3rem;
+}

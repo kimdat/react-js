@@ -46,7 +46,7 @@ const Login = () => {
         console.error(err);
         let messErr = err;
         if (messErr.response.data) messErr = messErr.response.data;
-        if (messErr.error) messErr = messErr.error;
+        if (messErr.Error) messErr = messErr.Error;
         Swal.fire({
           icon: "error",
           text: "Erro login " + messErr,

@@ -1,0 +1,92 @@
+.modalOverlay {
+    background-color: rgba(0, 0, 0, 0.753);
+    position: fixed;
+    inset: 0;
+    z-index: 998;
+
+    &[data-state="open"] {
+        animation: modalOverlayShow 250ms ease-in-out;
+    }
+
+    &[data-state="closed"] {
+        animation: modalOverlayHide 250ms ease-in-out;
+    }
+}
+
+@keyframes modalOverlayShow {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes modalOverlayHide {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+.modalContent {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+
+    border: 1px solid rgb(204, 204, 204);
+    background-color: white;
+    border-radius: 3px;
+    min-height: 6rem;
+    max-width: 550px;
+
+    @media (max-width: 641px) {
+        max-width: 96%;
+    }
+}
+
+.modalTitle {
+    padding: 0.625rem 2.5rem 0.625rem 1rem;
+    color: rgb(51, 51, 51);
+    font-size: 1.5rem;
+    line-height: 3rem;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+
+    @media (max-width: 641px) {
+        font-size: 1rem;
+        line-height: 2.25rem;
+    }
+}
+
+.closeButton {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.125rem;
+    line-height: normal;
+    background-color: transparent;
+    border: 0px;
+    height: 1.5rem;
+    padding: 0.3125rem;
+    position: absolute;
+    right: 1rem;
+    top: 0.625rem;
+    transition: box-shadow 0.3s linear 0s;
+    width: 1.5rem;
+
+    &:hover,
+    &:active,
+    &:focus {
+        border-radius: 3px;
+        box-shadow: rgb(0 0 0 / 25%) 0px 0px 0px 5rem inset;
+        cursor: pointer;
+        outline: none;
+    }
+}

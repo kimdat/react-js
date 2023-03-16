@@ -1,0 +1,17 @@
+.deviceDetailsForm {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.formLabel {
+    margin-bottom: 0;
+    font-size: .8rem;
+    font-weight: 600;
+}
+
+.formGroup {
+    margin-top: .5rem;
+    display: grid;
+    grid-template-columns: 100px 1fr;
+}

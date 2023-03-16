@@ -1,0 +1,18 @@
+.pageContainer {
+    margin-top: 4rem;
+    padding: 1rem;
+}
+
+.actionsWrapper {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.actionButton:nth-child(2) {
+    margin: 0 .3rem;
+}
+
+.buttonIcon {
+    display: inline-block;
+    margin-right: .3rem;
+}

@@ -3,6 +3,7 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Layout from "./LAYOUT/Layout.js";
+import DeviceManagementPage from './features/devices/DeviceManagementPage';
 
 
 const Inventories = lazy(() =>
@@ -53,6 +54,17 @@ function App() {
               <Layout>
                 <div>
                   <Inventories />
+                </div>
+              </Layout>
+            }
+          ></Route>
+          <Route
+            exact
+            path="/device-management"
+            element={
+              <Layout>
+                <div>
+                  <DeviceManagementPage />
                 </div>
               </Layout>
             }
