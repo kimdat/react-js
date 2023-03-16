@@ -42,6 +42,7 @@ const DeviceListTable = (props) => {
         deviceStatus,
         regions,
         provinces,
+        filters,
     } = props;
         
     const columns = [

@@ -7,7 +7,12 @@ import { faAdd, faXmark, faPencil } from '@fortawesome/free-solid-svg-icons';
 import AddDeviceModal from './components/AddDeviceModal';
 import { useGetAllDevicesQuery } from './deviceApiSlice';
 import { useDispatch, useSelector } from "react-redux";
-import { selectDeviceList, selectAllToggle, selectRowToggle } from './deviceSlice';
+import {
+    selectDeviceList,
+    selectFilters,
+    selectAllToggle,
+    selectRowToggle,
+} from './deviceSlice';
 import { useGetAllProvincesQuery } from '../province/provinceApiSlice';
 import { useGetAllRegionsQuery } from '../region/regionApiSlice';
 import { useGetAllDeviceStatusQuery } from '../deviceStatus/deviceStatusApiSlice';
@@ -37,7 +42,7 @@ const DeviceManagementPage = (props) => {
         isSuccess: deviceStatusSuccess,
     } = useGetAllDeviceStatusQuery();
 
-    const isLoading = deviceStatusFetching || provincesFetching || regionsFetching || deviceStatusFetching;
+    const isLoading = devicesFetching || provincesFetching || regionsFetching || deviceStatusFetching;
     const isSuccess = devicesSuccess || provincesSuccess || regionsSuccess || deviceStatusSuccess;
     const isError = devicesError || provincesError || regionsError || deviceStatusError;
 
@@ -92,7 +97,8 @@ const DeviceManagementPage = (props) => {
     //reducer
     const devices = useSelector(selectDeviceList);
     const isSelectAll = useSelector((state) => state.device.isSelectAll);
-    const hasNoRowSelected = devices? devices.every((device) => device.isSelected === false) : true;
+    const hasNoRowSelected = devices ? devices.every((device) => device.isSelected === false) : true;
+    const filters = useSelector(selectFilters);
     return (
         <div className={styles.pageContainer}>
             <MDBCard>
@@ -144,10 +150,11 @@ const DeviceManagementPage = (props) => {
                             deviceList={devices}
                             isSelectAll={isSelectAll}
                             selectAllToggleFunc={() => dispatch(selectAllToggle())}
-                        selectRowToggleFunc={(ip) => dispatch(selectRowToggle(ip))}
-                        deviceStatus={deviceStatus}
-                        regions={regions}
-                        provinces={provinces}
+                            selectRowToggleFunc={(ip) => dispatch(selectRowToggle(ip))}
+                            deviceStatus={deviceStatus}
+                            regions={regions}
+                            provinces={provinces}
+                            filters={filters}
                         />
                     }
                     {isError && 

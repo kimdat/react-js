@@ -5,6 +5,7 @@ const initialState = {
     list: [],
     isSelectAll: false,
     isLoading: false,
+    filters: {}
 }
 
 const deviceSlice = createSlice({
@@ -30,6 +31,10 @@ const deviceSlice = createSlice({
             };
             const isSelectAll = checkSelectAll(state.list);
             state.isSelectAll = isSelectAll;
+        },
+        addFilter: (state, action) => {
+            const { filterName, filterValue } = action.payload;
+            state.filters[`${filterName}`] = filterValue;
         }
     },
     extraReducers: (builder) => {
@@ -48,4 +53,5 @@ const deviceSlice = createSlice({
 
 export const { selectAllToggle, selectRowToggle } = deviceSlice.actions;
 export const selectDeviceList = (state) => state.device.list;
+export const selectFilters = (state) => state.device.filters;
 export default deviceSlice.reducer;
