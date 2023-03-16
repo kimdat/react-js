@@ -10,10 +10,10 @@ const API_URL = instance.defaults.baseURL;
 const ExcelSSH = React.memo(({ row, setIsLoading }) => {
   const handleExport = async () => {
     try {
-      if (row.length === 0 || typeof row[0] == "undefined") {
+      if (typeof row === "undefined" || row.length === 0) {
         Swal.fire({
           icon: "error",
-          text: "No have device to export ",
+          text: "No have device to export",
         });
         return;
       }

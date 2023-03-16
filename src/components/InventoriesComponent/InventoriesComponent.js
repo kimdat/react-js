@@ -12,6 +12,7 @@ import FilterComponent from "./../../components/FilterComponent/FilterComponent"
 import { FaAngleDoubleDown, FaAngleDoubleRight } from "react-icons/fa";
 import "./Inventories.css";
 import ExpandableRowLazyComponent from "../../components/ExpandRowLazyComponent/ExpandRowLazyComponent";
+
 const InventoriesComponent = React.memo(
   ({
     handleFilterColumn,
@@ -133,12 +134,12 @@ const InventoriesComponent = React.memo(
                 />
               </div>
             ),
-          width: "50px",
+          width: "45px",
         },
         {
           name: "NO",
           selector: (row) => row.STT,
-          width: "50px",
+          width: "60px",
         },
         {
           name: (
@@ -232,28 +233,30 @@ const InventoriesComponent = React.memo(
 
           <FilterComponent onFilter={handleFilter} />
         </div>
-        <DataTable
-          highlightOnHover
-          paginationDefaultPage={currentPage}
-          paginationTotalRows={totalRow}
-          paginationPerPage={rowsPerPage}
-          columns={columns}
-          data={searchApiData}
-          expandableRows
-          pagination
-          paginationServer
-          onChangePage={handlePageChange}
-          onChangeRowsPerPage={handleRowsPerPageChange}
-          expandableRowsHideExpander
-          expandableRowExpanded={(row) =>
-            rowExpand.some((item) => item === row.id)
-          }
-          responsive={true}
-          dense={true}
-          expandableRowsComponent={expandableRowsComponent}
-          className="my-custom-data-table"
-          striped
-        />
+        <div>
+          <DataTable
+            highlightOnHover
+            paginationDefaultPage={currentPage}
+            paginationTotalRows={totalRow}
+            paginationPerPage={rowsPerPage}
+            columns={columns}
+            data={searchApiData}
+            expandableRows
+            pagination
+            paginationServer
+            onChangePage={handlePageChange}
+            onChangeRowsPerPage={handleRowsPerPageChange}
+            expandableRowsHideExpander
+            expandableRowExpanded={(row) =>
+              rowExpand.some((item) => item === row.id)
+            }
+            responsive={true}
+            dense={true}
+            expandableRowsComponent={expandableRowsComponent}
+            className="my-custom-data-table"
+            striped
+          />
+        </div>
       </div>
     );
   }

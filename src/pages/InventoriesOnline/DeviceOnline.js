@@ -30,7 +30,20 @@ const DevicesOnline = memo(
       const loadData = async () => {
         try {
           const { data } = await api.get(API_URL + "devicesOnline");
+          /* const dataa = [];
+
+          for (let i = 0; i < 50; i++) {
+            const devicesWithId = data.devices.map((device) => ({
+              ...device,
+              id:
+                Math.random().toString(36).substring(2, 15) +
+                Math.random().toString(36).substring(2, 15),
+            }));
+            dataa.push(...devicesWithId);
+          }
           //data trước khi filter
+          setDataToSearch(dataa);
+          setApiData(dataa);*/
           setDataToSearch(data.devices);
           setApiData(data.devices);
         } catch (err) {
@@ -71,6 +84,12 @@ const DevicesOnlineChild = memo(
         const name = e.target.name;
         const value = e.target.value.trim();
         const newInputs = { ...inputs, [name]: value };
+        //nếu giá trị cũ thì return luôn
+        if (
+          JSON.stringify(inputs).toLowerCase() ===
+          JSON.stringify(newInputs).toLowerCase()
+        )
+          return;
         console.log(dataToSearch);
 
         const newData = dataToSearch.filter((item) => {

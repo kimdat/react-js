@@ -8,30 +8,33 @@ import {
   MDBRow,
 } from "mdb-react-ui-kit";
 import React, { createRef } from "react";
-import DataCreate from "./DataCreate";
+import DataCreateUpdate from "./DataCreateUpdate";
 
 import DataExecute from "./DataExecute";
 
 import DevicesOnline from "./DeviceOnline";
 import Swal from "sweetalert2";
-import DataExecuteTest from "./DataExecuteTest";
 
 const InventoriesOnline = () => {
   const childRef = createRef();
   const deviceRef = createRef();
   const handleButtonClick = () => {
     const checkedRow = deviceRef.current.checkedRows;
-    if (checkedRow.length === 0) {
+    if (
+      checkedRow.length === 0 ||
+      checkedRow[0].hasOwnProperty("statusNotFound")
+    ) {
       Swal.fire({
         icon: "error",
         text: "Please choose one device",
       });
       return;
     }
-    const jsonId = {};
+    console.log(checkedRow);
+
     const rowCheck = checkedRow.map((item) => {
-      jsonId[item.Ip] = item.id;
       return {
+        id: item.id,
         device_type: item.Device_type,
         ip: item.Ip,
         deviceName: item.Name,
@@ -42,13 +45,13 @@ const InventoriesOnline = () => {
     });
 
     // Gọi hàm handleClick() trong component con
-    childRef.current.handleClick(rowCheck, jsonId);
+    childRef.current.handleClick(rowCheck);
   };
 
   return (
     <div>
-      <DataCreate />
-
+      <DataCreateUpdate />
+      <DataCreateUpdate flagUpdate={true} />
       <MDBContainer fluid>
         <MDBCard style={{ marginBottom: "-30px" }}>
           <MDBCardHeader style={{ textAlign: "center" }}>

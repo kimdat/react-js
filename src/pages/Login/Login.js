@@ -49,7 +49,7 @@ const Login = () => {
         if (messErr.Error) messErr = messErr.Error;
         Swal.fire({
           icon: "error",
-          text: "Erro login " + messErr,
+          text: "Error login " + messErr,
         });
       }
     }
