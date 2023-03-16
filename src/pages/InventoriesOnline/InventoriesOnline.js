@@ -35,7 +35,7 @@ const InventoriesOnline = () => {
     const rowCheck = checkedRow.map((item) => {
       return {
         id: item.id,
-        device_type: item.Device_type,
+        device_type_S: item.Device_type_S,
         ip: item.Ip,
         deviceName: item.Name,
         port: 22,

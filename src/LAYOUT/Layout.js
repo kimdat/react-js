@@ -1,3 +1,6 @@
+import Header from '../features/header/components/Header';
+import Footer from '../features/footer/components/Footer';
+
 function Layout(props) {
   const header = {
     logo: {
@@ -35,8 +38,9 @@ function Layout(props) {
   return (
     <div>
       {/* Include footer or any other common elements */}
-      asds
+      <Header logo={header.logo} navigations={header.navigations} profile={header.profile} />
       <div>{props.children}</div>
+      <Footer/>
     </div>
   );
 }

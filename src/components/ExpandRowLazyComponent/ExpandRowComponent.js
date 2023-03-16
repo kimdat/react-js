@@ -1,7 +1,6 @@
 import React, { useMemo } from "react";
 import DataTable from "react-data-table-component";
 
-import "./ExpandRowComponent.css";
 const ExpandRowComponent = React.memo(({ row }) => {
   const columnsChild = useMemo(
     () => [
