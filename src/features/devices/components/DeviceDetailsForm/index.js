@@ -5,6 +5,7 @@ import { api } from "../../../../Interceptor";
 import { deviceType, province, region } from "../../data/constants";
 import styles from "./DeviceDetailsForm.module.scss";
 import Swale from "sweetalert2";
+import LoadingComponent from "./../../../../components/LoadingComponent/LoadingComponent";
 const API_URL = api.defaults.baseURL;
 const DeviceDetailsForm = (props) => {
   const setInputs = props.setInputs;
@@ -34,7 +35,7 @@ const DeviceDetailsForm = (props) => {
     const value = e.target.value.trim();
 
     const newInputs = { ...inputs, [name]: value };
-    console.log(newInputs);
+
     setInputs(newInputs);
   };
   const handleOnBlur = (e) => {
@@ -43,6 +44,7 @@ const DeviceDetailsForm = (props) => {
   const handleCheckDuplicate = async (e) => {
     try {
       const formData = new FormData();
+
       const name = e.target.name;
       const value = e.target.value.trim();
       formData.append("name", name);

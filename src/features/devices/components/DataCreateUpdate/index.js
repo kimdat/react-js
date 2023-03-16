@@ -37,23 +37,26 @@ const DataCreateUpdate = memo(
       try {
         const formData = new FormData();
         console.log(device_list);
+        setIsLoading(true);
         formData.append("device_list", JSON.stringify(device_list));
         formData.append("flagUpdate", flagUpdate);
         const { data } = await api.post(API_URL + "createOnline", formData);
         console.log(data);
         //mess thông báo cho 1 thiết bị
         if (device_list.length === 1) {
-          //messInforOneDevice(data);
+          messInforOneDevice(data);
         }
+        setIsLoading(false);
       } catch (err) {
         const message = err?.response?.data?.error ?? err?.error ?? err;
         console.error(message);
-        /*Swale.fire({
+        Swale.fire({
           icon: "error",
           text: `Error  ${message}`,
-        });*/
+        });
+        setIsLoading(false);
       }
-    }, [flagUpdate, messInforOneDevice, device_list]);
+    }, [flagUpdate, messInforOneDevice, device_list, setIsLoading]);
     return (
       <MDBBtn type="submit" form="formLogin" size="lg" onClick={getCreate}>
         {EditCreate}

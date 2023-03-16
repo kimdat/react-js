@@ -38,9 +38,10 @@ const Inventories = React.memo(({ flagOffline = false }) => {
         setApiData(data);
       } catch (err) {
         console.log(err.response);
+        const message = err?.response?.data?.error ?? err?.error ?? err;
         Swale.fire({
           icon: "error",
-          text: `Error when fetchData() ${err.response}`,
+          text: `Error when fetchData() ${message}`,
         });
       }
     };

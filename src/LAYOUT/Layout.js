@@ -1,5 +1,5 @@
-import Header from '../features/header/components/Header';
-import Footer from '../features/footer/components/Footer';
+import Header from "../features/header/components/Header";
+import Footer from "../features/footer/components/Footer";
 
 function Layout(props) {
   const header = {
@@ -10,37 +10,47 @@ function Layout(props) {
     },
     navigations: [
       {
-        text: "Quản lý thiết bị offline",
+        text: "Manage Inventories",
         navigations: [
           {
-            text: "Danh sách thiết bị",
-            url: "/",
+            text: "Online",
+            url: "/managementDeviceInventories",
           },
           {
-            text: "Inventory",
-            url: "/",
+            text: "Offline",
+            url: "/Inventories",
           },
         ],
         hasSubMenu: true,
       },
+
       {
-        text: "Quản lý thiết bị online",
-        url: "/",
+        text: "Manage Device",
+        url: "/device-management",
+        hasSubMenu: false,
+      },
+      {
+        text: "Instantaneous check",
+        url: "/InventoriesOnline",
         hasSubMenu: false,
       },
     ],
     profile: {
-      profileGreeting: (username) => `Xin chào, ${username}`,
-      signOut: "Đăng xuất",
-      manageProfile: "Quản lý thông tin tài khoản",
+      profileGreeting: (username) => `Hello ${username}`,
+      signOut: "Logout",
+      manageProfile: "Manage account",
     },
   };
   return (
     <div>
       {/* Include footer or any other common elements */}
-      <Header logo={header.logo} navigations={header.navigations} profile={header.profile} />
+      <Header
+        logo={header.logo}
+        navigations={header.navigations}
+        profile={header.profile}
+      />
       <div>{props.children}</div>
-      <Footer/>
+      <Footer />
     </div>
   );
 }

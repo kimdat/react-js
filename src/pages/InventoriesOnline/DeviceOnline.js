@@ -35,9 +35,10 @@ const DevicesOnline = memo(
           setApiData(data.devices);
         } catch (err) {
           console.log(err.response);
+          const message = err?.response?.data?.error ?? err?.error ?? err;
           Swale.fire({
             icon: "error",
-            text: `Error when fetchData() ${err}`,
+            text: `Error when fetchData() ${message}`,
           });
         }
       };
