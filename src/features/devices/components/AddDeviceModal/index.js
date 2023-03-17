@@ -6,6 +6,8 @@ import styles from "./AddDeviceModal.module.scss";
 import { useAddNewDeviceMutation } from "../../deviceApiSlice";
 import * as Yup from "yup";
 import useFormValidator from "../../../../hooks/useFormValidator";
+import LoadingComponent from "./../../../../components/LoadingComponent/LoadingComponent";
+import Swale from "sweetalert2";
 
 const AddDeviceModal = (props) => {
   const { trigger, provinces, regions } = props;
@@ -20,8 +22,8 @@ const AddDeviceModal = (props) => {
   const [address, setAddress] = React.useState("");
 
   const [msg, setMsg] = React.useState("");
-
-  const [addNewDevice, { isLoading, isSuccess, isError }] =
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [addNewDevice, { isLoading1, isSuccess, isError }] =
     useAddNewDeviceMutation();
 
   const ipAddrRegExp =
@@ -60,7 +62,25 @@ const AddDeviceModal = (props) => {
     setLat,
     setAddress,
   };
-
+  const EditCreate = "Add";
+  const messInforOneDevice = (data) => {
+    const dataFail = data.fail;
+    const dataErr = data.Err;
+    const title =
+      dataErr.length > 0 ? "Err" : dataFail.length > 0 ? "Fail" : "Success";
+    const icon = dataErr.length > 0 || dataFail.length ? "error" : "success";
+    const html =
+      dataErr.length > 0
+        ? `Error when ${EditCreate} device`
+        : dataFail.length > 0
+        ? `connect fail for:${dataFail[0].ip}`
+        : `${EditCreate} success`;
+    Swale.fire({
+      title,
+      icon,
+      html,
+    });
+  };
   const handleAddDevice = async () => {
     //validation
     const data = await validate(device);
@@ -68,11 +88,15 @@ const AddDeviceModal = (props) => {
 
     //post
     try {
+      setIsLoading(true);
       const res = await addNewDevice(data).unwrap();
+      setIsLoading(false);
       console.log(res);
+      messInforOneDevice(res);
       // setOpen(false);
     } catch (err) {
       console.log(err);
+      setIsLoading(false);
       setMsg("");
       if (!err.success) {
         setMsg(err.data.errors?.join("</br>"));
@@ -83,41 +107,43 @@ const AddDeviceModal = (props) => {
   };
 
   return (
-    <Modal
-      setOpen={setOpen}
-      trigger={<span onClick={() => setOpen(!open)}>{trigger}</span>}
-      title="Add a new device"
-      body={
-        <div className={styles.addDeviceModalBody}>
-          <DeviceDetailsForm
-            device={device}
-            inputChangeHandlers={inputChangeHandler}
-            regions={regions}
-            provinces={provinces}
-            errors={errors}
-            texts={texts}
-          />
-          <div className={styles.actionButtonList}>
-            <MDBBtn
-              className={styles.actionButton}
-              color="secondary"
-              onClick={() => setOpen(!open)}
-            >
-              Cancel
-            </MDBBtn>
-            <MDBBtn
-              className={styles.actionButton}
-              onClick={() => handleAddDevice()}
-            >
-              Add
-            </MDBBtn>
+    <LoadingComponent isLoading={isLoading}>
+      <Modal
+        setOpen={setOpen}
+        trigger={<span onClick={() => setOpen(!open)}>{trigger}</span>}
+        title="Add a new device"
+        body={
+          <div className={styles.addDeviceModalBody}>
+            <DeviceDetailsForm
+              device={device}
+              inputChangeHandlers={inputChangeHandler}
+              regions={regions}
+              provinces={provinces}
+              errors={errors}
+              texts={texts}
+            />
+            <div className={styles.actionButtonList}>
+              <MDBBtn
+                className={styles.actionButton}
+                color="secondary"
+                onClick={() => setOpen(!open)}
+              >
+                Cancel
+              </MDBBtn>
+              <MDBBtn
+                className={styles.actionButton}
+                onClick={() => handleAddDevice()}
+              >
+                Add
+              </MDBBtn>
+            </div>
           </div>
-        </div>
-      }
-      hideOnClickOutside={true}
-      hasCloseButton={false}
-      isOpen={open}
-    ></Modal>
+        }
+        hideOnClickOutside={true}
+        hasCloseButton={false}
+        isOpen={open}
+      ></Modal>{" "}
+    </LoadingComponent>
   );
 };
 
