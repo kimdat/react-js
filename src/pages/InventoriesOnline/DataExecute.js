@@ -23,20 +23,20 @@ const DataExecute = memo(
     const getExecute = async (device_list) => {
       try {
         setIsLoading(true);
-        
+
         const formData = new FormData();
         formData.append("ip", JSON.stringify(device_list));
         const { data } = await axios.post(
           "http://localhost/NETMIKO/home.py",
           formData
         );
-
+        console.log(data);
         const inventory = JSON.parse(data.deviceData);
         const dataSuccess = [];
         const dataFail = [];
         let stt = 1;
         device_list.forEach((device) => {
-          const ip = device.ip;
+          const ip = device.Ip;
           const dataInventory = inventory[ip];
           var children = [];
           //nếu connect success
@@ -46,14 +46,14 @@ const DataExecute = memo(
               STT: stt++,
               ip: ip,
               id: device.id,
-              Name: device.deviceName,
+              Name: device.DeviceName,
               children: children,
             });
           } else {
             dataFail.push({
               ip: ip,
               id: device.id,
-              Name: device.deviceName,
+              Name: device.DeviceName,
               children: children,
             });
           }

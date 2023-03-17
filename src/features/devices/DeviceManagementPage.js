@@ -106,7 +106,10 @@ const DeviceManagementPage = (props) => {
                     <div className={styles.actionsWrapper}>
 
                         {/* action buttons */}
-                        <AddDeviceModal trigger={
+                        <AddDeviceModal
+                            provinces={provinces}
+                            regions={regions}
+                            trigger={
                             <MDBBtn
                                 className={styles.actionButton}
                                 type="button"

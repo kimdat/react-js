@@ -1,139 +1,60 @@
 import React, { useEffect } from "react";
 import { Form } from "react-bootstrap";
 import ReactInputMask from "react-input-mask";
-import { api } from "../../../../Interceptor";
-import { deviceType, province, region } from "../../data/constants";
+import { deviceType } from "../../data/constants";
 import styles from "./DeviceDetailsForm.module.scss";
-import Swale from "sweetalert2";
-import LoadingComponent from "./../../../../components/LoadingComponent/LoadingComponent";
-const API_URL = api.defaults.baseURL;
+import classNames from "classnames";
+
+const cx = classNames.bind(styles);
+
 const DeviceDetailsForm = (props) => {
-  const setInputs = props.setInputs;
-  const inputs = props.inputs;
-
-  useEffect(() => {
-    if (Object.keys(inputs).length === 0) {
-      const newInputs = {
-        ...inputs,
-        deviceType: deviceType[0].value,
-        region: region[0].value,
-        province: province[0].value,
-        ip: "",
-        long: "",
-        lat: "",
-        address: "",
-        username: "epnm",
-        password: "epnm@890!",
-      };
-      console.log(newInputs);
-      setInputs(newInputs);
-    }
-  }, [inputs, setInputs]);
-
-  const handleSetInputs = (e) => {
-    const name = e.target.name;
-    const value = e.target.value.trim();
-
-    const newInputs = { ...inputs, [name]: value };
-
-    setInputs(newInputs);
-  };
-  const handleOnBlur = (e) => {
-    //check laid
-  };
-  const handleCheckDuplicate = async (e) => {
-    try {
-      const formData = new FormData();
-
-      const name = e.target.name;
-      const value = e.target.value.trim();
-      formData.append("name", name);
-      formData.append("value", value);
-      const { data } = await api.post(`${API_URL}checkDuplicate`, formData);
-      console.log(data);
-      //nếu trùng thì return true
-      return typeof data.duplicate != "undefined";
-    } catch (err) {
-      const message =
-        err.response?.data?.error ?? err?.error ?? err.response.data;
-      console.error(err.response.data);
-      Swale.fire({
-        icon: "error",
-        text: `Error handleDuplicate ${message}`,
-      });
-      return false;
-    }
-  };
-
+  const { device, inputChangeHandlers, regions, provinces, errors, texts } =
+    props;
   const formConfigs = [
     {
       type: "text",
       validationRegex: "",
       label: "Device Name",
       id: "device_name_input",
-      name: "deviceName",
-
-      onChange: (e) => {
-        handleSetInputs(e);
-      },
-      onBlur: async (e) => {
-        //check valid
-        handleOnBlur();
-        //kiểm tra trùng
-        if (await handleCheckDuplicate(e)) {
-          console.log("dup");
-        }
-      },
+      name: "DeviceName",
+      value: device.deviceName,
+      onChange: (e) => inputChangeHandlers.setDeviceName(e.target.value),
     },
     {
       type: "text",
-      mask: "99.9.999.999",
       validationRegex: "",
-      label: "IP Loopback",
+      label: "IP",
       id: "ip_loopback_input",
-      name: "ip",
-      onChange: (e) => {
-        handleSetInputs(e);
-      },
-      onBlur: async (e) => {
-        handleOnBlur();
-        if (await handleCheckDuplicate(e)) {
-          console.log("dup");
-        }
-      },
+      name: "Ip",
+      value: device.ipLoopback,
+      onChange: (e) => inputChangeHandlers.setIpLoopback(e.target.value),
     },
     {
       type: "select",
       label: "Device type",
       options: deviceType,
       id: "device_type_select",
-      name: "deviceType",
-
-      onChange: (e) => {
-        handleSetInputs(e);
-      },
+      name: "Device_Type",
+      value: device.deviceType,
+      onChange: (e) => inputChangeHandlers.setDeviceType(e.target.value),
     },
     {
       type: "select",
       label: "Region",
-      options: region,
+      options: regions,
       id: "region_select",
-      name: "region",
-
-      onChange: (e) => {
-        handleSetInputs(e);
-      },
+      name: "region_id",
+      value: device.region,
+      onChange: (e) => inputChangeHandlers.setRegion(e.target.value),
     },
     {
       type: "select",
       label: "Province",
-      options: province,
+      options: provinces,
       id: "province_select",
-      name: "province",
-
-      onChange: (e) => {
-        handleSetInputs(e);
-      },
+      name: "province_id",
+      value: device.province,
+      onChange: (e) => inputChangeHandlers.setProvince(e.target.value),
     },
     {
       type: "text",
@@ -142,12 +63,8 @@ const DeviceDetailsForm = (props) => {
       label: "Longitude",
       id: "longitude_input",
       name: "long",
-      onChange: (e) => {
-        handleSetInputs(e);
-      },
-      onBlur: (e) => {
-        handleOnBlur();
-      },
+      value: device.long,
+      onChange: (e) => inputChangeHandlers.setLong(e.target.value),
     },
     {
       type: "text",
@@ -156,27 +73,18 @@ const DeviceDetailsForm = (props) => {
       label: "Latitude",
       id: "latitude_input",
       name: "lat",
-      onChange: (e) => {
-        handleSetInputs(e);
-      },
-      onBlur: (e) => {
-        handleOnBlur();
-      },
+      value: device.lat,
+      onChange: (e) => inputChangeHandlers.setLat(e.target.value),
     },
     {
       type: "text",
       label: "Address",
       id: "address_input",
       name: "address",
-      onChange: (e) => {
-        handleSetInputs(e);
-      },
-      onBlur: (e) => {
-        handleOnBlur();
-      },
+      value: device.address,
+      onChange: (e) => inputChangeHandlers.setAddress(e.target.value),
     },
   ];
-
   return (
     <Form className={styles.deviceDetailsForm}>
       {/* rendering input elements via configs */}
@@ -185,14 +93,18 @@ const DeviceDetailsForm = (props) => {
         if (config.type === "select") {
           element = (
             <Form.Select
-              onChange={config.onChange}
+              className={styles.formControl}
               size="sm"
               name={config.name}
               id={config.id}
               key={idx}
+              value={config.value}
+              onChange={config.onChange}
+              isInvalid={errors(config.name)}
             >
-              {config.options.map((option, idx) => (
-                <option value={option.value} key={idx}>
+              <option>--</option>
+              {config.options?.map((option, idx) => (
+                <option value={option.id} key={idx}>
                   {option.name}
                 </option>
               ))}
@@ -201,27 +113,29 @@ const DeviceDetailsForm = (props) => {
         } else {
           const createInput = (props) => (
             <Form.Control
+              className={styles.formControl}
               {...props}
               type={config.type}
               id={config.id}
               name={config.name}
               size="sm"
+              isInvalid={errors(config.name)}
             />
           );
           if (config.mask) {
             element = (
               <ReactInputMask
                 mask={config.mask}
+                value={config.value}
                 onChange={config.onChange}
-                onBlur={config.onBlur}
               >
                 {(inputProps) => createInput(inputProps)}
               </ReactInputMask>
             );
           } else {
             element = createInput({
+              value: config.value,
               onChange: config.onChange,
-              onBlur: config.onBlur,
             });
           }
         }
@@ -231,6 +145,11 @@ const DeviceDetailsForm = (props) => {
               {config.label}
             </Form.Label>
             {element}
+            {texts(config.name) && (
+              <Form.Text className={cx(styles.formText, "text-danger")}>
+                {texts(config.name)}
+              </Form.Text>
+            )}
           </Form.Group>
         );
       })}

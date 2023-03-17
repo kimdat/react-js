@@ -24,7 +24,7 @@ const ExpandRowComponent = React.memo(({ row }) => {
       {
         name: "CDESC",
         selector: (row) => row["CDESC"],
-        width: "44%",
+        width: "45%",
       },
     ],
     []

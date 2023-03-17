@@ -29,8 +29,8 @@ export const province = [
 
 export const deviceType = [
     {
-        name: "ASR-9902",
-        value: "ASR-9902",
+        name: "ASR-9922",
+        value: "ASR-9922",
     }, {
         name: "ASR-9912",
         value: "ASR-9912",

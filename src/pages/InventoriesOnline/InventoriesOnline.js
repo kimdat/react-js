@@ -36,8 +36,8 @@ const InventoriesOnline = () => {
       return {
         id: item.id,
         device_type_S: item.Device_type_S,
-        ip: item.Ip,
-        deviceName: item.Name,
+        Ip: item.Ip,
+        DeviceName: item.Name,
         port: 22,
         username: "epnm",
         password: "epnm@890!",
