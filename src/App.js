@@ -3,11 +3,10 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Layout from "./LAYOUT/Layout.js";
-import DeviceManagementPage from './features/devices/DeviceManagementPage';
-
+import DeviceManagementPage from "./features/devices/DeviceManagementPage";
 
 const Inventories = lazy(() =>
-  import("./pages/DeviceInventoryManage/DeviceInventoryManage")
+  import("./pages/DEVICEINVENTORY/DeviceInventory")
 );
 const InventoriesOnline = lazy(() =>
   import("./pages/InventoriesOnline/InventoriesOnline")
@@ -26,7 +25,7 @@ function App() {
       <Router>
         <Routes>
           <Route exact path="/" element={<Login />}></Route>
-        
+
           <Route
             exact
             path="/inventories"

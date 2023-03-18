@@ -37,6 +37,27 @@ export const deviceApiSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: ["Devices"],
     }),
+    checkDuplicate: builder.query({
+      query: ({ name, value }) => {
+        const formData = new FormData();
+        formData.append(name, value);
+        return {
+          url: "checkDuplicate",
+          method: "POST",
+          body: formData,
+        };
+      },
+    }),
+    deleteDevices: builder.mutation({
+      query: (deviceIdList) => ({
+        url: `api/devices/delete`,
+        method: "POST",
+        body: {
+          list: deviceIdList,
+        },
+      }),
+      invalidatesTags: ["Devices"],
+    }),
   }),
 });
 
@@ -44,4 +65,5 @@ export const {
   useGetAllDevicesQuery,
   useLazyGetDevicesByFiltersQuery,
   useAddNewDeviceMutation,
+  useDeleteDevicesMutation,
 } = deviceApiSlice;

@@ -8,12 +8,11 @@ import {
   MDBRow,
 } from "mdb-react-ui-kit";
 import React, { createRef } from "react";
-import DataCreateUpdate from "./DataCreateUpdate";
 
-import DataExecute from "./DataExecute";
+import DataExecute from "./components/DataExecute/DataExecute";
 
-import DevicesOnline from "./DeviceOnline";
 import Swal from "sweetalert2";
+import DevicesOnline from "./components/DeviceOnline/DeviceOnline";
 
 const InventoriesOnline = () => {
   const childRef = createRef();
@@ -49,21 +48,16 @@ const InventoriesOnline = () => {
   };
 
   return (
-    <div>
-      <DataCreateUpdate />
-      <DataCreateUpdate flagUpdate={true} />
+    <div style={{ marginTop: "50px" }}>
       <MDBContainer fluid>
         <MDBCard style={{ marginBottom: "-30px" }}>
           <MDBCardHeader style={{ textAlign: "center" }}>
             INSTANTANEOUS CHECK
           </MDBCardHeader>
         </MDBCard>
-        <MDBRow>
+        <MDBRow style={{ marginTop: "50px" }}>
           <MDBCol md="4" style={{ marginRight: "-15px" }}>
-            <MDBCard
-              className="bg-white my-5 mx-auto"
-              style={{ position: "static" }}
-            >
+            <MDBCard className="bg-white" style={{ position: "static" }}>
               <MDBCardBody>
                 <div
                   style={{
@@ -82,10 +76,7 @@ const InventoriesOnline = () => {
             </MDBCard>
           </MDBCol>
           <MDBCol md="8">
-            <MDBCard
-              className="bg-white my-5 mx-auto"
-              style={{ position: "static" }}
-            >
+            <MDBCard className="bg-white " style={{ position: "static" }}>
               <MDBCardBody>
                 <DataExecute ref={childRef}></DataExecute>
               </MDBCardBody>

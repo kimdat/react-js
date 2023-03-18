@@ -9,12 +9,10 @@ import React, {
   createContext,
   useImperativeHandle,
 } from "react";
-import { api } from "../../Interceptor";
-import LoadingComponent from "./../../components/LoadingComponent/LoadingComponent";
-
-import { FilterColumn } from "./../../components/FilterColumn/FilterColumn";
+import { api } from "../../../../Interceptor";
+import LoadingComponent from "../../../../components/LoadingComponent/LoadingComponent";
+import { FilterColumn } from "../../../../components/FilterColumn/FilterColumn";
 import DataTable from "react-data-table-component";
-
 export const DevicesOnlineChildContext = createContext(null);
 const API_URL = api.defaults.baseURL;
 const DevicesOnline = memo(
@@ -78,8 +76,6 @@ const DevicesOnlineChild = memo(
           JSON.stringify(newInputs).toLowerCase()
         )
           return;
-        console.log(dataToSearch);
-
         const newData = dataToSearch.filter((item) => {
           for (let key in newInputs) {
             if (
@@ -145,6 +141,7 @@ const DevicesOnlineChild = memo(
       },
       [handleFilterColumn]
     );
+    let STT = 1;
     const columns = useMemo(
       () => [
         {
@@ -172,7 +169,7 @@ const DevicesOnlineChild = memo(
 
         {
           name: "NO",
-          selector: (row) => row["STT"],
+          selector: (row) => STT++,
           width: "50px",
         },
         {
@@ -215,21 +212,24 @@ const DevicesOnlineChild = memo(
         checkAll,
         checkedRows,
         handleFilterColumn,
+        STT,
       ]
     );
     return (
       <LoadingComponent>
-        <DataTable
-          dense={true}
-          data={data}
-          fixedHeader={true}
-          columns={columns}
-          fixedHeaderScrollHeight="400px"
-          responsive={true}
-          highlightOnHover
-          striped
-          className="my-custom-data-table"
-        />
+        <div>
+          <DataTable
+            dense={true}
+            data={data}
+            fixedHeader={true}
+            columns={columns}
+            fixedHeaderScrollHeight="400px"
+            responsive={true}
+            highlightOnHover
+            striped
+            className="my-custom-data-table"
+          />
+        </div>
       </LoadingComponent>
     );
   }

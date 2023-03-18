@@ -1,10 +1,10 @@
 import React, { useState, useCallback } from "react";
 
-import InventoriesComponent from "../../components/InventoriesComponent/InventoriesComponent";
+import InventoriesComponent from "../../../../components/InventoriesComponent/InventoriesComponent";
 
-import LoadingComponent from "../../components/LoadingComponent/LoadingComponent";
+import LoadingComponent from "../../../../components/LoadingComponent/LoadingComponent";
 import "./InventoriesOnline.css";
-import ExcelSSH from "./ExcelSSH";
+import ExcelSSH from "../ExcelSSH/ExcelSSH";
 
 const InventoriesComponentOnline = React.memo(
   ({
@@ -48,7 +48,7 @@ const InventoriesComponentOnline = React.memo(
       },
       [handleDatatable, currentPage, totalRow]
     );
-
+    console.log(searchApiData);
     return (
       <div className="InventoriesComponentOnline">
         {searchApiData.length > 0 && (

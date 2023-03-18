@@ -5,10 +5,10 @@ import React, {
   memo,
   useImperativeHandle,
 } from "react";
-import InventoriesComponentOnline from "./InventoriesComponentOnline";
+import InventoriesComponentOnline from "../InventoriesComponent/InventoriesComponentOnline";
 
 import Swale from "sweetalert2";
-import LoadingComponent from "../../components/LoadingComponent/LoadingComponent";
+import LoadingComponent from "../../../../components/LoadingComponent/LoadingComponent";
 import axios from "axios";
 const DataExecute = memo(
   forwardRef((props, ref) => {
@@ -23,7 +23,6 @@ const DataExecute = memo(
     const getExecute = async (device_list) => {
       try {
         setIsLoading(true);
-
         const formData = new FormData();
         formData.append("ip", JSON.stringify(device_list));
         const { data } = await axios.post(
@@ -33,7 +32,7 @@ const DataExecute = memo(
         console.log(data);
         const inventory = JSON.parse(data.deviceData);
         const dataSuccess = [];
-        const dataFail = [];
+        const dataFail = [];  
         let stt = 1;
         device_list.forEach((device) => {
           const ip = device.Ip;

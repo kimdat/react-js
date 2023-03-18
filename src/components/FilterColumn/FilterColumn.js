@@ -7,7 +7,7 @@ export const FilterColumn = React.memo(
         {nameTitle}
         <br />
         <input
-          style={{ maxWidth: "130px", marginBottom: "10px" }}
+          style={{ maxWidth: "120px", marginBottom: "10px" }}
           name={column}
           className="filterColumn"
           onKeyDown={handleFilterColumn}

@@ -38,7 +38,7 @@ const Login = () => {
             text: data.mess,
           });
         } else {
-          localStorage.setItem("email", "kimdat1999@gmail.com");
+          localStorage.setItem("email", inputs.email);
 
           navigate("/inventories");
         }

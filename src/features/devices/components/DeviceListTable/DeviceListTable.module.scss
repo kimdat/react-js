@@ -4,6 +4,8 @@
     max-width: fit-content;
     overflow-x: auto;
     white-space: nowrap;
+    height: 75vh;
+    margin-bottom: 0 !important;
 
     th {
         font-weight: 700 !important;
@@ -19,12 +21,22 @@
     height: 5rem;
     vertical-align: middle !important;
     position: sticky;
+
+    // tr {
+    //     position: fixed;
+    // }
 }
 
 .deviceListTableCol {
     resize: horizontal;
     overflow: auto;
     padding-right: 10px;
+}
+
+.deviceListTableRow {
+    &:hover {
+        cursor: pointer;
+    }
 }
 
 .textFilter {

@@ -43,6 +43,7 @@ const DeviceListTable = (props) => {
         regions,
         provinces,
         filters,
+        openEditDeviceModalHandler,
     } = props;
         
     const columns = [
@@ -125,8 +126,10 @@ const DeviceListTable = (props) => {
                         {rows.map((row, idx) => 
                             <tr key={idx}
                                 className={cx(
+                                    styles.deviceListTableRow,
                                     {"table-primary": row.isSelected}
                                 )}
+                                onClick={() => console.log(row.id)}
                             >
                                 <th scope='col'>
                                     <MDBCheckbox checked={row.isSelected || false}
@@ -143,7 +146,7 @@ const DeviceListTable = (props) => {
                                         : <div className={styles.statusIcon}><FontAwesomeIcon className="text-danger" icon={faXmarkCircle} /></div>
                                     }
                                     {
-                                        deviceStatus?.find(status => status.value === row.status)?.name
+                                        deviceStatus?.find(status => status.id === row.status)?.name
                                     }
                                 </td>
                                 <td>{row.region}</td>

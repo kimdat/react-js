@@ -3,7 +3,7 @@ import React from "react";
 import { FaFileExport } from "react-icons/fa";
 import { Button } from "react-bootstrap";
 import Swal from "sweetalert2";
-import instance from "../../Interceptor";
+import instance from "../../../../Interceptor";
 
 const API_URL = instance.defaults.baseURL;
 
