@@ -1,4 +1,4 @@
-import { inventoriesComponentSlice } from "../components/InventoriesComponent/InventoriesComponentSlice";
+/*import { inventoriesComponentSlice } from "../components/InventoriesComponent/InventoriesComponentSlice";
 import { checkSlice } from "../pages/DEVICEINVENTORY/InventoryCheckSlice";
 import { inventoriesChildSlice } from "../pages/DEVICEINVENTORY/inventoryChildSlice";
 
@@ -9,3 +9,4 @@ const commonReducer = {
 };
 
 export default commonReducer;
+*/

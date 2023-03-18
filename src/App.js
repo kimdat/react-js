@@ -6,7 +6,7 @@ import Layout from "./LAYOUT/Layout.js";
 import DeviceManagementPage from "./features/devices/DeviceManagementPage";
 
 const Inventories = lazy(() =>
-  import("./pages/DEVICEINVENTORY/DeviceInventory")
+  import("./pages/DEVICEINVENTORY/DeviceInventoryManage")
 );
 const InventoriesOnline = lazy(() =>
   import("./pages/InventoriesOnline/InventoriesOnline")
