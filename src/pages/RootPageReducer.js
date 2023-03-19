@@ -1,7 +1,7 @@
-import DeviceInventoryReducer from "./DEVICEINVENTORY/DeviceInvenroyReducer";
+import {deviceInventorySlice} from "./DEVICEINVENTORY/deviceInventorySlice";
 
 const RootPageReducer = {
-  DeviceInventory: DeviceInventoryReducer,
+  deviceInventory: deviceInventorySlice.reducer,
 };
 
 export default RootPageReducer;

@@ -23,13 +23,11 @@ const Inventories = React.memo(({ flagOffline = false }) => {
   console.log("iv");
 
   const dispatch = useDispatch();
-  const apiData = useSelector((state) => state.DeviceInventory.data);
+  const apiData = useSelector((state) => state.deviceInventory.data);
 
   useEffect(() => {
     try {
       dispatch(fetchData("devices"));
-
-      //setApiData(data);
     } catch (err) {
       console.log(err.response);
       const message = err?.response?.data?.error ?? err?.error ?? err;

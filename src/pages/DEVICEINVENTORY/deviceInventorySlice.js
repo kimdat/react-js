@@ -1,9 +1,20 @@
-import { checkSlice } from "./InventoryCheckSlice";
-import { inventoriesChildSlice } from "./inventoryChildSlice";
+import { createSlice } from "@reduxjs/toolkit";
 
-const deviceInventoryReducer = {
-  inventoriesChild: inventoriesChildSlice.reducer,
-  check: checkSlice.reducer,
+const initialState = {
+  data: null,
+  error: null,
 };
 
-export default deviceInventoryReducer;
+export const deviceInventorySlice = createSlice({
+  name: "deviceInventory",
+  initialState,
+  reducers: {
+    setData: (state, action) => {
+      state.data = action.payload;
+    },
+  },
+});
+
+export const { setData } = deviceInventorySlice.actions;
+
+export default deviceInventorySlice.reducer;
