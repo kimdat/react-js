@@ -13,32 +13,40 @@ import LoadingComponent from "../../components/LoadingComponent/LoadingComponent
 import InventoriesComponent from "../../components/InventoriesComponent/InventoriesComponent";
 import ImportFile from "./../../components/ImportFile/ImportFile";
 import { debounce } from "lodash";
-import { fetchData } from "./DeviceInventoryAction";
-import { useDispatch, useSelector } from "react-redux";
 const API_URL = api.defaults.baseURL;
 const Inventories = React.memo(({ flagOffline = false }) => {
   if (flagOffline) {
     api.defaults.headers.common["flagOffline"] = true;
   }
   console.log("iv");
-
-  const dispatch = useDispatch();
-  const apiData = useSelector((state) => state.DeviceInventory.data);
+  const [apiData, setApiData] = useState(null);
 
   useEffect(() => {
-    try {
-      dispatch(fetchData("devices"));
+    const loadData = async () => {
+      try {
+        /*const promises = [];
+        for (let i = 0; i < 100; i++) {
+          promises.push(api.get(API_URL + "devices"));
+        }
 
-      //setApiData(data);
-    } catch (err) {
-      console.log(err.response);
-      const message = err?.response?.data?.error ?? err?.error ?? err;
-      Swale.fire({
-        icon: "error",
-        text: `Error when fetchData() ${message}`,
-      });
-    }
-  }, [dispatch]);
+        const responseArray = await Promise.all(
+          promises.map((p) => p.catch((error) => ({ error })))
+        );
+        console.log(responseArray);*/
+        const { data } = await api.get(API_URL + "devices");
+        console.log(data);
+        setApiData(data);
+      } catch (err) {
+        console.log(err.response);
+        const message = err?.response?.data?.error ?? err?.error ?? err;
+        Swale.fire({
+          icon: "error",
+          text: `Error when fetchData() ${message}`,
+        });
+      }
+    };
+    loadData();
+  }, []);
 
   return (
     <div>
