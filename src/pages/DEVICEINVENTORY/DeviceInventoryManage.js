@@ -202,6 +202,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
         console.log(data);
         return data;
       } catch (err) {
+        setIsLoading(false);
         swaleError(err, "apiFilterData() ");
       }
     },

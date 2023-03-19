@@ -13,6 +13,12 @@ import { api } from "../../../../Interceptor";
 import LoadingComponent from "../../../../components/LoadingComponent/LoadingComponent";
 import { FilterColumn } from "../../../../components/FilterColumn/FilterColumn";
 import DataTable from "react-data-table-component";
+
+import {
+  FILED_DEVICE_ONLINE,
+  TITLE_DEVICE_ONLINE,
+  WIDTH_COLUMN_DEVICE_ONLINE,
+} from "./ConstraintDivceOnline";
 export const DevicesOnlineChildContext = createContext(null);
 const API_URL = api.defaults.baseURL;
 const DevicesOnline = memo(
@@ -164,19 +170,19 @@ const DevicesOnlineChild = memo(
                 />
               </div>
             ),
-          width: "45px",
+          width: WIDTH_COLUMN_DEVICE_ONLINE.Selected,
         },
 
         {
-          name: "NO",
+          name: TITLE_DEVICE_ONLINE.No,
           selector: (row) => STT++,
-          width: "50px",
+          width: WIDTH_COLUMN_DEVICE_ONLINE.No,
         },
         {
           name: (
             <FilterColumn
-              column="Name"
-              nameTitle="Device Name"
+              column={FILED_DEVICE_ONLINE.Name}
+              nameTitle={TITLE_DEVICE_ONLINE.Name}
               handleFilterColumn={handleFilterColumn}
             ></FilterColumn>
           ),
@@ -184,7 +190,7 @@ const DevicesOnlineChild = memo(
             if (row.hasOwnProperty("statusNotFound")) {
               return <div>There are no record</div>;
             }
-            return <div>{row.Name.toUpperCase()}</div>;
+            return <div>{row[FILED_DEVICE_ONLINE.Name].toUpperCase()}</div>;
           },
 
           conditionalCellStyles: [
@@ -199,11 +205,15 @@ const DevicesOnlineChild = memo(
             },
             {
               when: (row) => !row.hasOwnProperty("statusNotFound"),
-              width: "30%",
+              width: WIDTH_COLUMN_DEVICE_ONLINE.Name,
             },
           ],
         },
-        createColumnToFilter("Ip", "40%", "IP Loopback"),
+        createColumnToFilter(
+          FILED_DEVICE_ONLINE.Ip,
+          WIDTH_COLUMN_DEVICE_ONLINE.Ip,
+          TITLE_DEVICE_ONLINE.Ip
+        ),
       ],
       [
         createColumnToFilter,

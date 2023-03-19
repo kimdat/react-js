@@ -1,30 +1,34 @@
 import React, { useMemo } from "react";
 import DataTable from "react-data-table-component";
+import {
+  FILED_Expand_Row_Component,
+  WIDTH_COLUMN_Expand_Row_Component,
+} from "./ConstraintExpandRowComponent";
 
 const ExpandRowComponent = React.memo(({ row }) => {
   const columnsChild = useMemo(
     () => [
       {
-        width: "105px",
+        width: WIDTH_COLUMN_Expand_Row_Component.Blank,
       },
       {},
       {
         name: "Name",
-        selector: (row) => row["Name"],
+        selector: (row) => row[FILED_Expand_Row_Component.Name],
       },
       {
         name: "PID",
-        selector: (row) => row["PID"],
+        selector: (row) => row[FILED_Expand_Row_Component.Pid],
       },
       {
         name: "Serial",
-        selector: (row) => row["Serial"],
+        selector: (row) => row[FILED_Expand_Row_Component.Serial],
       },
 
       {
         name: "CDESC",
-        selector: (row) => row["CDESC"],
-        width: "44.5%",
+        selector: (row) => row[FILED_Expand_Row_Component.CDESC],
+        width: WIDTH_COLUMN_Expand_Row_Component.CDESC,
       },
     ],
     []

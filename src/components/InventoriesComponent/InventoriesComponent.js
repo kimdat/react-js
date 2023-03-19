@@ -12,6 +12,13 @@ import FilterComponent from "./../../components/FilterComponent/FilterComponent"
 import { FaAngleDoubleDown, FaAngleDoubleRight } from "react-icons/fa";
 import "./Inventories.css";
 import ExpandableRowLazyComponent from "../../components/ExpandRowLazyComponent/ExpandRowLazyComponent";
+import {
+  FILED_COLUMN_INVENTORIES,
+  FILED_COLUMN__FILTER_INVENTORIES,
+  TITLE_COLUMN_INVENTORIES,
+  TITLE_COLUMN__FILTER_INVENTORIES,
+  WIDTH_COLUMN_INVENTORIES,
+} from "./ConstraintInventoriesComponent";
 
 const InventoriesComponent = React.memo(
   ({
@@ -136,18 +143,18 @@ const InventoriesComponent = React.memo(
                 />
               </div>
             ),
-          width: "45px",
+          width: WIDTH_COLUMN_INVENTORIES.Selected,
         },
         {
-          name: "NO",
+          name: TITLE_COLUMN_INVENTORIES.No,
           selector: (row) => row.STT,
-          width: "60px",
+          width: WIDTH_COLUMN_INVENTORIES.No,
         },
         {
           name: (
             <FilterColumn
-              column="Name"
-              nameTitle="Device Name"
+              column={FILED_COLUMN_INVENTORIES.Name}
+              nameTitle={TITLE_COLUMN_INVENTORIES.Name}
               handleFilterColumn={handleFilterColumn}
             ></FilterColumn>
           ),
@@ -191,10 +198,26 @@ const InventoriesComponent = React.memo(
             },
           ],
         },
-        createColumnChildToFilter("InventoriesName", "", "SLOT"),
-        createColumnChildToFilter("PID", "", "PID"),
-        createColumnChildToFilter("Serial", "", "Serial"),
-        createColumnChildToFilter("CDESC", "45%", "DESCRIPTION"),
+        createColumnChildToFilter(
+          FILED_COLUMN__FILTER_INVENTORIES.Name,
+          "",
+          TITLE_COLUMN__FILTER_INVENTORIES.Name
+        ),
+        createColumnChildToFilter(
+          FILED_COLUMN__FILTER_INVENTORIES.Pid,
+          "",
+          TITLE_COLUMN__FILTER_INVENTORIES.Pid
+        ),
+        createColumnChildToFilter(
+          FILED_COLUMN__FILTER_INVENTORIES.Serial,
+          "",
+          TITLE_COLUMN__FILTER_INVENTORIES.Serial
+        ),
+        createColumnChildToFilter(
+          FILED_COLUMN__FILTER_INVENTORIES.CDESC,
+          WIDTH_COLUMN_INVENTORIES.CDESC,
+          TITLE_COLUMN__FILTER_INVENTORIES.CDESC
+        ),
       ],
       [
         handleFilterColumn,
