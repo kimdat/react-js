@@ -13,6 +13,7 @@ import DataExecute from "./components/DataExecute/DataExecute";
 
 import Swal from "sweetalert2";
 import DevicesOnline from "./components/DeviceOnline/DeviceOnline";
+import { FILED_DEVICE_ONLINE } from "./ConstraintDivceOnline";
 
 const InventoriesOnline = () => {
   const childRef = createRef();
@@ -33,10 +34,10 @@ const InventoriesOnline = () => {
 
     const rowCheck = checkedRow.map((item) => {
       return {
-        id: item.id,
-        device_type_S: item.Device_type_S,
-        Ip: item.Ip,
-        DeviceName: item.Name,
+        id: item[FILED_DEVICE_ONLINE.id],
+        device_type_S: item[FILED_DEVICE_ONLINE.Device_type_S],
+        Ip: item[FILED_DEVICE_ONLINE.Ip],
+        DeviceName: item[FILED_DEVICE_ONLINE.Name],
         port: 22,
         username: "epnm",
         password: "epnm@890!",

@@ -18,7 +18,7 @@ import {
   FILED_DEVICE_ONLINE,
   TITLE_DEVICE_ONLINE,
   WIDTH_COLUMN_DEVICE_ONLINE,
-} from "./ConstraintDivceOnline";
+} from "../../ConstraintDivceOnline";
 export const DevicesOnlineChildContext = createContext(null);
 const API_URL = api.defaults.baseURL;
 const DevicesOnline = memo(
