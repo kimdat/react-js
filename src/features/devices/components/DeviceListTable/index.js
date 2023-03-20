@@ -73,6 +73,11 @@ const DeviceListTable = (props) => {
             address: d.address,
         };
     }) : [];
+
+    const getOptionNameById = (id, options) => {
+        return options?.find((option) => option.id === id)?.name;
+    }
+
     return (
         <>
             {rows.length === 0 && 
@@ -141,7 +146,7 @@ const DeviceListTable = (props) => {
                                 <td>{row.ip}</td>
                                 <td>
                                     {
-                                        row.status === 'M'
+                                        row.status === '1'
                                         ? <div className={styles.statusIcon}><FontAwesomeIcon className="text-success" icon={faCheckCircle} /></div>
                                         : <div className={styles.statusIcon}><FontAwesomeIcon className="text-danger" icon={faXmarkCircle} /></div>
                                     }
@@ -149,8 +154,8 @@ const DeviceListTable = (props) => {
                                         deviceStatus?.find(status => status.id === row.status)?.name
                                     }
                                 </td>
-                                <td>{row.region}</td>
-                                <td>{row.province}</td>
+                                <td>{getOptionNameById(row.region, regions)}</td>
+                                <td>{getOptionNameById(row.province, provinces)}</td>
                                 <td>{row.long}</td>
                                 <td>{row.lat}</td>
                                 <td>{row.address}</td>

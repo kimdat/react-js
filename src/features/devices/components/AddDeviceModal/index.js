@@ -106,6 +106,21 @@ const AddDeviceModal = (props) => {
     }
   };
 
+  const resetForm = () => {
+    setDeviceName("");
+    setIpLoopback("");
+    setDeviceType("");
+    setRegion("");
+    setProvince("");
+    setLong("");
+    setLat("");
+    setAddress("");
+  }
+
+  React.useEffect(() => {
+    resetForm();
+  }, [open]);
+
   return (
     <LoadingComponent isLoading={isLoading}>
       <Modal

@@ -10,7 +10,7 @@ import {
 import { FilterColumn } from "./../../components/FilterColumn/FilterColumn";
 import FilterComponent from "./../../components/FilterComponent/FilterComponent";
 import { FaAngleDoubleDown, FaAngleDoubleRight } from "react-icons/fa";
-import "./Inventories.css";
+// import "./Inventories.css";
 import ExpandableRowLazyComponent from "../../components/ExpandRowLazyComponent/ExpandRowLazyComponent";
 import {
   FILED_COLUMN_INVENTORIES,

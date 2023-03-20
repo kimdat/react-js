@@ -60,57 +60,9 @@ const DeviceManagementPage = (props) => {
     devicesError || provincesError || regionsError || deviceStatusError;
 
   const dispatch = useDispatch();
-
-  //sample data
-  // const devices = [
-  //     {
-  //         deviceName: "ABC-123",
-  //         ip: "10.0.0.1",
-  //         status: "U",
-  //         region: "region",
-  //         province: "province",
-  //         long: "long",
-  //         lat: "lat",
-  //         address: "address",
-  //     },
-  //     {
-  //         deviceName: "ABC-234",
-  //         ip: "10.0.0.2",
-  //         status: "M",
-  //         region: "region",
-  //         province: "province",
-  //         long: "long",
-  //         lat: "lat",
-  //         address: "address",
-  //     },
-  //     {
-  //         deviceName: "ABC-345",
-  //         ip: "10.0.0.3",
-  //         status: "U",
-  //         region: "region",
-  //         province: "province",
-  //         long: "long",
-  //         lat: "lat",
-  //         address: "address",
-  //     },
-  //     {
-  //         deviceName: "ABC-456",
-  //         ip: "10.0.0.4",
-  //         status: "U",
-  //         region: "region",
-  //         province: "province",
-  //         long: "long",
-  //         lat: "lat",
-  //         address: "address",
-  //     },
-  // ]
-
-  //page states
-
-  //reducer
+  
   const devices = useSelector(selectDeviceList);
-  const isSelectAll = useSelector((state) => state);
-  console.log(isSelectAll);
+  const isSelectAll = useSelector((state) => state.device.isSelectAll);
   const hasNoRowSelected = devices
     ? devices.every((device) => device.isSelected === false)
     : true;
