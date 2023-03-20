@@ -3,7 +3,7 @@ import DeviceDetailsForm from "../DeviceDetailsForm";
 import Modal from "../../../../components/common/Modal";
 import { MDBBtn } from "mdb-react-ui-kit";
 import styles from "./AddDeviceModal.module.scss";
-import { useAddNewDeviceMutation } from "../../deviceApiSlice";
+import { useAddNewDeviceMutation, useLazyCheckDuplicateQuery } from "../../deviceApiSlice";
 import * as Yup from "yup";
 import useFormValidator from "../../../../hooks/useFormValidator";
 import LoadingComponent from "./../../../../components/LoadingComponent/LoadingComponent";
@@ -21,10 +21,14 @@ const AddDeviceModal = (props) => {
   const [lat, setLat] = React.useState("");
   const [address, setAddress] = React.useState("");
 
+  const [isIpDuplicate, setIsIpDuplicate] = React.useState(false);
+  const [isDeviceNameDuplicate, setIsDeviceNameDuplicate] = React.useState(false);
+
   const [msg, setMsg] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
   const [addNewDevice, { isLoading1, isSuccess, isError }] =
     useAddNewDeviceMutation();
+  const [checkDuplicate] = useLazyCheckDuplicateQuery();
 
   const ipAddrRegExp =
     /^(?=\d+\.\d+\.\d+\.\d+$)(?:(?:25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\.?){4}$/;
@@ -82,6 +86,18 @@ const AddDeviceModal = (props) => {
     });
   };
   const handleAddDevice = async () => {
+    //duplicate check
+    const isIpDuplicate = await checkDuplicate({ ip: ipLoopback }).unwrap();
+    setIsIpDuplicate(isIpDuplicate);
+    if (isIpDuplicate) {
+      return;
+    }
+    const isDeviceNameDuplicate = await checkDuplicate({ deviceName: deviceName }).unwrap();
+    setIsDeviceNameDuplicate(isDeviceNameDuplicate);
+    if (isDeviceNameDuplicate) {
+      return;
+    }
+
     //validation
     const data = await validate(device);
     if (data === null) return;
@@ -121,6 +137,28 @@ const AddDeviceModal = (props) => {
     resetForm();
   }, [open]);
 
+  const addDeviceErrors = (fieldName) => {
+    //check duplicate
+    if (fieldName === 'Ip' && isIpDuplicate) {
+      return true;
+    }
+    if (fieldName === 'DeviceName' && isDeviceNameDuplicate) {
+      return true;
+    }
+    return errors(fieldName);
+  }
+
+  const addDeviceTexts = (fieldName) => {
+    //check duplicate
+    if (fieldName === 'Ip' && isIpDuplicate) {
+      return "This ip address already exists.";
+    }
+    if (fieldName === 'DeviceName' && isDeviceNameDuplicate) {
+      return "This device name already exists.";
+    }
+    return texts(fieldName);
+  }
+
   return (
     <LoadingComponent isLoading={isLoading}>
       <Modal
@@ -134,8 +172,8 @@ const AddDeviceModal = (props) => {
               inputChangeHandlers={inputChangeHandler}
               regions={regions}
               provinces={provinces}
-              errors={errors}
-              texts={texts}
+              errors={addDeviceErrors}
+              texts={addDeviceTexts}
             />
             <div className={styles.actionButtonList}>
               <MDBBtn

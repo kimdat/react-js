@@ -38,14 +38,20 @@ export const deviceApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ["Devices"],
     }),
     checkDuplicate: builder.query({
-      query: ({ name, value }) => {
+      query: ({ip, deviceName}) => {
         const formData = new FormData();
-        formData.append(name, value);
-        return {
-          url: "checkDuplicate",
+        formData.append("device", JSON.stringify({
+          ip: ip ? ip : "",
+          deviceName: deviceName ? deviceName : ""
+        }));
+        return ({
+          url: 'checkDuplicate',
           method: "POST",
           body: formData,
-        };
+        });
+      },
+      transformResponse: (response) => {
+        return response?.duplicate === true;
       },
     }),
     deleteDevices: builder.mutation({
@@ -66,4 +72,5 @@ export const {
   useLazyGetDevicesByFiltersQuery,
   useAddNewDeviceMutation,
   useDeleteDevicesMutation,
+  useLazyCheckDuplicateQuery,
 } = deviceApiSlice;
