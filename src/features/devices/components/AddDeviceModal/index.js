@@ -102,8 +102,6 @@ const AddDeviceModal = (props) => {
     setDuplicateStatesToDefault();
   }, [open]);
 
-  console.log(open);
-
   const addDeviceErrors = (fieldName) => {
     //check duplicate
     if (fieldName === fieldNames.IP && isIpDuplicate) {
@@ -159,7 +157,7 @@ const AddDeviceModal = (props) => {
             </div>
           </div>
         }
-        hideOnClickOutside={true}
+        hideOnClickOutside={false}
         hasCloseButton={false}
         isOpen={open}
       ></Modal>{" "}

@@ -51,7 +51,6 @@ const DeviceManagementPage = (props) => {
   const [deleteDevices, {
     isError: deleteDeviceError,
     isSuccess: deleteDeviceSuccess,
-    isLoading: deleteDeviceLoading,
   }] = useDeleteDevicesMutation();
 
   const isLoading =
@@ -88,10 +87,17 @@ const DeviceManagementPage = (props) => {
       confirmButtonColor: '#d33',
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteDevices(selectedDeviceIdList);
-        Swal.fire('Deleted!', '', 'success')
-      } else if (result.isDenied) {
-        Swal.fire('Devices have not been deleted!', '', 'info')
+        try {
+          const deleteResult = deleteDevices(selectedDeviceIdList).unwrap();
+        } catch (err) {
+          console.log(err);
+        }
+        if (deleteDeviceSuccess) {
+          Swal.fire('Deleted!', '', 'success')
+        }
+        if (deleteDeviceError) {
+          Swal.fire("Error", '')
+        }
       }
     });
   }
@@ -106,7 +112,6 @@ const DeviceManagementPage = (props) => {
               regions={regions}
               trigger={
                 <MDBBtn
-                  className={styles.actionButton}
                   type="button"
                   size="sm"
                   color="primary"

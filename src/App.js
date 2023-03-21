@@ -1,5 +1,4 @@
 import React, { useEffect, lazy } from "react";
-import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Layout from "./LAYOUT/Layout.js";
