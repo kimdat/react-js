@@ -62,9 +62,7 @@ function App() {
             path="/device-management"
             element={
               <Layout>
-                <div>
                   <DeviceManagementPage />
-                </div>
               </Layout>
             }
           ></Route>

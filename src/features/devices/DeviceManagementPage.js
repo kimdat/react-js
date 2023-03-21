@@ -19,6 +19,7 @@ import {
 import { useGetAllProvincesQuery } from "../province/provinceApiSlice";
 import { useGetAllRegionsQuery } from "../region/regionApiSlice";
 import { useGetAllDeviceStatusQuery } from "../deviceStatus/deviceStatusApiSlice";
+import Swal from "sweetalert2";
 
 const DeviceManagementPage = (props) => {
   //gọi api trả về các devices
@@ -47,7 +48,11 @@ const DeviceManagementPage = (props) => {
     isSuccess: deviceStatusSuccess,
   } = useGetAllDeviceStatusQuery();
 
-  const [deleteDevices, {}] = useDeleteDevicesMutation();
+  const [deleteDevices, {
+    isError: deleteDeviceError,
+    isSuccess: deleteDeviceSuccess,
+    isLoading: deleteDeviceLoading,
+  }] = useDeleteDevicesMutation();
 
   const isLoading =
     devicesFetching ||
@@ -67,9 +72,29 @@ const DeviceManagementPage = (props) => {
     ? devices.every((device) => device.isSelected === false)
     : true;
   const filters = useSelector(selectFilters);
-  const selectedDeviceIdList = devices
-    .filter((device) => device.isSelected === true)
-    .map((device) => device.Id);
+
+  const selectedDeviceList = devices.filter((device) => device.isSelected === true);
+  const selectedDeviceIdList = selectedDeviceList.map((device) => device.Id);
+  const selectedDeviceNameList = selectedDeviceList.map((device) => device.DeviceName);
+  const nameListToHtmlHelper = (list) => list.toString();
+  
+  const deleteDeviceHandler = () => {
+    Swal.fire({
+      title: `Do you want to delete these devices?`,
+      text: `${nameListToHtmlHelper(selectedDeviceNameList)}`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      confirmButtonColor: '#d33',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteDevices(selectedDeviceIdList);
+        Swal.fire('Saved!', '', 'success')
+      } else if (result.isDenied) {
+        Swal.fire('Changes are not saved', '', 'info')
+      }
+    });
+  }
   return (
     <div className={styles.pageContainer}>
       <MDBCard>
@@ -99,7 +124,7 @@ const DeviceManagementPage = (props) => {
               size="sm"
               color="danger"
               disabled={hasNoRowSelected}
-              onClick={() => deleteDevices(selectedDeviceIdList)}
+              onClick={() => deleteDeviceHandler()}
             >
               <div className={styles.buttonIcon}>
                 <FontAwesomeIcon icon={faXmark} />
