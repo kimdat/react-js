@@ -1,9 +1,10 @@
 .pageContainer {
-    margin-top: 4rem;
     padding: 1rem;
+    padding-top: 4rem;
 }
 
 .actionsWrapper {
+    position: fixed;
     display: flex;
     justify-content: flex-end;
 }
@@ -15,4 +16,8 @@
 .buttonIcon {
     display: inline-block;
     margin-right: .3rem;
+}
+
+.pageContent {
+    padding-top: 3rem;
 }

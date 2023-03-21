@@ -42,16 +42,16 @@ function Layout(props) {
     },
   };
   return (
-    <div>
+    <>
       {/* Include footer or any other common elements */}
       <Header
         logo={header.logo}
         navigations={header.navigations}
         profile={header.profile}
       />
-      <div>{props.children}</div>
+      {props.children}
       <Footer />
-    </div>
+    </>
   );
 }
 

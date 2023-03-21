@@ -89,9 +89,9 @@ const DeviceManagementPage = (props) => {
     }).then((result) => {
       if (result.isConfirmed) {
         deleteDevices(selectedDeviceIdList);
-        Swal.fire('Saved!', '', 'success')
+        Swal.fire('Deleted!', '', 'success')
       } else if (result.isDenied) {
-        Swal.fire('Changes are not saved', '', 'info')
+        Swal.fire('Devices have not been deleted!', '', 'info')
       }
     });
   }
