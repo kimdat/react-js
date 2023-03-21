@@ -8,18 +8,14 @@ import * as Yup from "yup";
 import useFormValidator from "../../../../hooks/useFormValidator";
 import LoadingComponent from "./../../../../components/LoadingComponent/LoadingComponent";
 import Swale from "sweetalert2";
+import { useInputs } from "../../../../hooks/useInputs";
+import { fieldNames } from "../../data/constants";
 
 const AddDeviceModal = (props) => {
   const { trigger, provinces, regions } = props;
   const [open, setOpen] = React.useState(false);
-  const [deviceName, setDeviceName] = React.useState("");
-  const [ipLoopback, setIpLoopback] = React.useState("");
-  const [deviceType, setDeviceType] = React.useState("");
-  const [region, setRegion] = React.useState("");
-  const [province, setProvince] = React.useState("");
-  const [long, setLong] = React.useState("");
-  const [lat, setLat] = React.useState("");
-  const [address, setAddress] = React.useState("");
+
+  const [inputs, setInputs, getAllInputs, resetInputs] = useInputs(Object.values(fieldNames));
 
   const [isIpDuplicate, setIsIpDuplicate] = React.useState(false);
   const [isDeviceNameDuplicate, setIsDeviceNameDuplicate] = React.useState(false);
@@ -33,39 +29,17 @@ const AddDeviceModal = (props) => {
   const ipAddrRegExp =
     /^(?=\d+\.\d+\.\d+\.\d+$)(?:(?:25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\.?){4}$/;
   const addDeviceSchema = Yup.object().shape({
-    DeviceName: Yup.string().required("Device name is required."),
-    Ip: Yup.string().matches(ipAddrRegExp, "IP address is invalid."),
-    Device_Type: Yup.string().required("Device type is required."),
-    region_id: Yup.string().required("Region is required."),
-    province_id: Yup.string().required("Province type is required."),
-    long: Yup.string(),
-    lat: Yup.string(),
+    [fieldNames.DEVICE_NAME]: Yup.string().required("Device name is required."),
+    [fieldNames.IP]: Yup.string().matches(ipAddrRegExp, 'IP address is invalid.'),
+    [fieldNames.DEVICE_TYPE]: Yup.string().required("Device type is required."),
+    [fieldNames.REGION_ID]: Yup.string().required("Region is required."),
+    [fieldNames.PROVINCE_ID]: Yup.string().required("Province type is required."),
+    [fieldNames.LONG]: Yup.string(),
+    [fieldNames.LAT]: Yup.string(),
+    [fieldNames.ADDRESS]: Yup.string(),
   });
   const { errors, texts, validate } = useFormValidator(addDeviceSchema);
 
-  const device = {
-    DeviceName: deviceName,
-    Ip: ipLoopback,
-    Device_Type: deviceType,
-    region_id: region,
-    province_id: province,
-    long,
-    lat,
-    address,
-    username: "epnm",
-    password: "epnm@890!",
-  };
-
-  const inputChangeHandler = {
-    setDeviceName,
-    setIpLoopback,
-    setDeviceType,
-    setRegion,
-    setProvince,
-    setLong,
-    setLat,
-    setAddress,
-  };
   const EditCreate = "Add";
   const messInforOneDevice = (data) => {
     const dataFail = data.fail;
@@ -87,19 +61,19 @@ const AddDeviceModal = (props) => {
   };
   const handleAddDevice = async () => {
     //duplicate check
-    const isIpDuplicate = await checkDuplicate({ ip: ipLoopback }).unwrap();
+    const isIpDuplicate = await checkDuplicate({ ip: inputs([fieldNames.IP]) }).unwrap();
     setIsIpDuplicate(isIpDuplicate);
     if (isIpDuplicate) {
       return;
     }
-    const isDeviceNameDuplicate = await checkDuplicate({ deviceName: deviceName }).unwrap();
+    const isDeviceNameDuplicate = await checkDuplicate({ deviceName: inputs([fieldNames.DEVICE_NAME]) }).unwrap();
     setIsDeviceNameDuplicate(isDeviceNameDuplicate);
     if (isDeviceNameDuplicate) {
       return;
     }
 
     //validation
-    const data = await validate(device);
+    const data = await validate(getAllInputs());
     if (data === null) return;
 
     //post
@@ -122,27 +96,16 @@ const AddDeviceModal = (props) => {
     }
   };
 
-  const resetForm = () => {
-    setDeviceName("");
-    setIpLoopback("");
-    setDeviceType("");
-    setRegion("");
-    setProvince("");
-    setLong("");
-    setLat("");
-    setAddress("");
-  }
-
   React.useEffect(() => {
-    resetForm();
+    resetInputs();
   }, [open]);
 
   const addDeviceErrors = (fieldName) => {
     //check duplicate
-    if (fieldName === 'Ip' && isIpDuplicate) {
+    if (fieldName === fieldNames.IP && isIpDuplicate) {
       return true;
     }
-    if (fieldName === 'DeviceName' && isDeviceNameDuplicate) {
+    if (fieldName === fieldName.DEVICE_NAME && isDeviceNameDuplicate) {
       return true;
     }
     return errors(fieldName);
@@ -150,10 +113,10 @@ const AddDeviceModal = (props) => {
 
   const addDeviceTexts = (fieldName) => {
     //check duplicate
-    if (fieldName === 'Ip' && isIpDuplicate) {
+    if (fieldName === fieldNames.IP && isIpDuplicate) {
       return "This ip address already exists.";
     }
-    if (fieldName === 'DeviceName' && isDeviceNameDuplicate) {
+    if (fieldName === fieldNames.DEVICE_NAME && isDeviceNameDuplicate) {
       return "This device name already exists.";
     }
     return texts(fieldName);
@@ -168,8 +131,8 @@ const AddDeviceModal = (props) => {
         body={
           <div className={styles.addDeviceModalBody}>
             <DeviceDetailsForm
-              device={device}
-              inputChangeHandlers={inputChangeHandler}
+              inputs={inputs}
+              setInputs={setInputs}
               regions={regions}
               provinces={provinces}
               errors={addDeviceErrors}

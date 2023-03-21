@@ -1,32 +1,3 @@
-export const deviceStatus = [
-    {
-        name: 'Unmanaged',
-        value: 'U'
-    },
-    {
-        name: 'Managed',
-        value: 'M'
-    },
-]
-
-export const region = [
-    {
-        name: "Đông Nam Bộ",
-        value: "DNB"
-    },
-    {
-        name: "Tây Nam Bộ",
-        value: "TNB"
-    }
-]
-
-export const province = [
-    {
-        name: "TP.HCM",
-        value: "HCM"
-    }
-]
-
 export const deviceType = [
     {
         name: "ASR-9922",
@@ -54,3 +25,14 @@ export const deviceType = [
         value: "NCS-540",
     },
 ]
+
+export const fieldNames = {
+    DEVICE_NAME: "DeviceName",
+    IP: "Ip",
+    DEVICE_TYPE: "Device_Type",
+    REGION_ID: "region_id",
+    PROVINCE_ID: "province_id",
+    LONG: "long",
+    LAT: "lat",
+    ADDRESS: "address"
+}

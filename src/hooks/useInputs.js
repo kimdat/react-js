@@ -9,7 +9,7 @@ export const useInputs = (fieldNames) => {
     const [state, setState] = React.useState(initState);
 
     const inputs = (fieldName) => {
-        return state[fieldName]?.value;
+        return state[fieldName];
     }
 
     const setInputs = (fieldName, newValue) => {
@@ -18,5 +18,9 @@ export const useInputs = (fieldNames) => {
         });
     }
 
-    return [inputs, setInputs];
+    const getAllInputs = () => state;
+
+    const resetInputs = () => setState(initState);
+
+    return [inputs, setInputs, getAllInputs, resetInputs];
 }
