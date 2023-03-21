@@ -21,8 +21,7 @@ const AddDeviceModal = (props) => {
   const [isDeviceNameDuplicate, setIsDeviceNameDuplicate] = React.useState(false);
 
   const [msg, setMsg] = React.useState("");
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [addNewDevice, { isLoading1, isSuccess, isError }] =
+  const [addNewDevice, { isLoading, isSuccess, isError }] =
     useAddNewDeviceMutation();
   const [checkDuplicate] = useLazyCheckDuplicateQuery();
 
@@ -61,14 +60,15 @@ const AddDeviceModal = (props) => {
   };
   const handleAddDevice = async () => {
     //duplicate check
-    const isIpDuplicate = await checkDuplicate({ ip: inputs([fieldNames.IP]) }).unwrap();
-    setIsIpDuplicate(isIpDuplicate);
-    if (isIpDuplicate) {
-      return;
-    }
     const isDeviceNameDuplicate = await checkDuplicate({ deviceName: inputs([fieldNames.DEVICE_NAME]) }).unwrap();
     setIsDeviceNameDuplicate(isDeviceNameDuplicate);
     if (isDeviceNameDuplicate) {
+      return;
+    }
+
+    const isIpDuplicate = await checkDuplicate({ ip: inputs([fieldNames.IP]) }).unwrap();
+    setIsIpDuplicate(isIpDuplicate);
+    if (isIpDuplicate) {
       return;
     }
 
@@ -78,15 +78,10 @@ const AddDeviceModal = (props) => {
 
     //post
     try {
-      setIsLoading(true);
       const res = await addNewDevice(data).unwrap();
-      setIsLoading(false);
-      console.log(res);
+      setOpen(false);
       messInforOneDevice(res);
-      // setOpen(false);
     } catch (err) {
-      console.log(err);
-      setIsLoading(false);
       setMsg("");
       if (!err.success) {
         setMsg(err.data.errors?.join("</br>"));
@@ -106,6 +101,8 @@ const AddDeviceModal = (props) => {
     resetValidator();
     setDuplicateStatesToDefault();
   }, [open]);
+
+  console.log(open);
 
   const addDeviceErrors = (fieldName) => {
     //check duplicate
