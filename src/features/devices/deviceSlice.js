@@ -31,6 +31,7 @@ const deviceSlice = createSlice({
       const isSelectAll = checkSelectAll(state.list);
       state.isSelectAll = isSelectAll;
     },
+
     addFilter: (state, action) => {
       const { filterName, filterValue } = action.payload;
       state.filters[`${filterName}`] = filterValue;

@@ -44,6 +44,7 @@ const DeviceListTable = (props) => {
         provinces,
         filters,
         openEditDeviceModalHandler,
+        onRowClickHandler,
     } = props;
         
     const columns = [
@@ -75,7 +76,7 @@ const DeviceListTable = (props) => {
     }) : [];
 
     const getOptionNameById = (id, options) => {
-        return options?.find((option) => option.id === id)?.name;
+        return options?.find((option) => option.id == id)?.name;
     }
 
     return (
@@ -134,7 +135,7 @@ const DeviceListTable = (props) => {
                                     styles.deviceListTableRow,
                                     {"table-primary": row.isSelected}
                                 )}
-                                onClick={() => console.log(row.id)}
+                                onClick={() => onRowClickHandler(row.id)}
                             >
                                 <th scope='col'>
                                     <MDBCheckbox checked={row.isSelected || false}

@@ -37,6 +37,16 @@ export const deviceApiSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: ["Devices"],
     }),
+    editDevice: builder.mutation({
+      query: (deviceId, device) => {
+        return {
+          url: `api/devices/${deviceId}`,
+          method: "POST",
+          body: device,
+        };
+      },
+      invalidatesTags: ["Devices"],
+    }),
     checkDuplicate: builder.query({
       query: ({ip, deviceName}) => {
         const formData = new FormData();
@@ -73,4 +83,5 @@ export const {
   useAddNewDeviceMutation,
   useDeleteDevicesMutation,
   useLazyCheckDuplicateQuery,
+  useEditDeviceMutation,
 } = deviceApiSlice;

@@ -105,13 +105,13 @@ const DeviceDetailsForm = (props) => {
               name={config.name}
               size="sm"
               isInvalid={errors(config.name)}
+              value={inputs(config.name)}
             />
           );
           if (config.mask) {
             element = (
               <ReactInputMask
                 mask={config.mask}
-                value={inputs(config.name)}
                 onChange={(e) => setInputs(config.name, e.target.value)}
               >
                 {(inputProps) => createInput(inputProps)}

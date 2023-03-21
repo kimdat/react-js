@@ -1,8 +1,8 @@
 import React from 'react';
 
-export const useInputs = (fieldNames) => {
+export const useInputs = (fieldNames, values) => {
     const initState = fieldNames.reduce((state, fieldName) => {
-        state[fieldName] = "";
+        state[fieldName] = values ? values[fieldName] : "";
         return state;
     }, {});
 
