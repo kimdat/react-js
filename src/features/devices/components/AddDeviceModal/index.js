@@ -38,7 +38,7 @@ const AddDeviceModal = (props) => {
     [fieldNames.LAT]: Yup.string(),
     [fieldNames.ADDRESS]: Yup.string(),
   });
-  const { errors, texts, validate } = useFormValidator(addDeviceSchema);
+  const { errors, texts, validate, resetValidator } = useFormValidator(addDeviceSchema);
 
   const EditCreate = "Add";
   const messInforOneDevice = (data) => {
@@ -96,8 +96,15 @@ const AddDeviceModal = (props) => {
     }
   };
 
+  const setDuplicateStatesToDefault = () => {
+    setIsDeviceNameDuplicate(false);
+    setIsIpDuplicate(false);
+  }
+
   React.useEffect(() => {
     resetInputs();
+    resetValidator();
+    setDuplicateStatesToDefault();
   }, [open]);
 
   const addDeviceErrors = (fieldName) => {

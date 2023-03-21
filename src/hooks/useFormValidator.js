@@ -116,7 +116,10 @@ const useFormValidator = (schemas, milliseconds) => {
                 updateState(newState)
             }
             return null
-        }
+        },
+        resetValidator: () => {
+            updateState(defaultState);
+        },
     }
 }
 
