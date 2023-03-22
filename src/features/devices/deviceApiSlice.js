@@ -2,23 +2,17 @@ import { apiSlice } from "../api/apiSlice";
 
 export const deviceApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getAllDevices: builder.query({
-      query: () => ({
+    getDevices: builder.query({
+      query: (params) => ({
         url: "api/devices",
         method: "GET",
+        params: {...params}
       }),
       transformResponse: (response) => {
-        return response.devices;
-      },
-      providesTags: ["Devices"],
-    }),
-    getDevicesByFilters: builder.query({
-      query: (filters) => ({
-        url: "api/devices?" + JSON.stringify(filters),
-        method: "GET",
-      }),
-      transformResponse: (response) => {
-        return response.devices;
+        return {
+          devices: response.devices,
+          totalRowCount: response.totalRowCount,
+        };
       },
       providesTags: ["Devices"],
     }),
@@ -78,8 +72,7 @@ export const deviceApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
-  useGetAllDevicesQuery,
-  useLazyGetDevicesByFiltersQuery,
+  useLazyGetDevicesQuery,
   useAddNewDeviceMutation,
   useDeleteDevicesMutation,
   useLazyCheckDuplicateQuery,

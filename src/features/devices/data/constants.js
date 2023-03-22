@@ -52,4 +52,6 @@ export const deviceSchema = Yup.object().shape({
     [fieldNames.LONG]: Yup.string(),
     [fieldNames.LAT]: Yup.string(),
     [fieldNames.ADDRESS]: Yup.string(),
-  });
+});
+  
+export const pageSizes = [10, 15, 20, 25, 30];

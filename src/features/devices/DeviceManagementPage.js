@@ -3,11 +3,11 @@ import DeviceListTable from "./components/DeviceListTable";
 import styles from "./DeviceManagementPage.module.scss";
 import { MDBBtn, MDBCard, MDBCardBody } from "mdb-react-ui-kit";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAdd, faXmark, faPencil } from "@fortawesome/free-solid-svg-icons";
+import { faAdd, faXmark, faFileExcel } from "@fortawesome/free-solid-svg-icons";
 import AddDeviceModal from "./components/AddDeviceModal";
 import {
   useDeleteDevicesMutation,
-  useGetAllDevicesQuery,
+  useLazyGetDevicesQuery,
 } from "./deviceApiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -15,6 +15,9 @@ import {
   selectFilters,
   selectAllToggle,
   selectRowToggle,
+  setCurrentPage,
+  setRowsPerPage,
+  selectTotalRowCount,
 } from "./deviceSlice";
 import { useGetAllProvincesQuery } from "../province/provinceApiSlice";
 import { useGetAllRegionsQuery } from "../region/regionApiSlice";
@@ -26,12 +29,13 @@ const DeviceManagementPage = (props) => {
   const [editDeviceModalOpen, setEditDeviceModalOpen] = React.useState(false);
   const [editDeviceId, setEditDeviceId] = React.useState(null);
   //gọi api trả về các devices
-  const {
-    _,
-    isFetching: devicesFetching,
-    isError: devicesError,
-    isSuccess: devicesSuccess,
-  } = useGetAllDevicesQuery();
+  const [getDevices,
+    {
+      isFetching: devicesFetching,
+      isError: devicesError,
+      isSuccess: devicesSuccess,
+    }
+  ] = useLazyGetDevicesQuery();
   const {
     data: provinces,
     isFetching: provincesFetching,
@@ -61,6 +65,8 @@ const DeviceManagementPage = (props) => {
     provincesFetching ||
     regionsFetching ||
     deviceStatusFetching;
+  
+  //
   const isSuccess =
     devicesSuccess || provincesSuccess || regionsSuccess || deviceStatusSuccess;
   const isError =
@@ -73,7 +79,13 @@ const DeviceManagementPage = (props) => {
   const hasNoRowSelected = devices
     ? devices.every((device) => device.isSelected === false)
     : true;
+  
   const filters = useSelector(selectFilters);
+  const totalRowCount = useSelector(selectTotalRowCount);
+
+  React.useEffect(() => {
+    getDevices(filters);
+  }, [filters, getDevices]);
 
   const selectedDeviceList = devices.filter((device) => device.isSelected === true);
   const selectedDeviceIdList = selectedDeviceList.map((device) => device.Id);
@@ -149,6 +161,17 @@ const DeviceManagementPage = (props) => {
                 </div>
                 Delete
               </MDBBtn>
+              <MDBBtn
+                className={styles.actionButton}
+                type="button"
+                size="sm"
+                color="info"
+              >
+                <div className={styles.buttonIcon}>
+                  <FontAwesomeIcon icon={faFileExcel} />
+                </div>
+                Export
+              </MDBBtn>
             </div>
             <div className={styles.pageContent}>
               {isSuccess && (
@@ -162,6 +185,11 @@ const DeviceManagementPage = (props) => {
                   provinces={provinces}
                   filters={filters}
                   onRowClickHandler={onRowClickHandler}
+                  currentPage={filters.currentPage}
+                  rowsPerPage={filters.rowsPerPage}
+                  setRowsPerPage={(value) => dispatch(setRowsPerPage(value))}
+                  setCurrentPage={(value) => dispatch(setCurrentPage(value))}
+                  totalRowCount={totalRowCount}
                 />
               )}
               {isError && <div>There are no devices.</div>}

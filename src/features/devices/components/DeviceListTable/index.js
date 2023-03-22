@@ -11,9 +11,25 @@ import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmarkCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { Form } from 'react-bootstrap';
+import Pagination from '../../../../components/common/Pagination';
 import { fieldNames } from '../../data/constants';
 
 const cx = classNames.bind(styles);
+
+const PageSizeSelector = (props) => {
+    const { onSizeChange, pageSizes } = props;
+    return (
+        <Form.Group className={styles.pageSizeSelectorWrapper}>
+            <label htmlFor="page-selector">Rows per page:</label>
+            <Form.Select id="page-selector" size="sm" onChange={
+                (e) => onSizeChange(Number.parseInt(e.target.value))}>
+                {pageSizes.map((size, idx) => 
+                    <option key={idx} value={size}>{size}</option>
+                )}
+            </Form.Select>
+        </Form.Group>
+    );
+}
 
 const TextFilter = ({ id, label, onChange }) => 
     <Form.Group className={styles.textFilter}>
@@ -41,11 +57,16 @@ const DeviceListTable = (props) => {
         deviceStatus,
         regions,
         provinces,
-        filters,
         onRowClickHandler,
+        filters,
         setFilter,
+        currentPage,
+        rowsPerPage,
+        setRowsPerPage,
+        setCurrentPage,
+        totalRowCount,
     } = props;
-    console.log(deviceList);
+
     const columns = [
         { id: "number", label: "No.", filterType: "text", width: 5, minWidth: 5},
         { id: [fieldNames.DEVICE_NAME], label: "Device Name", filterType: "text", width: 20, minWidth: 15 },
@@ -172,6 +193,20 @@ const DeviceListTable = (props) => {
                     </MDBTableBody>
                 </MDBTable>
             }
+            <div className={styles.paginationWrapper}>
+                <PageSizeSelector
+                    onSizeChange={setRowsPerPage}
+                    pageSizes={[10, 15, 20, 25, 30]}
+                />
+                <Pagination
+                    className={styles.pagination}
+                    onPageChange={setCurrentPage}
+                    totalCount={totalRowCount}
+                    siblingCount={0}
+                    currentPage={currentPage}
+                    pageSize={rowsPerPage}
+                />
+            </div>
         </>
     );
 }
