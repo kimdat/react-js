@@ -9,7 +9,7 @@ const LogoutPage = (props) => {
         navigate("/", { replace: true });
     });
 
-    return <div>...đang đăng xuất</div>;
+    return <div>...Logging out</div>;
 }
 
 export default LogoutPage;

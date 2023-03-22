@@ -114,15 +114,8 @@ const DeviceManagementPage = (props) => {
 
   return (
     <>
-      <EditDeviceModal
-        provinces={provinces}
-        regions={regions}
-        open={editDeviceModalOpen}
-        setOpen={setEditDeviceModalOpen}
-        deviceId={editDeviceId}
-        device={getDeviceById(editDeviceId)}
-      />
       <div className={styles.pageContainer}>
+        <h1 className={styles.pageTitle}>Device Management</h1>
         <MDBCard>
           <MDBCardBody>
             <div className={styles.actionsWrapper}>
@@ -176,6 +169,14 @@ const DeviceManagementPage = (props) => {
           </MDBCardBody>
         </MDBCard>
       </div>
+      <EditDeviceModal
+        provinces={provinces}
+        regions={regions}
+        open={editDeviceModalOpen}
+        setOpen={setEditDeviceModalOpen}
+        deviceId={editDeviceId}
+        device={getDeviceById(editDeviceId)}
+      />
     </>
   );
 };

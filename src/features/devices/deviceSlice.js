@@ -34,7 +34,7 @@ const deviceSlice = createSlice({
 
     addFilter: (state, action) => {
       const { filterName, filterValue } = action.payload;
-      state.filters[`${filterName}`] = filterValue;
+      state.filters[filterName] = filterValue;
     },
   },
   extraReducers: (builder) => {

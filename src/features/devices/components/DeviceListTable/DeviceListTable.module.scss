@@ -33,9 +33,18 @@
     padding-right: 10px;
 }
 
-.deviceListTableRow {
-    &:hover {
-        cursor: pointer;
+.deviceName {
+    button {
+        width: 100%;
+        background-color: transparent;
+        border: 0;
+        text-align: left;
+        text-decoration: underline;
+        color: var(--bg-primary);
+
+        &:hover {
+            color: var(--bg-secondary);
+        }
     }
 }
 

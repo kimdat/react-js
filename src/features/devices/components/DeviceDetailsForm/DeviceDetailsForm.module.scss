@@ -27,3 +27,14 @@
         "label text";
     grid-template-columns: 100px 1fr;
 }
+
+.required {
+    margin: 0 3px;
+    color: var(--mdb-danger);
+}
+
+.requiredDescription {
+    margin-top: 1rem;
+    font-size: .8rem;
+    text-align: right;
+}

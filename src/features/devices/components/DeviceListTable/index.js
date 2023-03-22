@@ -11,27 +11,26 @@ import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmarkCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { Form } from 'react-bootstrap';
+import { fieldNames } from '../../data/constants';
 
 const cx = classNames.bind(styles);
 
-const TextFilter = ({ id, label }) => 
+const TextFilter = ({ id, label, onChange }) => 
     <Form.Group className={styles.textFilter}>
         <Form.Label htmlFor={id}>{label}</Form.Label>
-        <Form.Control id={id} type="text" size="sm"></Form.Control>
+        <Form.Control id={id} type="text" size="sm" onChange={onChange}></Form.Control>
     </Form.Group>
 
-const SelectFilter = ({ id, label, options }) => 
+const SelectFilter = ({ id, label, options, onChange }) => 
     <Form.Group className={styles.selectFilter}>
         <Form.Label htmlFor={id}>{label}</Form.Label>
-        <Form.Select id={id} name={label} size="sm">
+        <Form.Select id={id} name={label} size="sm" onChange={onChange}>
             <option defaultValue={"all"}>All</option>
             {options?.map((option, idx) => 
                 <option key={idx} value={option.id}>{option.name}</option>
             )}
         </Form.Select>
     </Form.Group>
-    
-
     
 const DeviceListTable = (props) => {
     const {
@@ -43,35 +42,37 @@ const DeviceListTable = (props) => {
         regions,
         provinces,
         filters,
-        openEditDeviceModalHandler,
         onRowClickHandler,
+        setFilter,
     } = props;
-        
+    console.log(deviceList);
     const columns = [
         { id: "number", label: "No.", filterType: "text", width: 5, minWidth: 5},
-        { id: "deviceName", label: "Device Name", filterType: "text", width: 20, minWidth: 15},
-        { id: "ip", label: "IP Loopback", filterType: "text", width: 20, minWidth: 15},
-        { id: "status", label: "Status", filterType: "select", options: deviceStatus, width: 20, minWidth: 13},
-        { id: "region", label: "Region", filterType: "select", options: regions, width: 20, minWidth: 10},
-        { id: "province", label: "Province", filterType: "select", options: provinces, width: 20, minWidth: 10},
-        { id: "long", label: "Long.", filterType: "text", width: 10, minWidth: 5},
-        { id: "lat", label: "Lat.", filterType: "text", width: 10, minWidth: 5},
-        { id: "address", label: "Address", filterType: "text", width: 35, minWidth: 20},
+        { id: [fieldNames.DEVICE_NAME], label: "Device Name", filterType: "text", width: 20, minWidth: 15 },
+        { id: [fieldNames.IP], label: "IP", filterType: "text", width: 15, minWidth: 15},
+        { id: [fieldNames.DEVICE_TYPE], label: "Device Type", filterType: "select", width: 15, minWidth: 15 },
+        { id: [fieldNames.STATUS], label: "Status", filterType: "select", options: deviceStatus, width: 14, minWidth: 14},
+        { id: [fieldNames.REGION_ID], label: "Region", filterType: "select", options: regions, width: 20, minWidth: 20},
+        { id: [fieldNames.PROVINCE_ID], label: "Province", filterType: "select", options: provinces, width: 20, minWidth: 10},
+        { id: [fieldNames.LONG], label: "Long.", filterType: "text", width: 10, minWidth: 5},
+        { id: [fieldNames.LAT], label: "Lat.", filterType: "text", width: 10, minWidth: 5},
+        { id: [fieldNames.ADDRESS], label: "Address", filterType: "text", width: 35, minWidth: 20},
     ];
 
     const rows = deviceList ? deviceList.map((d, idx) => {
         return {
-            id: d.Id,
+            id: d[fieldNames.ID],
             isSelected: d.isSelected,
             number: idx + 1,
-            deviceName: d.DeviceName,
-            ip: d.Ip,
-            status: d.status,
-            region: d.region_id,
-            province: d.province_id,
-            long: d.long,
-            lat: d.lat,
-            address: d.address,
+            deviceName: d[fieldNames.DEVICE_NAME],
+            ip: d[fieldNames.IP],
+            deviceType: d[fieldNames.DEVICE_TYPE],
+            status: d[fieldNames.STATUS],
+            region: d[fieldNames.REGION_ID],
+            province: d[fieldNames.PROVINCE_ID],
+            long: d[fieldNames.LONG],
+            lat: d[fieldNames.LAT],
+            address: d[fieldNames.ADDRESS],
         };
     }) : [];
 
@@ -108,6 +109,7 @@ const DeviceListTable = (props) => {
                                             <TextFilter
                                                 id={col.id}
                                                 label={col.label}
+                                                onChange={() => setFilter()}
                                             />
                                         </div>
                                     }
@@ -135,7 +137,7 @@ const DeviceListTable = (props) => {
                                     styles.deviceListTableRow,
                                     {"table-primary": row.isSelected}
                                 )}
-                                onClick={() => onRowClickHandler(row.id)}
+                                
                             >
                                 <th scope='col'>
                                     <MDBCheckbox checked={row.isSelected || false}
@@ -143,8 +145,13 @@ const DeviceListTable = (props) => {
                                     ></MDBCheckbox>
                                 </th>
                                 <td>{row.number}</td>
-                                <td>{row.deviceName}</td>
+                                <td className={styles.deviceName}>
+                                    <button onClick={() => onRowClickHandler(row.id)}>
+                                        {row.deviceName}
+                                    </button>
+                                </td>
                                 <td>{row.ip}</td>
+                                <td>{row.deviceType}</td>
                                 <td>
                                     {
                                         row.status === '1'

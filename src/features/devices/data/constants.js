@@ -29,8 +29,10 @@ export const deviceType = [
 ]
 
 export const fieldNames = {
+    ID: "Id",
     DEVICE_NAME: "DeviceName",
     IP: "Ip",
+    STATUS: "status",
     DEVICE_TYPE: "Device_Type",
     REGION_ID: "region_id",
     PROVINCE_ID: "province_id",

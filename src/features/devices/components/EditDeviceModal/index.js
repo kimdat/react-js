@@ -15,8 +15,8 @@ const EditDeviceModal = (props) => {
       isLoading={isLoading}
       isError={isError}
       isSuccess={isSuccess}
-      title="Edit device"
-      actionButton="Edit"
+      title="Modify device info"
+      actionButton="Update"
       actionFunc={(data) => editDevice(deviceId, data)}
       device={device}
     />
