@@ -18,6 +18,7 @@ import {
   setCurrentPage,
   setRowsPerPage,
   selectTotalRowCount,
+  setFilter,
 } from "./deviceSlice";
 import { useGetAllProvincesQuery } from "../province/provinceApiSlice";
 import { useGetAllRegionsQuery } from "../region/regionApiSlice";
@@ -184,6 +185,7 @@ const DeviceManagementPage = (props) => {
                   regions={regions}
                   provinces={provinces}
                   filters={filters}
+                  setFilter={(value) => dispatch(setFilter(value))}
                   onRowClickHandler={onRowClickHandler}
                   currentPage={filters.currentPage}
                   rowsPerPage={filters.rowsPerPage}

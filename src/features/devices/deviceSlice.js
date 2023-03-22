@@ -44,7 +44,7 @@ const deviceSlice = createSlice({
       const currentPage = action.payload;
       state.filters.currentPage = currentPage;
     },
-    addFilter: (state, action) => {
+    setFilter: (state, action) => {
       const { filterName, filterValue } = action.payload;
       state.filters[filterName] = filterValue;
     },
@@ -66,7 +66,13 @@ const deviceSlice = createSlice({
   },
 });
 
-export const { selectAllToggle, selectRowToggle, setRowsPerPage, setCurrentPage } = deviceSlice.actions;
+export const {
+  selectAllToggle,
+  selectRowToggle,
+  setRowsPerPage,
+  setCurrentPage,
+  setFilter,
+} = deviceSlice.actions;
 export const selectDeviceList = (state) => state.device.list;
 export const selectFilters = (state) => state.device.filters;
 export const selectTotalRowCount = (state) => state.device.totalRowCount;

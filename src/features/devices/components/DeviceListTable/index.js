@@ -31,17 +31,28 @@ const PageSizeSelector = (props) => {
     );
 }
 
-const TextFilter = ({ id, label, onChange }) => 
-    <Form.Group className={styles.textFilter}>
-        <Form.Label htmlFor={id}>{label}</Form.Label>
-        <Form.Control id={id} type="text" size="sm" onChange={onChange}></Form.Control>
-    </Form.Group>
+const TextFilter = ({ id, label, onEnterKeyDown }) => 
+{
+    const onKeyDown = (e) => {
+        if (e.keyCode === 13) {
+            onEnterKeyDown(id, e.target.value);
+        }
+    }
+    return (
+        <Form.Group className={styles.textFilter}>
+            <Form.Label htmlFor={id}>{label}</Form.Label>
+            <Form.Control id={id} type="text" size="sm"
+                onKeyDown={onKeyDown}
+            ></Form.Control>
+        </Form.Group>
+    );
+}
 
 const SelectFilter = ({ id, label, options, onChange }) => 
     <Form.Group className={styles.selectFilter}>
         <Form.Label htmlFor={id}>{label}</Form.Label>
-        <Form.Select id={id} name={label} size="sm" onChange={onChange}>
-            <option defaultValue={"all"}>All</option>
+        <Form.Select id={id} name={label} size="sm" onChange={(e) => onChange(id, e.target.value)}>
+            <option value="">All</option>
             {options?.map((option, idx) => 
                 <option key={idx} value={option.id}>{option.name}</option>
             )}
@@ -69,15 +80,15 @@ const DeviceListTable = (props) => {
 
     const columns = [
         { id: "number", label: "No.", filterType: "text", width: 5, minWidth: 5},
-        { id: [fieldNames.DEVICE_NAME], label: "Device Name", filterType: "text", width: 20, minWidth: 15 },
-        { id: [fieldNames.IP], label: "IP", filterType: "text", width: 15, minWidth: 15},
-        { id: [fieldNames.DEVICE_TYPE], label: "Device Type", filterType: "select", width: 15, minWidth: 15 },
-        { id: [fieldNames.STATUS], label: "Status", filterType: "select", options: deviceStatus, width: 14, minWidth: 14},
-        { id: [fieldNames.REGION_ID], label: "Region", filterType: "select", options: regions, width: 20, minWidth: 20},
-        { id: [fieldNames.PROVINCE_ID], label: "Province", filterType: "select", options: provinces, width: 20, minWidth: 10},
-        { id: [fieldNames.LONG], label: "Long.", filterType: "text", width: 10, minWidth: 5},
-        { id: [fieldNames.LAT], label: "Lat.", filterType: "text", width: 10, minWidth: 5},
-        { id: [fieldNames.ADDRESS], label: "Address", filterType: "text", width: 35, minWidth: 20},
+        { id: fieldNames.DEVICE_NAME, label: "Device Name", filterType: "text", width: 20, minWidth: 15 },
+        { id: fieldNames.IP, label: "IP", filterType: "text", width: 15, minWidth: 15},
+        { id: fieldNames.DEVICE_TYPE, label: "Device Type", filterType: "select", width: 15, minWidth: 15 },
+        { id: fieldNames.STATUS, label: "Status", filterType: "select", options: deviceStatus, width: 14, minWidth: 14},
+        { id: fieldNames.REGION_ID, label: "Region", filterType: "select", options: regions, width: 20, minWidth: 20},
+        { id: fieldNames.PROVINCE_ID, label: "Province", filterType: "select", options: provinces, width: 20, minWidth: 10},
+        { id: fieldNames.LONG, label: "Long.", filterType: "text", width: 10, minWidth: 5},
+        { id: fieldNames.LAT, label: "Lat.", filterType: "text", width: 10, minWidth: 5},
+        { id: fieldNames.ADDRESS, label: "Address", filterType: "text", width: 35, minWidth: 20},
     ];
 
     const rows = deviceList ? deviceList.map((d, idx) => {
@@ -103,11 +114,7 @@ const DeviceListTable = (props) => {
 
     return (
         <>
-            {rows.length === 0 && 
-                <div>There are no devices.</div>
-            }
-            {rows.length !== 0 &&
-                <MDBTable striped small hover
+            <MDBTable striped small hover
                     className={cx(styles.deviceListTable, 'w-auto')}
                 >
                     <MDBTableHead className={styles.deviceListTableHead}>
@@ -130,7 +137,9 @@ const DeviceListTable = (props) => {
                                             <TextFilter
                                                 id={col.id}
                                                 label={col.label}
-                                                onChange={() => setFilter()}
+                                                onEnterKeyDown={(name, value) => setFilter({
+                                                    filterName: name, filterValue: value
+                                                })}
                                             />
                                         </div>
                                     }
@@ -144,6 +153,9 @@ const DeviceListTable = (props) => {
                                                 id={col.id}
                                                 label={col.label}
                                                 options={col.options}
+                                                onChange={(name, value) => setFilter({
+                                                    filterName: name, filterValue: value,
+                                                })}
                                                 />
                                         </div>
                                     }
@@ -151,6 +163,13 @@ const DeviceListTable = (props) => {
                             )}
                         </tr>
                     </MDBTableHead>
+                    {rows.length === 0 && 
+                        <tr>
+                            There are no devices.
+                        </tr>
+                    }
+                    {rows.length !== 0 &&
+                
                     <MDBTableBody>
                         {rows.map((row, idx) => 
                             <tr key={idx}
@@ -191,8 +210,8 @@ const DeviceListTable = (props) => {
                             </tr>
                         )}
                     </MDBTableBody>
-                </MDBTable>
-            }
+                }
+            </MDBTable>
             <div className={styles.paginationWrapper}>
                 <PageSizeSelector
                     onSizeChange={setRowsPerPage}
