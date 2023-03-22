@@ -3,7 +3,7 @@ import DeviceListTable from "./components/DeviceListTable";
 import styles from "./DeviceManagementPage.module.scss";
 import { MDBBtn, MDBCard, MDBCardBody } from "mdb-react-ui-kit";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAdd, faXmark, faFileExcel } from "@fortawesome/free-solid-svg-icons";
+import { faAdd, faXmark, faFileExcel, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 import AddDeviceModal from "./components/AddDeviceModal";
 import {
   useDeleteDevicesMutation,
@@ -143,9 +143,8 @@ const DeviceManagementPage = (props) => {
                     color="primary"
                   >
                     <div className={styles.buttonIcon}>
-                      <FontAwesomeIcon icon={faAdd} />
+                      <FontAwesomeIcon icon={faPlus} />
                     </div>
-                    Add
                   </MDBBtn>
                 }
               />
@@ -158,9 +157,8 @@ const DeviceManagementPage = (props) => {
                 onClick={() => deleteDeviceHandler()}
               >
                 <div className={styles.buttonIcon}>
-                  <FontAwesomeIcon icon={faXmark} />
+                  <FontAwesomeIcon icon={faTrash} />
                 </div>
-                Delete
               </MDBBtn>
               <MDBBtn
                 className={styles.actionButton}
@@ -171,7 +169,6 @@ const DeviceManagementPage = (props) => {
                 <div className={styles.buttonIcon}>
                   <FontAwesomeIcon icon={faFileExcel} />
                 </div>
-                Export
               </MDBBtn>
             </div>
             <div className={styles.pageContent}>

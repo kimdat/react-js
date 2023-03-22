@@ -165,7 +165,9 @@ const DeviceListTable = (props) => {
                     </MDBTableHead>
                     {rows.length === 0 && 
                         <tr>
-                            There are no devices.
+                            <td colSpan={columns.length} className={styles.noDevicesMessage}>
+                                There are no devices.
+                            </td>
                         </tr>
                     }
                     {rows.length !== 0 &&

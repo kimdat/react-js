@@ -83,3 +83,9 @@
 .paginationSelector {
     margin-left: .3rem;
 }
+
+.noDevicesMessage {
+    text-align: left;
+    font-style: italic;
+    color: var(--mdb-danger)
+}
