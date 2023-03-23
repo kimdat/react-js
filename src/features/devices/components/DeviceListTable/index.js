@@ -79,54 +79,16 @@ const DeviceListTable = (props) => {
     } = props;
 
     const columns = [
-        { id: "number", label: "No.", filterType: "text", width: 5, minWidth: 5 },
-        {
-        id: "deviceName",
-        label: "Device Name",
-        filterType: "text",
-        width: 20,
-        minWidth: 15,
-        },
-        {
-        id: "ip",
-        label: "IP Loopback",
-        filterType: "text",
-        width: 20,
-        minWidth: 15,
-        },
-        {
-        id: "status",
-        label: "Status",
-        filterType: "select",
-        options: deviceStatus,
-        width: 20,
-        minWidth: 13,
-        },
-        {
-        id: "region",
-        label: "Region",
-        filterType: "select",
-        options: regions,
-        width: 20,
-        minWidth: 10,
-        },
-        {
-        id: "province",
-        label: "Province",
-        filterType: "select",
-        options: provinces,
-        width: 20,
-        minWidth: 10,
-        },
-        { id: "long", label: "Long.", filterType: "text", width: 10, minWidth: 5 },
-        { id: "lat", label: "Lat.", filterType: "text", width: 10, minWidth: 5 },
-        {
-        id: "address",
-        label: "Address",
-        filterType: "text",
-        width: 35,
-        minWidth: 20,
-        },
+        { id: "number", label: "No.", filterType: "text", width: 5, minWidth: 5},
+        { id: fieldNames.DEVICE_NAME, label: "Device Name", filterType: "text", width: 20, minWidth: 15 },
+        { id: fieldNames.IP, label: "IP", filterType: "text", width: 15, minWidth: 15},
+        { id: fieldNames.DEVICE_TYPE, label: "Device Type", filterType: "select", width: 15, minWidth: 15 },
+        { id: fieldNames.STATUS, label: "Status", filterType: "select", options: deviceStatus, width: 14, minWidth: 14},
+        { id: fieldNames.REGION_ID, label: "Region", filterType: "select", options: regions, width: 20, minWidth: 20},
+        { id: fieldNames.PROVINCE_ID, label: "Province", filterType: "select", options: provinces, width: 20, minWidth: 10},
+        { id: fieldNames.LONG, label: "Long.", filterType: "text", width: 10, minWidth: 5},
+        { id: fieldNames.LAT, label: "Lat.", filterType: "text", width: 10, minWidth: 5},
+        { id: fieldNames.ADDRESS, label: "Address", filterType: "text", width: 35, minWidth: 20},
     ];
 
   const rows = deviceList
