@@ -117,52 +117,53 @@ const DeviceListTable = (props) => {
             <MDBTable striped small hover
                     className={cx(styles.deviceListTable, 'w-auto')}
                 >
-                    <MDBTableHead className={styles.deviceListTableHead}>
-                        <tr>
-                            <th scope='col' className={styles.deviceListTableHeadCell}>
-                                <MDBCheckbox checked={isSelectAll || false}
-                                    onChange={() => selectAllToggleFunc()}></MDBCheckbox>
-                            </th>
-                            {columns.map((col, idx) => 
-                                <th scope='col'
-                                    key={idx}
-                                    className={styles.deviceListTableHeadCell}
-                                >
-                                    {col.filterType === "text" && 
-                                        <div className={styles.deviceListTableCol}
-                                            style={{
-                                                width: `${col.width}ch`,
-                                                minWidth: `${col.minWidth}ch`,
-                                            }}>
-                                            <TextFilter
-                                                id={col.id}
-                                                label={col.label}
-                                                onEnterKeyDown={(name, value) => setFilter({
-                                                    filterName: name, filterValue: value
-                                                })}
+                <MDBTableHead className={styles.deviceListTableHead}>
+                    <tr>
+                        <th scope='col' className={styles.deviceListTableHeadCell}>
+                            <MDBCheckbox checked={isSelectAll || false}
+                                onChange={() => selectAllToggleFunc()}></MDBCheckbox>
+                        </th>
+                        {columns.map((col, idx) => 
+                            <th scope='col'
+                                key={idx}
+                                className={styles.deviceListTableHeadCell}
+                            >
+                                {col.filterType === "text" && 
+                                    <div className={styles.deviceListTableCol}
+                                        style={{
+                                            width: `${col.width}ch`,
+                                            minWidth: `${col.minWidth}ch`,
+                                        }}>
+                                        <TextFilter
+                                            id={col.id}
+                                            label={col.label}
+                                            onEnterKeyDown={(name, value) => setFilter({
+                                                filterName: name, filterValue: value
+                                            })}
+                                        />
+                                    </div>
+                                }
+                                {col.filterType === "select" &&
+                                    <div className={styles.deviceListTableCol}
+                                        style={{
+                                            width: `${col.width}ch`,
+                                            minWidth: `${col.minWidth}ch`,
+                                        }}>
+                                        <SelectFilter
+                                            id={col.id}
+                                            label={col.label}
+                                            options={col.options}
+                                            onChange={(name, value) => setFilter({
+                                                filterName: name, filterValue: value,
+                                            })}
                                             />
-                                        </div>
-                                    }
-                                    {col.filterType === "select" &&
-                                        <div className={styles.deviceListTableCol}
-                                            style={{
-                                                width: `${col.width}ch`,
-                                                minWidth: `${col.minWidth}ch`,
-                                            }}>
-                                            <SelectFilter
-                                                id={col.id}
-                                                label={col.label}
-                                                options={col.options}
-                                                onChange={(name, value) => setFilter({
-                                                    filterName: name, filterValue: value,
-                                                })}
-                                                />
-                                        </div>
-                                    }
-                                </th>
-                            )}
-                        </tr>
-                    </MDBTableHead>
+                                    </div>
+                                }
+                            </th>
+                        )}
+                    </tr>
+                </MDBTableHead>
+                <MDBTableBody>
                     {rows.length === 0 && 
                         <tr>
                             <td colSpan={columns.length} className={styles.noDevicesMessage}>
@@ -170,49 +171,45 @@ const DeviceListTable = (props) => {
                             </td>
                         </tr>
                     }
-                    {rows.length !== 0 &&
-                
-                    <MDBTableBody>
-                        {rows.map((row, idx) => 
-                            <tr key={idx}
-                                className={cx(
-                                    styles.deviceListTableRow,
-                                    {"table-primary": row.isSelected}
-                                )}
-                                
-                            >
-                                <th scope='col'>
-                                    <MDBCheckbox checked={row.isSelected || false}
-                                        onChange={() => selectRowToggleFunc(row.id)}
-                                    ></MDBCheckbox>
-                                </th>
-                                <td>{row.number}</td>
-                                <td className={styles.deviceName}>
-                                    <button onClick={() => onRowClickHandler(row.id)}>
-                                        {row.deviceName}
-                                    </button>
-                                </td>
-                                <td>{row.ip}</td>
-                                <td>{row.deviceType}</td>
-                                <td>
-                                    {
-                                        row.status === '1'
-                                        ? <div className={styles.statusIcon}><FontAwesomeIcon className="text-success" icon={faCheckCircle} /></div>
-                                        : <div className={styles.statusIcon}><FontAwesomeIcon className="text-danger" icon={faXmarkCircle} /></div>
-                                    }
-                                    {
-                                        deviceStatus?.find(status => status.id === row.status)?.name
-                                    }
-                                </td>
-                                <td>{getOptionNameById(row.region, regions)}</td>
-                                <td>{getOptionNameById(row.province, provinces)}</td>
-                                <td>{row.long}</td>
-                                <td>{row.lat}</td>
-                                <td>{row.address}</td>
-                            </tr>
-                        )}
-                    </MDBTableBody>
-                }
+                    {rows.length !== 0 && rows.map((row, idx) => 
+                        <tr key={idx}
+                            className={cx(
+                                styles.deviceListTableRow,
+                                {"table-primary": row.isSelected}
+                            )}
+                            
+                        >
+                            <th scope='col'>
+                                <MDBCheckbox checked={row.isSelected || false}
+                                    onChange={() => selectRowToggleFunc(row.id)}
+                                ></MDBCheckbox>
+                            </th>
+                            <td>{row.number}</td>
+                            <td className={styles.deviceName}>
+                                <button onClick={() => onRowClickHandler(row.id)}>
+                                    {row.deviceName}
+                                </button>
+                            </td>
+                            <td>{row.ip}</td>
+                            <td>{row.deviceType}</td>
+                            <td>
+                                {
+                                    row.status === '1'
+                                    ? <div className={styles.statusIcon}><FontAwesomeIcon className="text-success" icon={faCheckCircle} /></div>
+                                    : <div className={styles.statusIcon}><FontAwesomeIcon className="text-danger" icon={faXmarkCircle} /></div>
+                                }
+                                {
+                                    deviceStatus?.find(status => status.id === row.status)?.name
+                                }
+                            </td>
+                            <td>{getOptionNameById(row.region, regions)}</td>
+                            <td>{getOptionNameById(row.province, provinces)}</td>
+                            <td>{row.long}</td>
+                            <td>{row.lat}</td>
+                            <td>{row.address}</td>
+                        </tr>
+                    )}
+                </MDBTableBody>
             </MDBTable>
             <div className={styles.paginationWrapper}>
                 <PageSizeSelector

@@ -1,11 +1,21 @@
 import React from 'react';
 import DeviceModal from '../DeviceModal';
 import { useEditDeviceMutation } from "../../deviceApiSlice";
+import Swal from 'sweetalert2';
 
 const EditDeviceModal = (props) => {
   const { provinces, regions, open, setOpen, deviceId, device } = props;
   const [editDevice, { isLoading, isSuccess, isError }] =
     useEditDeviceMutation();
+  
+  const alertMessageFire = (status, msg) => {
+    Swal.fire({
+      icon: status,
+      title: status,
+      text: msg,
+    });
+  };
+  
   return (
     <DeviceModal
       open={open}
@@ -17,8 +27,10 @@ const EditDeviceModal = (props) => {
       isSuccess={isSuccess}
       title="Modify device info"
       actionButton="Update"
-      actionFunc={(data) => editDevice(deviceId, data)}
+      actionFunc={(data) => editDevice({deviceId, data})}
       device={device}
+      hasDuplicateValidation={false}
+      alertMessageFire={alertMessageFire}
     />
   );
 }

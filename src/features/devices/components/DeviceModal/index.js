@@ -6,7 +6,6 @@ import styles from "./DeviceModal.module.scss";
 import { useLazyCheckDuplicateQuery } from "../../deviceApiSlice";
 import useFormValidator from "../../../../hooks/useFormValidator";
 import LoadingComponent from "./../../../../components/LoadingComponent/LoadingComponent";
-import Swale from "sweetalert2";
 import { useInputs } from "../../../../hooks/useInputs";
 import { fieldNames, deviceSchema } from "../../data/constants";
 
@@ -24,69 +23,45 @@ const DeviceModal = (props) => {
     isSuccess,
     isError,
     device,
+    hasDuplicateValidation,
+    alertMessageFire,
   } = props;
 
   const [inputs, setInputs, getAllInputs, resetInputs] = useInputs(Object.values(fieldNames), device);
 
   const [isIpDuplicate, setIsIpDuplicate] = React.useState(false);
   const [isDeviceNameDuplicate, setIsDeviceNameDuplicate] = React.useState(false);
-
-  const [msg, setMsg] = React.useState("");
     
   const [checkDuplicate] = useLazyCheckDuplicateQuery();
 
   const { errors, texts, validate, resetValidator } = useFormValidator(deviceSchema);
 
-  const EditCreate = "Add";
-  const messInforOneDevice = (data) => {
-    const dataFail = data.fail;
-    const dataErr = data.Err;
-    const title =
-      dataErr.length > 0 ? "Err" : dataFail.length > 0 ? "Fail" : "Success";
-    const icon = dataErr.length > 0 || dataFail.length ? "error" : "success";
-    const html =
-      dataErr.length > 0
-        ? `Error when ${EditCreate} device`
-        : dataFail.length > 0
-        ? `connect fail for:${dataFail[0].ip}`
-        : `${EditCreate} success`;
-    Swale.fire({
-      title,
-      icon,
-      html,
-    });
-};
-  
-    const handleAddDevice = async () => {
-    //duplicate check
-    const isDeviceNameDuplicate = await checkDuplicate({ deviceName: inputs([fieldNames.DEVICE_NAME]) }).unwrap();
-    setIsDeviceNameDuplicate(isDeviceNameDuplicate);
-    if (isDeviceNameDuplicate) {
-      return;
-    }
-
-    const isIpDuplicate = await checkDuplicate({ ip: inputs([fieldNames.IP]) }).unwrap();
-    setIsIpDuplicate(isIpDuplicate);
-    if (isIpDuplicate) {
-      return;
-    }
-
+  const actionHandler = async () => {
     //validation
     const data = await validate(getAllInputs());
     if (data === null) return;
+    
+    //duplicate check
+    if (hasDuplicateValidation) {
+      const isDeviceNameDuplicate = await checkDuplicate({ deviceName: inputs(fieldNames.DEVICE_NAME) }).unwrap();
+      setIsDeviceNameDuplicate(isDeviceNameDuplicate);
+      if (isDeviceNameDuplicate) {
+        return;
+      }
 
+      const isIpDuplicate = await checkDuplicate({ ip: inputs(fieldNames.IP) }).unwrap();
+      setIsIpDuplicate(isIpDuplicate);
+      if (isIpDuplicate) {
+        return;
+      }
+    }
+      
     //post
     try {
       const res = await actionFunc(data).unwrap();
-      setOpen(false);
-      messInforOneDevice(res);
+      alertMessageFire("success",res.message? res.message : "Done!");
     } catch (err) {
-      setMsg("");
-      // if (!err.success) {
-      //   setMsg(err.data.errors?.join("</br>"));
-      // } else {
-      //   setMsg("There are something wrong.");
-      // }
+      alertMessageFire("error", err.message? err.message : "There was an error.");
     }
   };
 
@@ -98,27 +73,33 @@ const DeviceModal = (props) => {
   React.useEffect(() => {
     resetInputs();
     resetValidator();
-    setDuplicateStatesToDefault();
+    if (hasDuplicateValidation) {
+      setDuplicateStatesToDefault();
+    }
   }, [open]);
 
-  const addDeviceErrors = (fieldName) => {
+  const deviceErrors = (fieldName) => {
     //check duplicate
-    if (fieldName === fieldNames.IP && isIpDuplicate) {
-      return true;
-    }
-    if (fieldName === fieldName.DEVICE_NAME && isDeviceNameDuplicate) {
-      return true;
+    if (hasDuplicateValidation) {
+      if (fieldName === fieldNames.IP && isIpDuplicate) {
+        return true;
+      }
+      if (fieldName === fieldNames.DEVICE_NAME && isDeviceNameDuplicate) {
+        return true;
+      }
     }
     return errors(fieldName);
   }
 
-  const addDeviceTexts = (fieldName) => {
+  const deviceTexts = (fieldName) => {
     //check duplicate
-    if (fieldName === fieldNames.IP && isIpDuplicate) {
-      return "This ip address already exists.";
-    }
-    if (fieldName === fieldNames.DEVICE_NAME && isDeviceNameDuplicate) {
-      return "This device name already exists.";
+    if (hasDuplicateValidation) {
+      if (fieldName === fieldNames.IP && isIpDuplicate) {
+        return "This ip address already exists.";
+      }
+      if (fieldName === fieldNames.DEVICE_NAME && isDeviceNameDuplicate) {
+        return "This device name already exists.";
+      }
     }
     return texts(fieldName);
   }
@@ -136,8 +117,8 @@ const DeviceModal = (props) => {
               setInputs={setInputs}
               regions={regions}
               provinces={provinces}
-              errors={addDeviceErrors}
-              texts={addDeviceTexts}
+              errors={deviceErrors}
+              texts={deviceTexts}
             />
             <div className={styles.actionButtonList}>
               <MDBBtn
@@ -149,7 +130,7 @@ const DeviceModal = (props) => {
               </MDBBtn>
               <MDBBtn
                 className={styles.actionButton}
-                onClick={() => handleAddDevice()}
+                onClick={() => actionHandler()}
               >
                 {actionButton}
               </MDBBtn>

@@ -34,11 +34,11 @@ export const deviceApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ["Devices"],
     }),
     editDevice: builder.mutation({
-      query: (deviceId, device) => {
+      query: ({deviceId, data}) => {
         return {
           url: `api/devices/${deviceId}`,
           method: "POST",
-          body: device,
+          body: data,
         };
       },
       invalidatesTags: ["Devices"],
