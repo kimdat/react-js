@@ -3,6 +3,8 @@ export const FILED_DEVICE_ONLINE = {
   Ip: "Ip",
   Device_type_S: "Device_type_S",
   id: "id",
+  STT: "STT",
+  No: "No",
 };
 export const TITLE_DEVICE_ONLINE = {
   Name: "Device Name",

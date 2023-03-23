@@ -54,7 +54,7 @@ const ExcelSSH = React.memo(({ row, setIsLoading }) => {
       <Button
         variant="info"
         onClick={handleExport}
-        style={{ marginLeft: "10px", borderRadius: "10px" }}
+        style={{ marginLeft: "10px", borderRadius: "5px" }}
       >
         <FaFileExport />
       </Button>

@@ -11,9 +11,11 @@ export const TITLE_Expand_Row_Component = {
   CDESC: "CDESC",
 };
 export const WIDTH_COLUMN_Expand_Row_Component = {
-  Blank: "105px",
+  Selected: "22px",
+  No: "50px",
+  DeviceName: "",
   Name: "",
   Pid: "",
   Serial: "",
-  CDESC: "44.3%",
+  CDESC: "31%",
 };

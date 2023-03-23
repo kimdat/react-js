@@ -13,7 +13,6 @@ import { api } from "../../../../Interceptor";
 import LoadingComponent from "../../../../components/LoadingComponent/LoadingComponent";
 import { FilterColumn } from "../../../../components/FilterColumn/FilterColumn";
 import DataTable from "react-data-table-component";
-
 import {
   FILED_DEVICE_ONLINE,
   TITLE_DEVICE_ONLINE,
@@ -82,6 +81,7 @@ const DevicesOnlineChild = memo(
           JSON.stringify(newInputs).toLowerCase()
         )
           return;
+        console.log(newInputs);
         const newData = dataToSearch.filter((item) => {
           for (let key in newInputs) {
             if (
@@ -91,6 +91,8 @@ const DevicesOnlineChild = memo(
                 .trim()
                 .includes(newInputs[key].toLowerCase().trim())
             ) {
+              console.log(item[key]);
+              console.log(newInputs[key]);
               continue;
             } else {
               return false;
@@ -98,6 +100,7 @@ const DevicesOnlineChild = memo(
           }
           return true;
         });
+
         //nếu search không thấy
         if (newData.length === 0) {
           setData([{ statusNotFound: true }]);
@@ -143,11 +146,12 @@ const DevicesOnlineChild = memo(
           selector: (row) => row[columnName],
 
           width: width,
+          resizable: true, // cho phép resize cột
         };
       },
       [handleFilterColumn]
     );
-    let STT = 1;
+
     const columns = useMemo(
       () => [
         {
@@ -173,11 +177,11 @@ const DevicesOnlineChild = memo(
           width: WIDTH_COLUMN_DEVICE_ONLINE.Selected,
         },
 
-        {
-          name: TITLE_DEVICE_ONLINE.No,
-          selector: (row) => STT++,
-          width: WIDTH_COLUMN_DEVICE_ONLINE.No,
-        },
+        createColumnToFilter(
+          FILED_DEVICE_ONLINE.No,
+          WIDTH_COLUMN_DEVICE_ONLINE.No,
+          TITLE_DEVICE_ONLINE.No
+        ),
         {
           name: (
             <FilterColumn
@@ -208,6 +212,7 @@ const DevicesOnlineChild = memo(
               width: WIDTH_COLUMN_DEVICE_ONLINE.Name,
             },
           ],
+          resizable: true, // cho phép resize cột
         },
         createColumnToFilter(
           FILED_DEVICE_ONLINE.Ip,
@@ -222,7 +227,6 @@ const DevicesOnlineChild = memo(
         checkAll,
         checkedRows,
         handleFilterColumn,
-        STT,
       ]
     );
     return (
@@ -237,7 +241,8 @@ const DevicesOnlineChild = memo(
             responsive={true}
             highlightOnHover
             striped
-            className="my-custom-data-table"
+            className="my-custom-data-table "
+            resizable={true}
           />
         </div>
       </LoadingComponent>

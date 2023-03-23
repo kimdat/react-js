@@ -63,7 +63,7 @@ const InventoriesOnline = () => {
                 <div
                   style={{
                     width: "100px",
-                    marginBottom: "20px",
+                    marginBottom: "10px",
                     float: "right",
                   }}
                 >

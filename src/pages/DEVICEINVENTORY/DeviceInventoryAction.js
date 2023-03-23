@@ -12,6 +12,7 @@ export const fetchData = (endpoint) => {
   return async (dispatch) => {
     try {
       const { data } = await api.get(`${API_URL}${endpoint}`);
+      
       dispatch(setData(data));
     } catch (err) {
       const message = err?.response?.data?.error ?? err?.error ?? err;

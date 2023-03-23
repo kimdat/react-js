@@ -4,14 +4,25 @@
     width: 100%;
 }
 
+.formControl {
+    grid-area: control;
+}
+
 .formLabel {
     margin-bottom: 0;
     font-size: .8rem;
     font-weight: 600;
+    grid-area: label;
+}
+.formText {
+    grid-area: text;
 }
 
 .formGroup {
     margin-top: .5rem;
     display: grid;
+    grid-template-areas:
+        "label control"
+        "label text";
     grid-template-columns: 100px 1fr;
 }

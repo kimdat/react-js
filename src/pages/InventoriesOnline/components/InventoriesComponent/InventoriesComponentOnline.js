@@ -4,7 +4,8 @@ import InventoriesComponent from "../../../../components/InventoriesComponent/In
 
 import LoadingComponent from "../../../../components/LoadingComponent/LoadingComponent";
 import "./InventoriesOnline.css";
-import ExcelSSH from "../ExcelSSH/ExcelSSH";
+
+import ExportExcel from "../../../../components/ExportExcel/ExportExcel";
 
 const InventoriesComponentOnline = React.memo(
   ({
@@ -54,7 +55,11 @@ const InventoriesComponentOnline = React.memo(
         {searchApiData.length > 0 && (
           <LoadingComponent isLoading={isLoading}>
             <div style={{ float: "right" }}>
-              <ExcelSSH setIsLoading={setIsLoading} row={dataAll} />
+              <ExportExcel
+                setIsLoading={setIsLoading}
+                row={dataAll}
+                endPoint="exportFileExcelSSH"
+              />
             </div>
             <InventoriesComponent
               totalRow={totalRow}

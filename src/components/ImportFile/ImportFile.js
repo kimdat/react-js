@@ -14,12 +14,11 @@ const ImportFile = memo(({ loadData }) => {
       <>
         <Button
           variant="primary"
-          style={{ borderRadius: "10px" }}
+          style={{ borderRadius: "5px" }}
           onClick={handleShow}
+          size="sm"
         >
-          <div>
-            <FaPlus />
-          </div>
+          <FaPlus />
         </Button>
         {show && (
           <ModalFileUpload

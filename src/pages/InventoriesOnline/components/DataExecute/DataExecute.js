@@ -10,6 +10,7 @@ import InventoriesComponentOnline from "../InventoriesComponent/InventoriesCompo
 import Swale from "sweetalert2";
 import LoadingComponent from "../../../../components/LoadingComponent/LoadingComponent";
 import axios from "axios";
+import { FILED_DEVICE_ONLINE } from "./../../ConstraintDivceOnline";
 const DataExecute = memo(
   forwardRef((props, ref) => {
     const [rowExpand, setRowExpand] = useState([]);
@@ -30,35 +31,32 @@ const DataExecute = memo(
           formData
         );
         console.log(data);
+        setIsLoading(false);
         const inventory = JSON.parse(data.deviceData);
         const dataSuccess = [];
-        const dataFail = [];  
+        const dataFail = [];
         let stt = 1;
         device_list.forEach((device) => {
           const ip = device.Ip;
           const dataInventory = inventory[ip];
           var children = [];
+          children = dataInventory;
+          const objInventories = {};
+
+          objInventories[FILED_DEVICE_ONLINE.Ip] = ip;
+          objInventories[FILED_DEVICE_ONLINE.Name] = device.DeviceName;
+          objInventories["children"] = children;
           //nếu connect success
           if (!dataInventory[0].Err) {
-            children = dataInventory;
-            dataSuccess.push({
-              STT: stt++,
-              ip: ip,
-              id: device.id,
-              Name: device.DeviceName,
-              children: children,
-            });
+            objInventories[FILED_DEVICE_ONLINE.No] = stt++;
+            dataSuccess.push(objInventories);
           } else {
-            dataFail.push({
-              ip: ip,
-              id: device.id,
-              Name: device.DeviceName,
-              children: children,
-            });
+            dataFail.push(objInventories);
           }
         });
+
         if (dataFail.length > 0) {
-          const messFail = dataFail.map((i) => i.ip);
+          const messFail = dataFail.map((i) => i[FILED_DEVICE_ONLINE.Ip]);
           Swale.fire({
             title: "ConnectFail",
             icon: "error",
@@ -74,7 +72,6 @@ const DataExecute = memo(
           setTotalRow(dataSuccess.length);
           setDataAll(dataSuccess);
         } else setSearchApiData([]);
-        setIsLoading(false);
       } catch (err) {
         setSearchApiData([]);
         setIsLoading(false);
