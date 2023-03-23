@@ -10,6 +10,11 @@ function Layout(props) {
     },
     navigations: [
       {
+        text: "Manage Device",
+        url: "/device-management",
+        hasSubMenu: false,
+      },
+      {
         text: "Manage Inventories",
         navigations: [
           {
@@ -24,11 +29,6 @@ function Layout(props) {
         hasSubMenu: true,
       },
 
-      {
-        text: "Manage Device",
-        url: "/device-management",
-        hasSubMenu: false,
-      },
       {
         text: "Instantaneous check",
         url: "/InventoriesOnline",

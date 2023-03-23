@@ -15,12 +15,20 @@ import ImportFile from "./../../components/ImportFile/ImportFile";
 import { debounce } from "lodash";
 import { fetchData } from "./DeviceInventoryAction";
 import { useDispatch, useSelector } from "react-redux";
-
 const API_URL = api.defaults.baseURL;
+const swaleError = (err, nameFunction) => {
+  console.log(err);
+  const message = err?.response?.data?.error ?? err?.error ?? err;
+  Swale.fire({
+    icon: "error",
+    text: `Error ${nameFunction} ${message}`,
+  });
+};
 const Inventories = React.memo(({ flagOffline = false }) => {
   if (flagOffline) {
     api.defaults.headers.common["flagOffline"] = true;
   }
+  console.log("iv");
 
   const dispatch = useDispatch();
   const apiData = useSelector((state) => state.deviceInventory.data);
@@ -29,12 +37,7 @@ const Inventories = React.memo(({ flagOffline = false }) => {
     try {
       dispatch(fetchData("devices"));
     } catch (err) {
-      console.log(err.response);
-      const message = err?.response?.data?.error ?? err?.error ?? err;
-      Swale.fire({
-        icon: "error",
-        text: `Error when fetchData() ${message}`,
-      });
+      swaleError("err", "err fetch");
     }
   }, [dispatch]);
 
@@ -44,45 +47,9 @@ const Inventories = React.memo(({ flagOffline = false }) => {
     </div>
   );
 });
-/*class Inventories extends React.Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      apiData: null,
-    };
-    this.loaded = false;
-  }
-
-  async componentDidMount() {
-    try {
-      const { data } = await api.get(API_URL + "devices");
-      this.loaded = true;
-      this.setState({ apiData: data });
-    } catch (err) {
-      console.log(err.response);
-      Swale.fire({
-        icon: "error",
-        text: `Error when fetchData() ${err}`,
-      });
-    }
-  }
-  render() {
-    if (this.state.apiData != null) {
-      return <div>Loading...</div>;
-    }
-    console.log("123");
-    const { apiData } = this.state;
-    return (
-      <>
-        <div>{apiData && <InventoriesChild data={apiData} />}</div>
-      </>
-    );
-  }
-}*/
 const InventoriesChild = React.memo(({ data, flagOffline }) => {
   const [searchApiData, setSearchApiData] = useState(data.inventories);
-
   const [isExpandedAll, setIsExpandedAll] = useState([]);
   const filterTextRef = useRef("");
   const inputRef = useRef({});
@@ -96,19 +63,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
   const isSearchRef = useRef(false);
   //Data chưa phân trang
   const [dataFilterNotPag, setDataFilterNotPag] = useState(data.devices);
-  //IdBan đầu
-  //const idArray = data.idArray;
 
-  //Thông báo lỗi
-  const swaleError = useCallback((err, nameFunction) => {
-    console.log(err);
-    const message = err?.response?.data?.error ?? err?.error ?? err;
-    Swale.fire({
-      icon: "error",
-      text: `Error ${nameFunction} ${message}`,
-    });
-    setIsLoading(false);
-  }, []);
   //Hàm chọn check All
   const handleCheckAll = useCallback(async () => {
     setCheckAll(!checkAll);
@@ -123,7 +78,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
     } else {
       setCheckedRows([]);
     }
-  }, [checkAll, searchApiData, swaleError]);
+  }, [checkAll, searchApiData]);
   //check từng dòng
   const handleCheck = useCallback(
     (row) => {
@@ -150,8 +105,8 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
   //api lấy data khi expand all
   const getExpandAll = useCallback(async () => {
     // gọi API để lấy dữ liệu con
-    setIsLoading(true);
     try {
+      setIsLoading(true);
       const formData = new FormData();
       formData.append("searchapidata", JSON.stringify(searchApiData));
       const urlFilterData = `${API_URL}expandAll`;
@@ -166,23 +121,20 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
       setIsLoading(false);
       swaleError(err, "getExpandAll() ");
     }
-  }, [searchApiData, swaleError]);
+  }, [searchApiData]);
   //api lấy từng thằng con
-  const getChildren = useCallback(
-    async (row) => {
-      // gọi API để lấy dữ liệu con
-      console.log("api get children");
-      const id = row.id;
-      try {
-        const { data } = await api.get(`${API_URL}childDevice?id=${id}`);
+  const getChildren = useCallback(async (row) => {
+    // gọi API để lấy dữ liệu con
+    console.log("api get children");
+    const id = row.id;
+    try {
+      const { data } = await api.get(`${API_URL}childDevice?id=${id}`);
 
-        return data;
-      } catch (err) {
-        swaleError(err, "getChildren() ");
-      }
-    },
-    [swaleError]
-  );
+      return data;
+    } catch (err) {
+      swaleError(err, "getChildren() ");
+    }
+  }, []);
   //gọi api để filter
   const apiFilterData = useCallback(
     async (
@@ -206,36 +158,15 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
         };
 
         const { data } = await api.get(urlFilterData, { params });
-
+        console.log(data);
         return data;
       } catch (err) {
         setIsLoading(false);
         swaleError(err, "apiFilterData() ");
       }
     },
-    [swaleError]
+    []
   );
-  /* const dataFilterByNo = useCallback(
-    (valueNo, data) => {
-      // Tìm chỉ mục của các phần tử trong mảng idArray có giá trị index +1 valueNo
-      const objNo = idArray.reduce((obj, item, index) => {
-        const no = (index + 1).toString();
-        obj[item] = no.includes(valueNo) || !valueNo ? no : undefined;
-        return obj;
-      }, {});
-      //lấy data có id có  giá trị tương ứng với id Array
-      const dataFilterByNo = data
-        .map((item) => {
-          const itemId = item[FILED_DEVICE_ONLINE.id];
-
-          item["No"] = objNo[itemId];
-          return item;
-        })
-        .filter((item) => item["No"] !== undefined);
-      return dataFilterByNo;
-    },
-    [idArray]
-  );*/
   //hàm xử lý khi filter
   const dataFilter = useCallback(
     async (
@@ -245,41 +176,28 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
       pageRows = 10,
       flagShowChild = true
     ) => {
-      try {
-        setIsLoading(true);
-        const data = await apiFilterData(
-          valueSearch,
-          valueColumn,
-          page,
-          pageRows,
-          flagShowChild
-        );
-
-        let searchApidata = data.searchapidata;
-        //Search theo No
-        /* if (!searchApidata[0].hasOwnProperty("statusNotFound")) {
-          const valueNo = valueColumn.hasOwnProperty("No")
-            ? valueColumn["No"]
-            : "";
-          searchApidata = dataFilterByNo(valueNo, searchApidata);
-        }*/
-        if (flagShowChild) {
-          setIsExpandedAll(false);
-          //RowExpand
-          setRowExpand(data.row_expand);
-        } else {
-          setRowExpand([]);
-        }
-        //data
-        updateState(searchApidata.length, searchApidata, data.devices);
-        setCurrentPage(page);
-        setRowsPerPage(pageRows);
-        setIsLoading(false);
-      } catch (error) {
-        swaleError(error, "dataFilter()");
+      setIsLoading(true);
+      const data = await apiFilterData(
+        valueSearch,
+        valueColumn,
+        page,
+        pageRows,
+        flagShowChild
+      );
+      if (flagShowChild) {
+        setIsExpandedAll(false);
+        //RowExpand
+        setRowExpand(data.row_expand);
+      } else {
+        setRowExpand([]);
       }
+      //data
+      updateState(data.total_records, data.searchapidata, data.devices);
+      setCurrentPage(page);
+      setRowsPerPage(pageRows);
+      setIsLoading(false);
     },
-    [apiFilterData, updateState, swaleError, dataFilterByNo]
+    [apiFilterData, updateState]
   );
   const loadDataChild = useCallback(async () => {
     try {
@@ -293,7 +211,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
     } catch (err) {
       swaleError(err, "loadDataChild() ");
     }
-  }, [swaleError, updateState]);
+  }, [updateState]);
   const debouncedPageChange = useRef(null);
 
   const handlePageChange = useCallback(
@@ -302,6 +220,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
         isSearchRef.current = false;
         return;
       }
+
       if (!debouncedPageChange.current) {
         debouncedPageChange.current = debounce((page) => {
           dataFilter(
@@ -341,7 +260,10 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
       if (e.key !== "Enter") {
         return;
       }
-      isSearchRef.current = true;
+      if (currentPage !== 1) {
+        isSearchRef.current = true;
+      }
+
       const valueSearch = e.target.value;
       if (
         valueSearch.trim().toLowerCase() ===
@@ -351,7 +273,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
       filterTextRef.current = valueSearch;
       dataFilter(valueSearch, inputRef.current);
     },
-    [dataFilter]
+    [dataFilter, currentPage]
   );
   //search column
   const handleFilterColumn = useCallback(
@@ -359,7 +281,10 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
       if (e.key !== "Enter") {
         return;
       }
-      isSearchRef.current = true;
+
+      if (currentPage !== 1) {
+        isSearchRef.current = true;
+      }
       const name = e.target.name;
       const value = e.target.value.trim();
       const newInputs = { ...inputRef.current, [name]: value };
@@ -371,7 +296,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
       inputRef.current = newInputs;
       dataFilter(filterTextRef.current, newInputs);
     },
-    [dataFilter]
+    [dataFilter, currentPage]
   );
 
   return (
@@ -380,7 +305,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
         <MDBCardHeader style={{ textAlign: "center" }}>
           DEVICE INVENTORY
         </MDBCardHeader>
-        <MDBCardBody>
+        <MDBCardBody style={{ width: "100%" }}>
           <div style={{ display: "flex", float: "right" }}>
             {flagOffline && <ImportFile loadData={loadDataChild} />}
             <ExportExcel

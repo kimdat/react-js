@@ -1,8 +1,9 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import DataTable from "react-data-table-component";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "react-bootstrap";
+
 import {
   faChevronDown,
   faChevronRight,
@@ -10,7 +11,11 @@ import {
 import { FilterColumn } from "./../../components/FilterColumn/FilterColumn";
 import FilterComponent from "./../../components/FilterComponent/FilterComponent";
 import { FaAngleDoubleDown, FaAngleDoubleRight } from "react-icons/fa";
+<<<<<<< HEAD
 // import "./Inventories.css";
+=======
+import "../../pages/Datatable.css";
+>>>>>>> 83b677ef9bab15516bd7ad939dc93d1d0fabf9f6
 import ExpandableRowLazyComponent from "../../components/ExpandRowLazyComponent/ExpandRowLazyComponent";
 import {
   FILED_COLUMN_INVENTORIES,
@@ -20,6 +25,9 @@ import {
   WIDTH_COLUMN_INVENTORIES,
 } from "./ConstraintInventoriesComponent";
 
+const resize = (column, width) => {
+  column.style.width = `${width}px`;
+};
 const InventoriesComponent = React.memo(
   ({
     handleFilterColumn,
@@ -43,8 +51,33 @@ const InventoriesComponent = React.memo(
     rowExpand = [],
     setRowExpand = () => {},
   }) => {
-    console.log("invComponent");
+    useEffect(() => {
+      const classTable = document.querySelector(".table-wrapper");
 
+      const resizableColumns = classTable.querySelectorAll(".rdt_TableCol");
+
+      const width = parseInt(window.getComputedStyle(classTable).width);
+      const widthLastCol =
+        (width * parseInt(WIDTH_COLUMN_INVENTORIES.CDESC, 10)) / 100;
+      //resize col cuối
+      resize(resizableColumns[resizableColumns.length - 1], widthLastCol);
+      //Bỏ đi width col cuối cùng
+      let widthOtherCol = width - widthLastCol;
+      const data = WIDTH_COLUMN_INVENTORIES;
+      const emptyKeys = Object.keys(data).reduce(function (acc, key, index) {
+        if (data[key] === "") {
+          acc.push(index);
+        } else {
+          widthOtherCol -= parseInt(data[key]);
+        }
+        return acc;
+      }, []);
+
+      const widthResize = widthOtherCol / emptyKeys.length;
+      emptyKeys.forEach(function (index) {
+        resize(resizableColumns[index], widthResize);
+      });
+    }, []);
     //xử lý đóng/mở  con từng dòng
     const toggleRowDetails = useCallback(
       async (row) => {
@@ -102,6 +135,7 @@ const InventoriesComponent = React.memo(
       setSearchApiData,
       setIsExpandedAll,
     ]);
+
     //cột columm kèm thông tin filter
     const createColumnChildToFilter = useCallback(
       (columnName, width, nameTitle) => {
@@ -114,7 +148,9 @@ const InventoriesComponent = React.memo(
               handleFilterColumn={handleFilterColumn}
             ></FilterColumn>
           ),
-          style: { display: "none" },
+          style: {
+            display: "none",
+          },
           width: width === "" ? undefined : width,
         };
       },
@@ -145,9 +181,16 @@ const InventoriesComponent = React.memo(
             ),
           width: WIDTH_COLUMN_INVENTORIES.Selected,
         },
+
         {
-          name: TITLE_COLUMN_INVENTORIES.No,
-          selector: (row) => row.STT,
+          name: (
+            <FilterColumn
+              column={FILED_COLUMN_INVENTORIES.No}
+              nameTitle={TITLE_COLUMN_INVENTORIES.No}
+              handleFilterColumn={handleFilterColumn}
+            ></FilterColumn>
+          ),
+          selector: (row) => row.No,
           width: WIDTH_COLUMN_INVENTORIES.No,
         },
         {
@@ -175,9 +218,15 @@ const InventoriesComponent = React.memo(
                     ) : (
                       <FontAwesomeIcon icon={faChevronRight} />
                     )}
-                    <div style={{ color: "black", paddingLeft: "5px" }}>
+                    <span
+                      style={{
+                        color: "black",
+                        paddingLeft: "5px",
+                        userSelect: "text",
+                      }}
+                    >
                       {row.Name}
-                    </div>
+                    </span>
                   </div>
                 </Button>
               </div>
@@ -234,10 +283,13 @@ const InventoriesComponent = React.memo(
       ({ data: { children } }) => <ExpandableRowLazyComponent row={children} />,
       []
     );
+
     return (
       <div>
-        <div>
+        <div style={{ marginBottom: "20px" }}>
           <Button
+            className="btnExpandAll"
+            size="sm"
             style={{
               with: "100%",
               maxWidth: "200px",
@@ -258,7 +310,7 @@ const InventoriesComponent = React.memo(
 
           <FilterComponent onFilter={handleFilter} />
         </div>
-        <div className="table-container">
+        <div className="table-wrapper">
           <DataTable
             style={{ width: "100%", tableLayout: "auto" }}
             highlightOnHover
@@ -276,10 +328,14 @@ const InventoriesComponent = React.memo(
             expandableRowExpanded={(row) =>
               rowExpand.some((item) => item === row.id)
             }
+            inputProps={{
+              style: { fontSize: "14px", width: "200px" },
+              className: "custom-search-input",
+            }}
             responsive={true}
             dense={true}
             expandableRowsComponent={expandableRowsComponent}
-            className="my-custom-data-table"
+            className="my-custom-data-table inventories"
             striped
           />
         </div>

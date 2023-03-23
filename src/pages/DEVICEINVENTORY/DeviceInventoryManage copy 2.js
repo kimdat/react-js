@@ -15,12 +15,12 @@ import ImportFile from "./../../components/ImportFile/ImportFile";
 import { debounce } from "lodash";
 import { fetchData } from "./DeviceInventoryAction";
 import { useDispatch, useSelector } from "react-redux";
-
 const API_URL = api.defaults.baseURL;
 const Inventories = React.memo(({ flagOffline = false }) => {
   if (flagOffline) {
     api.defaults.headers.common["flagOffline"] = true;
   }
+  console.log("iv");
 
   const dispatch = useDispatch();
   const apiData = useSelector((state) => state.deviceInventory.data);
@@ -44,43 +44,9 @@ const Inventories = React.memo(({ flagOffline = false }) => {
     </div>
   );
 });
-/*class Inventories extends React.Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      apiData: null,
-    };
-    this.loaded = false;
-  }
-
-  async componentDidMount() {
-    try {
-      const { data } = await api.get(API_URL + "devices");
-      this.loaded = true;
-      this.setState({ apiData: data });
-    } catch (err) {
-      console.log(err.response);
-      Swale.fire({
-        icon: "error",
-        text: `Error when fetchData() ${err}`,
-      });
-    }
-  }
-  render() {
-    if (this.state.apiData != null) {
-      return <div>Loading...</div>;
-    }
-    console.log("123");
-    const { apiData } = this.state;
-    return (
-      <>
-        <div>{apiData && <InventoriesChild data={apiData} />}</div>
-      </>
-    );
-  }
-}*/
-const InventoriesChild = React.memo(({ data, flagOffline }) => {
+const InventoriesChild = React.memo((props) => {
+  const { data, flagOffline } = props;
   const [searchApiData, setSearchApiData] = useState(data.inventories);
 
   const [isExpandedAll, setIsExpandedAll] = useState([]);
@@ -89,16 +55,13 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
   const [checkedRows, setCheckedRows] = useState([]);
   const [checkAll, setCheckAll] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const rowsPerPageRef = useRef(10);
   const [totalRow, setToTalRow] = useState(data.total_row);
   const [isLoading, setIsLoading] = useState(false);
   const [rowExpand, setRowExpand] = useState([]);
-  const isSearchRef = useRef(false);
+
   //Data chưa phân trang
   const [dataFilterNotPag, setDataFilterNotPag] = useState(data.devices);
-  //IdBan đầu
-  //const idArray = data.idArray;
-
   //Thông báo lỗi
   const swaleError = useCallback((err, nameFunction) => {
     console.log(err);
@@ -107,7 +70,6 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
       icon: "error",
       text: `Error ${nameFunction} ${message}`,
     });
-    setIsLoading(false);
   }, []);
   //Hàm chọn check All
   const handleCheckAll = useCallback(async () => {
@@ -206,7 +168,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
         };
 
         const { data } = await api.get(urlFilterData, { params });
-
+        console.log(data);
         return data;
       } catch (err) {
         setIsLoading(false);
@@ -215,27 +177,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
     },
     [swaleError]
   );
-  /* const dataFilterByNo = useCallback(
-    (valueNo, data) => {
-      // Tìm chỉ mục của các phần tử trong mảng idArray có giá trị index +1 valueNo
-      const objNo = idArray.reduce((obj, item, index) => {
-        const no = (index + 1).toString();
-        obj[item] = no.includes(valueNo) || !valueNo ? no : undefined;
-        return obj;
-      }, {});
-      //lấy data có id có  giá trị tương ứng với id Array
-      const dataFilterByNo = data
-        .map((item) => {
-          const itemId = item[FILED_DEVICE_ONLINE.id];
 
-          item["No"] = objNo[itemId];
-          return item;
-        })
-        .filter((item) => item["No"] !== undefined);
-      return dataFilterByNo;
-    },
-    [idArray]
-  );*/
   //hàm xử lý khi filter
   const dataFilter = useCallback(
     async (
@@ -245,51 +187,36 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
       pageRows = 10,
       flagShowChild = true
     ) => {
-      try {
-        setIsLoading(true);
-        const data = await apiFilterData(
-          valueSearch,
-          valueColumn,
-          page,
-          pageRows,
-          flagShowChild
-        );
+      setIsLoading(true);
+      const data = await apiFilterData(
+        valueSearch,
+        valueColumn,
+        page,
+        pageRows,
+        flagShowChild
+      );
+      //Search theo No
 
-        let searchApidata = data.searchapidata;
-        //Search theo No
-        /* if (!searchApidata[0].hasOwnProperty("statusNotFound")) {
-          const valueNo = valueColumn.hasOwnProperty("No")
-            ? valueColumn["No"]
-            : "";
-          searchApidata = dataFilterByNo(valueNo, searchApidata);
-        }*/
-        if (flagShowChild) {
-          setIsExpandedAll(false);
-          //RowExpand
-          setRowExpand(data.row_expand);
-        } else {
-          setRowExpand([]);
-        }
-        //data
-        updateState(searchApidata.length, searchApidata, data.devices);
-        setCurrentPage(page);
-        setRowsPerPage(pageRows);
-        setIsLoading(false);
-      } catch (error) {
-        swaleError(error, "dataFilter()");
+      if (flagShowChild) {
+        setIsExpandedAll(false);
+        //RowExpand
+        setRowExpand(data.row_expand);
+      } else {
+        setRowExpand([]);
       }
+      //data
+      updateState(data.total_records, data.searchapidata, data.devices);
+
+      setIsLoading(false);
     },
-    [apiFilterData, updateState, swaleError, dataFilterByNo]
+    [apiFilterData, updateState]
   );
   const loadDataChild = useCallback(async () => {
     try {
       const { data } = await api.get(API_URL + "devices");
-      console.log(data);
       setRowExpand([]);
       updateState(data.total_row, data.inventories, data.devices);
       setCurrentPage(1);
-      setRowsPerPage(10);
-      isSearchRef.current = true;
     } catch (err) {
       swaleError(err, "loadDataChild() ");
     }
@@ -298,38 +225,39 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
 
   const handlePageChange = useCallback(
     (page) => {
-      if (isSearchRef.current) {
-        isSearchRef.current = false;
-        return;
-      }
+      setCurrentPage(page);
       if (!debouncedPageChange.current) {
         debouncedPageChange.current = debounce((page) => {
           dataFilter(
             filterTextRef.current,
             inputRef.current,
             page,
-            rowsPerPage,
+            rowsPerPageRef.current,
             !isExpandedAll
           );
           debouncedPageChange.current = null;
-        }, 500);
+        }, 200);
       }
       debouncedPageChange.current(page); // Gọi hàm debounce
     },
-    [dataFilter, rowsPerPage, isExpandedAll]
+    [dataFilter, isExpandedAll]
   );
 
   const handleRowsPerPageChange = (newRowsPerPage) => {
-    if (isSearchRef.current) {
-      isSearchRef.current = false;
-      return; // Nếu là search thì không thực hiện gọi hàm dataFilter
-    }
+    rowsPerPageRef.current = newRowsPerPage;
     const totalPages = Math.ceil(totalRow / newRowsPerPage);
+    //let newCurrentPage = currentPage > totalPages;
+    if (currentPage > totalPages) {
+      setCurrentPage(1);
+      return;
+    }
+    //nếu current page lớn hơn totalpage thì page là 1
+
     //nếu current page lớn hơn totalpage thì page là 1
     dataFilter(
       filterTextRef.current,
       inputRef.current,
-      currentPage > totalPages ? 1 : currentPage,
+      currentPage,
       newRowsPerPage,
       !isExpandedAll
     );
@@ -341,7 +269,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
       if (e.key !== "Enter") {
         return;
       }
-      isSearchRef.current = true;
+
       const valueSearch = e.target.value;
       if (
         valueSearch.trim().toLowerCase() ===
@@ -349,9 +277,14 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
       )
         return;
       filterTextRef.current = valueSearch;
+      //nếu currentpage không phải trang đầu thì quay về trang đâ
+      if (currentPage !== 1) {
+        setCurrentPage(1);
+        return;
+      }
       dataFilter(valueSearch, inputRef.current);
     },
-    [dataFilter]
+    [dataFilter, currentPage]
   );
   //search column
   const handleFilterColumn = useCallback(
@@ -359,7 +292,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
       if (e.key !== "Enter") {
         return;
       }
-      isSearchRef.current = true;
+
       const name = e.target.name;
       const value = e.target.value.trim();
       const newInputs = { ...inputRef.current, [name]: value };
@@ -369,9 +302,13 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
       )
         return;
       inputRef.current = newInputs;
+      if (currentPage !== 1) {
+        setCurrentPage(1);
+        return;
+      }
       dataFilter(filterTextRef.current, newInputs);
     },
-    [dataFilter]
+    [dataFilter, currentPage]
   );
 
   return (
@@ -409,7 +346,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
                     totalRow={totalRow}
                     currentPage={currentPage}
                     handlePageChange={handlePageChange}
-                    rowsPerPage={rowsPerPage}
+                    rowsPerPage={rowsPerPageRef.current}
                     handleRowsPerPageChange={handleRowsPerPageChange}
                     setIsLoading={setIsLoading}
                     searchApiData={searchApiData}

@@ -67,8 +67,9 @@ const DeleteRow = React.memo(({ rowsId, loadData }) => {
     <div>
       <Button
         variant="danger"
+        size="sm"
         onClick={handleDelete}
-        style={{ marginLeft: "10px", borderRadius: "10px" }}
+        style={{ marginLeft: "10px", borderRadius: "5px" }}
       >
         <FaTrash />
       </Button>

@@ -1,18 +1,27 @@
 import React from "react";
+import { Form } from "react-bootstrap";
 
 export const FilterColumn = React.memo(
-  ({ column, handleFilterColumn, nameTitle }) => {
+  ({ column, handleFilterColumn, nameTitle, width }) => {
     return (
-      <span className={`rdt_TableHead${column} rdt_tableHead`}>
-        {nameTitle}
-        <br />
-        <input
-          style={{ maxWidth: "120px", marginBottom: "10px" }}
+      <Form.Group
+        style={{
+          marginBottom: "10px",
+          paddingRight: "10px",
+          maxWidth: "100%",
+          minWidth: "100%",
+        }}
+        className={`rdt_TableHead${column} rdt_tableHead`}
+      >
+        <Form.Label> {nameTitle}</Form.Label>
+        <Form.Control
           name={column}
           className="filterColumn"
           onKeyDown={handleFilterColumn}
-        />
-      </span>
+          type="text"
+          size="sm"
+        ></Form.Control>
+      </Form.Group>
     );
   }
 );

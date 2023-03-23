@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Layout from "./LAYOUT/Layout.js";
 import DeviceManagementPage from "./features/devices/DeviceManagementPage";
+import ResizableDataTable from "./pages/Inventories1";
 
 const Inventories = lazy(() =>
   import("./pages/DEVICEINVENTORY/DeviceInventoryManage")
@@ -20,7 +21,7 @@ function App() {
     }
   }, [isLoggedIn]);
   return (
-    <div>
+    <div style={{ width: "100%" }}>
       <Router>
         <Routes>
           <Route exact path="/" element={<Login />}></Route>
@@ -62,6 +63,17 @@ function App() {
             element={
               <Layout>
                   <DeviceManagementPage />
+              </Layout>
+            }
+          ></Route>
+          <Route
+            exact
+            path="/test"
+            element={
+              <Layout>
+                <div>
+                  <ResizableDataTable />
+                </div>
               </Layout>
             }
           ></Route>

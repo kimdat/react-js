@@ -9,9 +9,14 @@ const ExpandRowComponent = React.memo(({ row }) => {
   const columnsChild = useMemo(
     () => [
       {
-        width: WIDTH_COLUMN_Expand_Row_Component.Blank,
+        width: WIDTH_COLUMN_Expand_Row_Component.Selected,
       },
-      {},
+      {
+        width: WIDTH_COLUMN_Expand_Row_Component.No,
+      },
+      {
+        width: WIDTH_COLUMN_Expand_Row_Component.DeviceName,
+      },
       {
         name: "Name",
         selector: (row) => row[FILED_Expand_Row_Component.Name],

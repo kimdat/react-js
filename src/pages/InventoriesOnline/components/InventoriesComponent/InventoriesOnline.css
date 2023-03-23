@@ -3,4 +3,14 @@
 .InventoriesComponentOnline .filterComponent,.InventoriesComponentOnline input{
   display: none;
 }
+.InventoriesComponentOnline  .rdt_TableCol:first-child ,.InventoriesComponentOnline  .rdt_TableCell:first-child {
+  display: none;
+}
+.InventoriesComponentOnline .rdt_tableHead{
 
+  margin-top: 18px;
+
+}
+.InventoriesComponentOnline .rdt_TableCol{
+  padding-left: 10px;
+}

@@ -1,48 +1,46 @@
-import React, { useState } from "react";
-
-import { api } from "../Interceptor";
-
 import DataTable from "react-data-table-component";
+import { Resizable } from "re-resizable";
 
-const API_URL = api.defaults.baseURL;
-const ExpandableComponent1 = React.memo(
-  ({ data }) => {
-    console.log("123");
-    return (
-      <div>
-        <p>ID: {data.id}</p>
-        <p>Name: {data.name}</p>
-        <p>Age: {data.age}</p>
-      </div>
-    );
-  },
-  (prevProps, nextProps) => prevProps.data === nextProps.data
+const ResizableCell = ({ value }) => (
+  <Resizable
+    defaultSize={{
+      width: 100,
+      height: 20
+    }}
+  >
+    <div>{value}</div>
+  </Resizable>
 );
 
-const Inventories1 = () => {
-  const data = [
-    { id: 1, name: "Alice", age: 25 },
-    { id: 2, name: "Bob", age: 30 },
-    { id: 3, name: "Charlie", age: 35 },
-  ];
+const columns = [
+  {
+    name: "Name",
+    selector: "name",
+    sortable: true,
+    cell: row => <ResizableCell value={row.name} />
+  },
+  {
+    name: "Address",
+    selector: "address",
+    sortable: true,
+    cell: row => <ResizableCell value={row.address} />
+  },
+  {
+    name: "Age",
+    selector: "age",
+    sortable: true,
+    cell: row => <ResizableCell value={row.age} />
+  }
+];
 
-  return (
-    <DataTable
-      title="My Table"
-      columns={[
-        { name: "ID", selector: (row) => row.id },
-        { name: "Name", selector: (row) => row.name },
-        { name: "Age", selector: (row) => row.age },
-      ]}
-      data={data}
-      expandableRows
-      expandableRowsComponent={({ data }) => (
-        <ExpandableComponent1 data={data} />
-      )}
-      expandableRowExpanded={(row) => {
-        return true;
-      }}
-    />
-  );
-};
-export default Inventories1;
+const data = [
+  { id: 1, name: "John Doe", address: "123 Main St.", age: 25 },
+  { id: 2, name: "Jane Smith", address: "456 Oak Ave.", age: 32 },
+  { id: 3, name: "Bob Johnson", address: "789 Pine Rd.", age: 45 },
+];
+
+const ResizableDataTable = () => (
+  <DataTable columns={columns} data={data} keyField="id" />
+);
+
+export default ResizableDataTable;
