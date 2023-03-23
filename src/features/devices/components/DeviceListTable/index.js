@@ -79,73 +79,59 @@ const DeviceListTable = (props) => {
     } = props;
 
     const columns = [
-        { id: "number", label: "No.", filterType: "text", width: 5, minWidth: 5},
-        { id: fieldNames.DEVICE_NAME, label: "Device Name", filterType: "text", width: 20, minWidth: 15 },
-        { id: fieldNames.IP, label: "IP", filterType: "text", width: 15, minWidth: 15},
-        { id: fieldNames.DEVICE_TYPE, label: "Device Type", filterType: "select", width: 15, minWidth: 15 },
-        { id: fieldNames.STATUS, label: "Status", filterType: "select", options: deviceStatus, width: 14, minWidth: 14},
-        { id: fieldNames.REGION_ID, label: "Region", filterType: "select", options: regions, width: 20, minWidth: 20},
-        { id: fieldNames.PROVINCE_ID, label: "Province", filterType: "select", options: provinces, width: 20, minWidth: 10},
-        { id: fieldNames.LONG, label: "Long.", filterType: "text", width: 10, minWidth: 5},
-        { id: fieldNames.LAT, label: "Lat.", filterType: "text", width: 10, minWidth: 5},
-        { id: fieldNames.ADDRESS, label: "Address", filterType: "text", width: 35, minWidth: 20},
+        { id: "number", label: "No.", filterType: "text", width: 5, minWidth: 5 },
+        {
+        id: "deviceName",
+        label: "Device Name",
+        filterType: "text",
+        width: 20,
+        minWidth: 15,
+        },
+        {
+        id: "ip",
+        label: "IP Loopback",
+        filterType: "text",
+        width: 20,
+        minWidth: 15,
+        },
+        {
+        id: "status",
+        label: "Status",
+        filterType: "select",
+        options: deviceStatus,
+        width: 20,
+        minWidth: 13,
+        },
+        {
+        id: "region",
+        label: "Region",
+        filterType: "select",
+        options: regions,
+        width: 20,
+        minWidth: 10,
+        },
+        {
+        id: "province",
+        label: "Province",
+        filterType: "select",
+        options: provinces,
+        width: 20,
+        minWidth: 10,
+        },
+        { id: "long", label: "Long.", filterType: "text", width: 10, minWidth: 5 },
+        { id: "lat", label: "Lat.", filterType: "text", width: 10, minWidth: 5 },
+        {
+        id: "address",
+        label: "Address",
+        filterType: "text",
+        width: 35,
+        minWidth: 20,
+        },
     ];
-
-  const columns = [
-    { id: "number", label: "No.", filterType: "text", width: 5, minWidth: 5 },
-    {
-      id: "deviceName",
-      label: "Device Name",
-      filterType: "text",
-      width: 20,
-      minWidth: 15,
-    },
-    {
-      id: "ip",
-      label: "IP Loopback",
-      filterType: "text",
-      width: 20,
-      minWidth: 15,
-    },
-    {
-      id: "status",
-      label: "Status",
-      filterType: "select",
-      options: deviceStatus,
-      width: 20,
-      minWidth: 13,
-    },
-    {
-      id: "region",
-      label: "Region",
-      filterType: "select",
-      options: regions,
-      width: 20,
-      minWidth: 10,
-    },
-    {
-      id: "province",
-      label: "Province",
-      filterType: "select",
-      options: provinces,
-      width: 20,
-      minWidth: 10,
-    },
-    { id: "long", label: "Long.", filterType: "text", width: 10, minWidth: 5 },
-    { id: "lat", label: "Lat.", filterType: "text", width: 10, minWidth: 5 },
-    {
-      id: "address",
-      label: "Address",
-      filterType: "text",
-      width: 35,
-      minWidth: 20,
-    },
-  ];
 
   const rows = deviceList
     ? deviceList.map((d, idx) => {
         return {
-<<<<<<< HEAD
             id: d[fieldNames.ID],
             isSelected: d.isSelected,
             number: rowsPerPage * (currentPage - 1) + idx + 1,
@@ -281,127 +267,5 @@ const DeviceListTable = (props) => {
         </>
     );
 }
-=======
-          id: d.Id,
-          isSelected: d.isSelected,
-          number: idx + 1,
-          deviceName: d.DeviceName,
-          ip: d.Ip,
-          status: d.status,
-          region: d.region_id,
-          province: d.province_id,
-          long: d.long,
-          lat: d.lat,
-          address: d.address,
-        };
-      })
-    : [];
-  return (
-    <>
-      {rows.length === 0 && <div>There are no devices.</div>}
-      {rows.length !== 0 && (
-        <MDBTable
-          striped
-          small
-          hover
-          className={cx(styles.deviceListTable, "w-auto")}
-        >
-          <MDBTableHead className={styles.deviceListTableHead}>
-            <tr>
-              <th scope="col" className={styles.deviceListTableHeadCell}>
-                <MDBCheckbox
-                  checked={isSelectAll || false}
-                  onChange={() => selectAllToggleFunc()}
-                ></MDBCheckbox>
-              </th>
-              {columns.map((col, idx) => (
-                <th
-                  scope="col"
-                  key={idx}
-                  className={styles.deviceListTableHeadCell}
-                >
-                  {col.filterType === "text" && (
-                    <div
-                      className={styles.deviceListTableCol}
-                      style={{
-                        width: `${col.width}ch`,
-                        minWidth: `${col.minWidth}ch`,
-                      }}
-                    >
-                      <TextFilter id={col.id} label={col.label} />
-                    </div>
-                  )}
-                  {col.filterType === "select" && (
-                    <div
-                      className={styles.deviceListTableCol}
-                      style={{
-                        width: `${col.width}ch`,
-                        minWidth: `${col.minWidth}ch`,
-                      }}
-                    >
-                      <SelectFilter
-                        id={col.id}
-                        label={col.label}
-                        options={col.options}
-                      />
-                    </div>
-                  )}
-                </th>
-              ))}
-            </tr>
-          </MDBTableHead>
-          <MDBTableBody>
-            {rows.map((row, idx) => (
-              <tr
-                key={idx}
-                className={cx(styles.deviceListTableRow, {
-                  "table-primary": row.isSelected,
-                })}
-                onClick={() => console.log(row.id)}
-              >
-                <th scope="col">
-                  <MDBCheckbox
-                    checked={row.isSelected || false}
-                    onChange={() => selectRowToggleFunc(row.id)}
-                  ></MDBCheckbox>
-                </th>
-                <td>{row.number}</td>
-                <td>{row.deviceName}</td>
-                <td>{row.ip}</td>
-                <td>
-                  {row.status === "M" ? (
-                    <div className={styles.statusIcon}>
-                      <FontAwesomeIcon
-                        className="text-success"
-                        icon={faCheckCircle}
-                      />
-                    </div>
-                  ) : (
-                    <div className={styles.statusIcon}>
-                      <FontAwesomeIcon
-                        className="text-danger"
-                        icon={faXmarkCircle}
-                      />
-                    </div>
-                  )}
-                  {
-                    deviceStatus?.find((status) => status.id === row.status)
-                      ?.name
-                  }
-                </td>
-                <td>{row.region}</td>
-                <td>{row.province}</td>
-                <td>{row.long}</td>
-                <td>{row.lat}</td>
-                <td>{row.address}</td>
-              </tr>
-            ))}
-          </MDBTableBody>
-        </MDBTable>
-      )}
-    </>
-  );
-};
->>>>>>> 83b677ef9bab15516bd7ad939dc93d1d0fabf9f6
 
 export default DeviceListTable;
