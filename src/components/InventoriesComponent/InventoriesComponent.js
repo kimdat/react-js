@@ -11,11 +11,7 @@ import {
 import { FilterColumn } from "./../../components/FilterColumn/FilterColumn";
 import FilterComponent from "./../../components/FilterComponent/FilterComponent";
 import { FaAngleDoubleDown, FaAngleDoubleRight } from "react-icons/fa";
-<<<<<<< HEAD
-// import "./Inventories.css";
-=======
 import "../../pages/Datatable.css";
->>>>>>> 83b677ef9bab15516bd7ad939dc93d1d0fabf9f6
 import ExpandableRowLazyComponent from "../../components/ExpandRowLazyComponent/ExpandRowLazyComponent";
 import {
   FILED_COLUMN_INVENTORIES,
