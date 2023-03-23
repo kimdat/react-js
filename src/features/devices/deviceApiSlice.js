@@ -10,7 +10,9 @@ export const deviceApiSlice = apiSlice.injectEndpoints({
       }),
       transformResponse: (response) => {
         return {
-          devices: response.devices,
+          devices: response.devices.sort((a, b) => {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+          }),
           totalRowCount: response.totalRowCount,
         };
       },

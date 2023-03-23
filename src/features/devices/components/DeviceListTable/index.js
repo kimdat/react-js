@@ -95,7 +95,7 @@ const DeviceListTable = (props) => {
         return {
             id: d[fieldNames.ID],
             isSelected: d.isSelected,
-            number: idx + 1,
+            number: rowsPerPage * (currentPage - 1) + idx + 1,
             deviceName: d[fieldNames.DEVICE_NAME],
             ip: d[fieldNames.IP],
             deviceType: d[fieldNames.DEVICE_TYPE],

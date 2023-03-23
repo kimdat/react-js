@@ -39,6 +39,7 @@ const deviceSlice = createSlice({
     setRowsPerPage: (state, action) => {
       const rowsPerPage = action.payload;
       state.filters.rowsPerPage = rowsPerPage;
+      state.filters.currentPage = 1;
     },
     setCurrentPage: (state, action) => {
       const currentPage = action.payload;

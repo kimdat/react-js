@@ -3,7 +3,7 @@ import DeviceListTable from "./components/DeviceListTable";
 import styles from "./DeviceManagementPage.module.scss";
 import { MDBBtn, MDBCard, MDBCardBody } from "mdb-react-ui-kit";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAdd, faXmark, faFileExcel, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faFileExcel, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 import AddDeviceModal from "./components/AddDeviceModal";
 import {
   useDeleteDevicesMutation,
