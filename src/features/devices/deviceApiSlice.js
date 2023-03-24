@@ -25,10 +25,6 @@ export const deviceApiSlice = apiSlice.injectEndpoints({
 
     addNewDevice: builder.mutation({
       query: (newDevice) => {
-        if (typeof newDevice === "object") {
-          newDevice = [newDevice];
-        }
-
         return {
           url: "api/devices",
           method: "POST",

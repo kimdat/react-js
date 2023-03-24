@@ -1,7 +1,14 @@
 import React from "react";
 import DeviceListTable from "./components/DeviceListTable";
 import styles from "./DeviceManagementPage.module.scss";
-import { MDBBtn, MDBCard, MDBCardBody } from "mdb-react-ui-kit";
+import "./device.css";
+import {
+  MDBBtn,
+  MDBCard,
+  MDBCardBody,
+  MDBCardHeader,
+  MDBContainer,
+} from "mdb-react-ui-kit";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAdd, faXmark, faPencil } from "@fortawesome/free-solid-svg-icons";
 import AddDeviceModal from "./components/AddDeviceModal";
@@ -119,60 +126,58 @@ const DeviceManagementPage = (props) => {
     .filter((device) => device.isSelected === true)
     .map((device) => device.Id);
   return (
-    <div className={styles.pageContainer}>
-      <MDBCard>
-        <MDBCardBody>
-          <div className={styles.actionsWrapper}>
-            {/* action buttons */}
-            <AddDeviceModal
-              provinces={provinces}
+    <MDBCard className="bg-white card-name">
+      <MDBCardBody>
+        <div className={styles.actionsWrapper}>
+          {/* action buttons */}
+          <AddDeviceModal
+            provinces={provinces}
+            regions={regions}
+            trigger={
+              <MDBBtn
+                className={styles.actionButton}
+                type="button"
+                size="sm"
+                color="primary"
+              >
+                <div className={styles.buttonIcon}>
+                  <FontAwesomeIcon icon={faAdd} />
+                </div>
+                Add
+              </MDBBtn>
+            }
+          />
+          <MDBBtn
+            className={styles.actionButton}
+            type="button"
+            size="sm"
+            color="danger"
+            disabled={hasNoRowSelected}
+            onClick={() => deleteDevices(selectedDeviceIdList)}
+          >
+            <div className={styles.buttonIcon}>
+              <FontAwesomeIcon icon={faXmark} />
+            </div>
+            Delete
+          </MDBBtn>
+        </div>
+        <div className={styles.pageContent}>
+          {isSuccess && (
+            <DeviceListTable
+              deviceList={devices}
+              isSelectAll={isSelectAll}
+              selectAllToggleFunc={() => dispatch(selectAllToggle())}
+              selectRowToggleFunc={(ip) => dispatch(selectRowToggle(ip))}
+              deviceStatus={deviceStatus}
               regions={regions}
-              trigger={
-                <MDBBtn
-                  className={styles.actionButton}
-                  type="button"
-                  size="sm"
-                  color="primary"
-                >
-                  <div className={styles.buttonIcon}>
-                    <FontAwesomeIcon icon={faAdd} />
-                  </div>
-                  Add
-                </MDBBtn>
-              }
+              provinces={provinces}
+              filters={filters}
             />
-            <MDBBtn
-              className={styles.actionButton}
-              type="button"
-              size="sm"
-              color="danger"
-              disabled={hasNoRowSelected}
-              onClick={() => deleteDevices(selectedDeviceIdList)}
-            >
-              <div className={styles.buttonIcon}>
-                <FontAwesomeIcon icon={faXmark} />
-              </div>
-              Delete
-            </MDBBtn>
-          </div>
-          <div className={styles.pageContent}>
-            {isSuccess && (
-              <DeviceListTable
-                deviceList={devices}
-                isSelectAll={isSelectAll}
-                selectAllToggleFunc={() => dispatch(selectAllToggle())}
-                selectRowToggleFunc={(ip) => dispatch(selectRowToggle(ip))}
-                deviceStatus={deviceStatus}
-                regions={regions}
-                provinces={provinces}
-                filters={filters}
-              />
-            )}
-            {isError && <div>There are no devices.</div>}
-          </div>
-        </MDBCardBody>
-      </MDBCard>
-    </div>
+          )}
+          {isError && <div>There are no devices.</div>}
+        </div>
+      </MDBCardBody>
+    </MDBCard>
   );
 };
 

@@ -11,6 +11,7 @@ import Swale from "sweetalert2";
 import LoadingComponent from "../../../../components/LoadingComponent/LoadingComponent";
 import axios from "axios";
 import { FILED_DEVICE_ONLINE } from "./../../ConstraintDivceOnline";
+import { FILED_COLUMN_INVENTORIES } from "../../../../components/InventoriesComponent/ConstraintInventoriesComponent";
 const DataExecute = memo(
   forwardRef((props, ref) => {
     const [rowExpand, setRowExpand] = useState([]);
@@ -32,7 +33,7 @@ const DataExecute = memo(
         );
         console.log(data);
         setIsLoading(false);
-        const inventory = JSON.parse(data.deviceData);
+        const inventory = data;
         const dataSuccess = [];
         const dataFail = [];
         let stt = 1;
@@ -43,11 +44,12 @@ const DataExecute = memo(
           children = dataInventory;
           const objInventories = {};
 
-          objInventories[FILED_DEVICE_ONLINE.Ip] = ip;
+          objInventories[FILED_DEVICE_ONLINE.id] = device.id;
           objInventories[FILED_DEVICE_ONLINE.Name] = device.DeviceName;
           objInventories["children"] = children;
+
           //nếu connect success
-          if (!dataInventory[0].Err) {
+          if (!dataInventory.Err) {
             objInventories[FILED_DEVICE_ONLINE.No] = stt++;
             dataSuccess.push(objInventories);
           } else {

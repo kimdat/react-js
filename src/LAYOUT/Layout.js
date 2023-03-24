@@ -1,5 +1,6 @@
 import Header from "../features/header/components/Header";
 import Footer from "../features/footer/components/Footer";
+import { MDBCard, MDBCardHeader, MDBContainer } from "mdb-react-ui-kit";
 
 function Layout(props) {
   const header = {
@@ -49,7 +50,18 @@ function Layout(props) {
         navigations={header.navigations}
         profile={header.profile}
       />
-      <div>{props.children}</div>
+      <div style={{ marginTop: "3rem", padding: "1rem" }}>
+        <MDBContainer fluid>
+          <MDBCard className="bg-white mx-auto card-name">
+            <MDBCardHeader className="headerCard-name" style={{}}>
+              DEVICE INVENTORY
+            </MDBCardHeader>
+          </MDBCard>
+          <div style={{ marginTop: "10px" }}></div>
+          <div>{props.children}</div>
+        </MDBContainer>
+      </div>
+
       <Footer />
     </div>
   );

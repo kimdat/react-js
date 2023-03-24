@@ -7,7 +7,7 @@ export const TITLE_COLUMN_INVENTORIES = {
   No: "No",
 };
 export const WIDTH_COLUMN_INVENTORIES = {
-  Selected: "22px",
+  Selected: "25px",
   No: "50px",
   Name: "",
   Slot: "",

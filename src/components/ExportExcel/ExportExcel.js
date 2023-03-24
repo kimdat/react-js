@@ -61,7 +61,7 @@ const ExportExcel = React.memo(
           onClick={handleExport}
           style={{ marginLeft: "10px", borderRadius: "5px" }}
         >
-          <FaFileExport />
+          <FaFileExport /> EXPORT
         </Button>
       </div>
     );
