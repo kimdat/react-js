@@ -25,7 +25,7 @@ const Header = (props) => {
 
                     <ul className={styles.navGroup}>
                         <NavLogo {...logo}></NavLogo>
-                        {isDesktop && navigations.map((item, idx) => <NavItem key={idx} {...item}></NavItem>)}
+                        {isDesktop && navigations?.map((item, idx) => <NavItem key={idx} {...item}></NavItem>)}
                     </ul>
 
                     <NavProfile {...profile}></NavProfile>

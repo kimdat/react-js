@@ -18,7 +18,7 @@ const SubMenu = (props) => {
     return (
         <div className={styles.subMenu}>
             <ul className={styles.subMenuItemList}>
-                {navigations.map((item, idx) =>
+                {navigations?.map((item, idx) =>
                     <SubMenuItem key={idx} {...item}></SubMenuItem>
                 )}
             </ul>

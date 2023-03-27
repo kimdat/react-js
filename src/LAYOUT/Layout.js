@@ -4,7 +4,7 @@ import styles from "./Layout.module.scss";
 import { MDBCard, MDBCardBody, MDBCardHeader } from "mdb-react-ui-kit";
 import './Layout.css'
 function Layout(props) {
-  const { header } = props;
+  const { header, title } = props;
   return (
     <div className={styles.pageWrapper}>
       {/* Include footer or any other common elements */}
@@ -17,7 +17,7 @@ function Layout(props) {
       <div className={styles.content}>
         <MDBCard className={styles.card}>
           <MDBCardHeader className="headerCard-name">
-            Device management
+            {title}
           </MDBCardHeader>
           <MDBCardBody className={styles.cardBody}>
             {props.children}

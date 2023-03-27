@@ -1,5 +1,5 @@
 import React, { useEffect, lazy } from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 
 import Layout from "./LAYOUT/Layout.js";
 import DeviceManagementPage from "./features/devices/DeviceManagementPage";
@@ -14,6 +14,7 @@ const InventoriesOnline = lazy(() =>
 const Login = lazy(() => import("./pages/Login/Login"));
 
 function App() {
+  const [pageTitle, setPageTitle] = React.useState("");
   const header = {
     logo: {
       url: "https://ctin.vn",
@@ -24,26 +25,18 @@ function App() {
       {
         text: "Manage Device",
         url: "/device-management",
-        hasSubMenu: false,
       },
       {
-        text: "Manage Inventories",
-        navigations: [
-          {
-            text: "Online",
-            url: "/managementDeviceInventories",
-          },
-          {
-            text: "Offline",
-            url: "/Inventories",
-          },
-        ],
-        hasSubMenu: true,
+        text: "Manage Inventories Online",
+        url: "/managementDeviceInventories",
+      },
+      {
+        text: "Manage Inventories Offline",
+        url: "/Inventories",
       },
       {
         text: "Instantaneous check",
         url: "/InventoriesOnline",
-        hasSubMenu: false,
       },
     ],
     profile: {
@@ -60,9 +53,16 @@ function App() {
     }
   }, [isLoggedIn]);
 
+  const location = useLocation();
+  useEffect(() => {
+    const title = header.navigations?.find((item) => {
+      return location.pathname === item.url;
+    });
+    setPageTitle(title.text);
+  });
+
   return (
-    <Layout header={header}>
-      <Router>
+    <Layout header={header} title={pageTitle}>
         <Routes>
           <Route exact path="/" element={<Login />}></Route>
           <Route
@@ -91,7 +91,6 @@ function App() {
             element={<ResizableDataTable />}
           ></Route>
         </Routes>
-      </Router>
     </Layout>
   );
 }

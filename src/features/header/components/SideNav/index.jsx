@@ -13,7 +13,7 @@ const SideNav = (props) => {
                     trigger={trigger}
                     body={
                         <ul className={styles.sideNavList}>
-                            {navigations.map((item, idx) => <SideNavItem key={idx} {...item} />)}
+                            {navigations?.map((item, idx) => <SideNavItem key={idx} {...item} />)}
                         </ul>
                     }
                 ></HamburgerMenu>

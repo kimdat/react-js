@@ -19,7 +19,7 @@ const SideNavSubMenu = (props) => {
     return (
         <div className={styles.sideNavSubMenu}>
             <ul className={styles.sideNavSubMenuList}>
-                {navigations.map((item, idx) =>
+                {navigations?.map((item, idx) =>
                     <SideNavSubMenuItem key={idx} {...item} />
                 )}
             </ul>

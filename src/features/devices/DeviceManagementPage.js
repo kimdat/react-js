@@ -20,12 +20,13 @@ import {
   selectTotalRowCount,
   setFilter,
 } from "./deviceSlice";
-import { useGetAllProvincesQuery } from "../province/provinceApiSlice";
+import { useLazyGetProvincesQuery } from "../province/provinceApiSlice";
 import { useGetAllRegionsQuery } from "../region/regionApiSlice";
 import { useGetAllDeviceStatusQuery } from "../deviceStatus/deviceStatusApiSlice";
 import Swal from "sweetalert2";
 import EditDeviceModal from "./components/EditDeviceModal";
 import "../../pages/Datatable.css";
+import { fieldNames } from "./data/constants";
 
 const DeviceManagementPage = (props) => {
   const [editDeviceModalOpen, setEditDeviceModalOpen] = React.useState(false);
@@ -38,12 +39,13 @@ const DeviceManagementPage = (props) => {
       isSuccess: devicesSuccess,
     }
   ] = useLazyGetDevicesQuery();
-  const {
-    data: provinces,
-    isFetching: provincesFetching,
-    isError: provincesError,
-    isSuccess: provincesSuccess,
-  } = useGetAllProvincesQuery();
+  const [getProvinces,
+    {
+      isFetching: provincesFetching,
+      isError: provincesError,
+      isSuccess: provincesSuccess,
+    }
+  ] = useLazyGetProvincesQuery();
   const {
     data: regions,
     isFetching: regionsFetching,
@@ -88,6 +90,21 @@ const DeviceManagementPage = (props) => {
   React.useEffect(() => {
     getDevices(filters);
   }, [filters, getDevices]);
+
+  //provinces
+  const regionId = filters[fieldNames.REGION_ID];
+  const [provinces, setProvinces] = React.useState([]);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      let provinces = [];
+      provinces = await getProvinces({
+        [fieldNames.REGION_ID]: regionId
+      }).unwrap();
+      setProvinces(provinces);
+    }
+    fetchData();
+  }, [regionId, getProvinces]);
 
   const selectedDeviceList = devices.filter((device) => device.isSelected === true);
   const selectedDeviceIdList = selectedDeviceList.map((device) => device.Id);

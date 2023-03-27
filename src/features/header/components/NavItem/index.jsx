@@ -5,13 +5,13 @@ import Dropdown from '../../../../components/common/Dropdown/index.jsx';
 import SubMenu from '../SubMenu/index.jsx';
 
 const NavItem = (props) => {
-    const { text, url, icon, navigations, hasSubMenu } = props;
+    const { text, url, icon, navigations } = props;
     return (
         <li className={styles.navItem}>
-            {!hasSubMenu &&
+            {!navigations &&
                 <NavLink text={text} url={url} />
             }
-            {hasSubMenu &&
+            {navigations &&
                 <Dropdown
                     toggle={<NavLink text={text} icon={icon} isToggle />}
                     content={<SubMenu navigations={navigations} />}

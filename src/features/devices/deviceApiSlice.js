@@ -41,11 +41,11 @@ export const deviceApiSlice = apiSlice.injectEndpoints({
     }),
     checkDuplicate: builder.query({
       query: ({ip, deviceName}) => {
+        const name = ip ? "Ip" : "DeviceName";
+        const value = ip ? ip : deviceName;
         const formData = new FormData();
-        formData.append("device", JSON.stringify({
-          ip: ip ? ip : "",
-          deviceName: deviceName ? deviceName : ""
-        }));
+        formData.append("name", name);
+        formData.append("value", value);
         return ({
           url: 'checkDuplicate',
           method: "POST",

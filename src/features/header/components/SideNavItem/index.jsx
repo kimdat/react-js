@@ -4,10 +4,10 @@ import SideNavSubMenu from '../SideNavSubMenu';
 import styles from './SideNavItem.module.scss';
 
 const SideNavItem = (props) => {
-    const { text, url, icon, navigations, hasSubMenu } = props;
+    const { text, url, icon, navigations } = props;
     return (
         <>
-            {!hasSubMenu &&
+            {!navigations &&
                 <li className={styles.sideNavItem}>
                     <a className={styles.sideNavLink} href={url}>
                         <span className={styles.sideNavIcon}>{icon ? icon : ''}</span>
@@ -15,7 +15,7 @@ const SideNavItem = (props) => {
                     </a>
                 </li>
             }
-            {hasSubMenu &&
+            {navigations &&
                 <li className={styles.sideNavItem}>
                     <Accordion header={
                         <a className={styles.sideNavLink} href="#">
