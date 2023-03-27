@@ -72,51 +72,80 @@ const Login = () => {
         <MDBCol col="12">
           <MDBCard
             className="bg-white my-5 mx-auto"
-            style={{ borderRadius: "1rem", maxWidth: "500px" }}
+            style={{ borderRadius: "1rem", maxWidth: "600px" }}
           >
             <MDBCardBody className="p-5 w-100 d-flex flex-column">
               <h2 className="fw-bold mb-2 text-center">
                 <img src={LOGO_URL} alt={LOGO_TITLE}></img>
               </h2>
 
-              <h2 className="fw-bold mb-2 text-center">
+              <h2
+                className="fw-bold mb-2 text-center"
+                style={{ marginTop: "10px" }}
+              >
                 CTIN AUTOMATION SYSTEM
               </h2>
-
-              <form onSubmit={handleSubmit} id="formLogin">
-                <div className="mb-3">
-                  <label htmlFor="email">
-                    Email <span style={{ color: "red" }}>*</span>
-                  </label>
-                  <input
-                    className="form-control"
-                    onChange={handleChange}
-                    type="email"
-                    name="email"
-                    id=""
-                    placeholder="Email"
-                  />
-                  <span className="error">{errors.email}</span>
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="pass">
-                    Password <span style={{ color: "red" }}>*</span>
-                  </label>
-                  <input
-                    className="form-control"
-                    onChange={handleChange}
-                    type="password"
-                    name="password"
-                    id=""
-                    placeholder="Password"
-                  />
-                  <span className="error">{errors.password}</span>
-                </div>
-              </form>
-
-              <MDBBtn type="submit" form="formLogin" size="lg">
-                Login
-              </MDBBtn>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <form
+                  onSubmit={handleSubmit}
+                  id="formLogin"
+                  style={{
+                    marginTop: "10px",
+                    width: "85%",
+                  }}
+                >
+                  <div className="mb-3">
+                    <label htmlFor="email">
+                      Email <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <input
+                      className="form-control"
+                      onChange={handleChange}
+                      type="email"
+                      name="email"
+                      id=""
+                      placeholder="Email"
+                    />
+                    <span className="error">{errors.email}</span>
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="pass">
+                      Password <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <input
+                      className="form-control"
+                      onChange={handleChange}
+                      type="password"
+                      name="password"
+                      id=""
+                      placeholder="Password"
+                    />
+                    <span className="error">{errors.password}</span>
+                  </div>
+                </form>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <MDBBtn
+                  type="submit"
+                  form="formLogin"
+                  size="lg"
+                  style={{ width: "85%" }}
+                >
+                  Login
+                </MDBBtn>
+              </div>
 
               <hr className="my-4" />
             </MDBCardBody>

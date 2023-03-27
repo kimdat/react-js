@@ -34,10 +34,10 @@ const InventoriesOnline = () => {
 
     const rowCheck = checkedRow.map((item) => {
       return {
-        id: item[FILED_DEVICE_ONLINE.id],
-        device_type_S: item[FILED_DEVICE_ONLINE.Device_type_S],
-        Ip: item[FILED_DEVICE_ONLINE.Ip],
-        DeviceName: item[FILED_DEVICE_ONLINE.Name],
+        id: item[FILED_DEVICE_ONLINE.id].trim(),
+        device_type_S: item[FILED_DEVICE_ONLINE.Device_type_S].trim(),
+        Ip: item[FILED_DEVICE_ONLINE.Ip].trim(),
+        DeviceName: item[FILED_DEVICE_ONLINE.Name].trim(),
         port: 22,
         username: "epnm",
         password: "epnm@890!",
@@ -49,42 +49,35 @@ const InventoriesOnline = () => {
   };
 
   return (
-    <div style={{ marginTop: "50px" }}>
-      <MDBContainer fluid>
-        <MDBCard style={{ marginBottom: "-30px" }}>
-          <MDBCardHeader style={{ textAlign: "center" }}>
-            INSTANTANEOUS CHECK
-          </MDBCardHeader>
-        </MDBCard>
-        <MDBRow style={{ marginTop: "50px" }}>
-          <MDBCol md="4" style={{ marginRight: "-15px" }}>
-            <MDBCard className="bg-white" style={{ position: "static" }}>
-              <MDBCardBody>
-                <div
-                  style={{
-                    width: "100px",
-                    marginBottom: "10px",
-                    float: "right",
-                  }}
-                >
-                  <MDBBtn size="sm" onClick={handleButtonClick}>
-                    Execute
-                  </MDBBtn>
-                </div>
-                <div className="clearfix"></div>
-                <DevicesOnline ref={deviceRef} />
-              </MDBCardBody>
-            </MDBCard>
-          </MDBCol>
-          <MDBCol md="8">
-            <MDBCard className="bg-white " style={{ position: "static" }}>
-              <MDBCardBody>
-                <DataExecute ref={childRef}></DataExecute>
-              </MDBCardBody>
-            </MDBCard>
-          </MDBCol>
-        </MDBRow>
-      </MDBContainer>
+    <div className="instanteousCheck">
+      <MDBRow style={{ marginTop: "10px" }}>
+        <MDBCol md="4">
+          <MDBCard className="card-name">
+            <MDBCardBody>
+              <div
+                style={{
+                  width: "100px",
+                  marginBottom: "10px",
+                  float: "right",
+                }}
+              >
+                <MDBBtn size="sm" onClick={handleButtonClick}>
+                  Execute
+                </MDBBtn>
+              </div>
+              <div className="clearfix"></div>
+              <DevicesOnline ref={deviceRef} />
+            </MDBCardBody>
+          </MDBCard>
+        </MDBCol>
+        <MDBCol md="8">
+          <MDBCard className="card-name">
+            <MDBCardBody>
+              <DataExecute ref={childRef}></DataExecute>
+            </MDBCardBody>
+          </MDBCard>
+        </MDBCol>
+      </MDBRow>
     </div>
   );
 };

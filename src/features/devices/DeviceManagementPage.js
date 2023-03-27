@@ -1,7 +1,7 @@
 import React from "react";
 import DeviceListTable from "./components/DeviceListTable";
 import styles from "./DeviceManagementPage.module.scss";
-import { MDBBtn, MDBCard, MDBCardBody, MDBCardHeader, MDBContainer } from "mdb-react-ui-kit";
+import { MDBBtn } from "mdb-react-ui-kit";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileExcel, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 import AddDeviceModal from "./components/AddDeviceModal";

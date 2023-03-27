@@ -91,7 +91,7 @@ const InventoriesComponent = React.memo(
           console.log(newSearchApiData);
           setSearchApiData(newSearchApiData);
         }
-
+        console.log(row);
         if (rowExpand.some((item) => item === row.id)) {
           setRowExpand(rowExpand.filter((rowId) => rowId !== row.id));
         } else {

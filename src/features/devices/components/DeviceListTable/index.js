@@ -164,7 +164,7 @@ const DeviceListTable = (props) => {
                         )}
                     </tr>
                 </MDBTableHead>
-                <MDBTableBody>
+                <MDBTableBody className={styles.tableBody}>
                     {rows.length === 0 && 
                         <tr>
                             <td colSpan={columns.length+1} className={styles.noDevicesMessage}>

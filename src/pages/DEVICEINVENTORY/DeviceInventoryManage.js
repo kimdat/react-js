@@ -220,7 +220,6 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
       const start = (page - 1) * rowPage;
       const end = (page - 1) * rowPage + rowPage;
       const newData = dataFilterNotPag.slice(start, end);
-      setSearchApiData(newData);
       //nếu  được  expandall
       if (!isExpandedAll) {
         const allHaveChildren = newData.every((item) =>
@@ -233,6 +232,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
         }
         setRowExpand(newData.map((item) => item.id));
       }
+      setSearchApiData(newData);
     },
     [dataFilterNotPag, isExpandedAll, dataFilter]
   );
@@ -319,57 +319,51 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
   );
 
   return (
-    <MDBContainer fluid>
-      <MDBCard className="bg-white my-5 mx-auto" style={{ position: "static" }}>
-        <MDBCardHeader style={{ textAlign: "center" }}>
-          DEVICE INVENTORY
-        </MDBCardHeader>
-        <MDBCardBody style={{ width: "100%" }}>
-          <div style={{ display: "flex", float: "right" }}>
-            {flagOffline && <ImportFile loadData={loadDataChild} />}
-            <ExportExcel
-              row={dataFilterNotPag}
-              setIsLoading={setIsLoading}
-              flagOffline={flagOffline}
-              endPoint="exportFileExcel"
-            />
-            {flagOffline && (
-              <DeleteRow loadData={loadDataChild} rowsId={checkedRows} />
+    <>
+        <div style={{ display: "flex", float: "right" }}>
+          {flagOffline && <ImportFile loadData={loadDataChild} />}
+          <ExportExcel
+            row={dataFilterNotPag}
+            setIsLoading={setIsLoading}
+            flagOffline={flagOffline}
+            endPoint="exportFileExcel"
+          />
+          {flagOffline && (
+            <DeleteRow loadData={loadDataChild} rowsId={checkedRows} />
+          )}
+        </div>
+        <div>
+          <LoadingComponent isLoading={isLoading}>
+            {searchApiData.length > 0 && (
+              <div className="manageDeviceInventory">
+                <InventoriesComponent
+                  handleFilterColumn={handleFilterColumn}
+                  handleFilter={handleFilter}
+                  checkAll={checkAll}
+                  handleCheckAll={handleCheckAll}
+                  checkedRows={checkedRows}
+                  handleCheck={handleCheck}
+                  getChildren={getChildren}
+                  getExpandAll={getExpandAll}
+                  totalRow={totalRow}
+                  currentPage={currentPage}
+                  handlePageChange={handlePageChange}
+                  rowsPerPage={rowsPerPageRef.current}
+                  handleRowsPerPageChange={handleRowsPerPageChange}
+                  setIsLoading={setIsLoading}
+                  searchApiData={searchApiData}
+                  setSearchApiData={setSearchApiData}
+                  isExpandedAll={isExpandedAll}
+                  setIsExpandedAll={setIsExpandedAll}
+                  rowExpand={rowExpand}
+                  setRowExpand={setRowExpand}
+                />
+              </div>
             )}
-          </div>
-          <div>
-            <LoadingComponent isLoading={isLoading}>
-              {searchApiData.length > 0 && (
-                <div className="manageDeviceInventory">
-                  <InventoriesComponent
-                    handleFilterColumn={handleFilterColumn}
-                    handleFilter={handleFilter}
-                    checkAll={checkAll}
-                    handleCheckAll={handleCheckAll}
-                    checkedRows={checkedRows}
-                    handleCheck={handleCheck}
-                    getChildren={getChildren}
-                    getExpandAll={getExpandAll}
-                    totalRow={totalRow}
-                    currentPage={currentPage}
-                    handlePageChange={handlePageChange}
-                    rowsPerPage={rowsPerPageRef.current}
-                    handleRowsPerPageChange={handleRowsPerPageChange}
-                    setIsLoading={setIsLoading}
-                    searchApiData={searchApiData}
-                    setSearchApiData={setSearchApiData}
-                    isExpandedAll={isExpandedAll}
-                    setIsExpandedAll={setIsExpandedAll}
-                    rowExpand={rowExpand}
-                    setRowExpand={setRowExpand}
-                  />
-                </div>
-              )}
-            </LoadingComponent>
-          </div>
-        </MDBCardBody>
-      </MDBCard>
-    </MDBContainer>
+          </LoadingComponent>
+        </div>
+    </>
+
   );
 });
 export default Inventories;

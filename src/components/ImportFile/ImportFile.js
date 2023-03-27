@@ -18,7 +18,7 @@ const ImportFile = memo(({ loadData }) => {
           onClick={handleShow}
           size="sm"
         >
-          <FaPlus />
+          <FaPlus /> IMPORT
         </Button>
         {show && (
           <ModalFileUpload
