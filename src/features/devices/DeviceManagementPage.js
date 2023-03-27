@@ -1,7 +1,7 @@
 import React from "react";
 import DeviceListTable from "./components/DeviceListTable";
 import styles from "./DeviceManagementPage.module.scss";
-import { MDBBtn, MDBCard, MDBCardBody } from "mdb-react-ui-kit";
+import { MDBBtn, MDBCard, MDBCardBody, MDBCardHeader, MDBContainer } from "mdb-react-ui-kit";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileExcel, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 import AddDeviceModal from "./components/AddDeviceModal";
@@ -25,6 +25,7 @@ import { useGetAllRegionsQuery } from "../region/regionApiSlice";
 import { useGetAllDeviceStatusQuery } from "../deviceStatus/deviceStatusApiSlice";
 import Swal from "sweetalert2";
 import EditDeviceModal from "./components/EditDeviceModal";
+import "../../pages/Datatable.css";
 
 const DeviceManagementPage = (props) => {
   const [editDeviceModalOpen, setEditDeviceModalOpen] = React.useState(false);
@@ -126,75 +127,69 @@ const DeviceManagementPage = (props) => {
   const getDeviceById = (id) => devices.find((device) => device.Id === id);
 
   return (
-    <>
-      <div className={styles.pageContainer}>
-        <h1 className={styles.pageTitle}>Device Management</h1>
-        <MDBCard>
-          <MDBCardBody>
-            <div className={styles.actionsWrapper}>
-              {/* action buttons */}
-              <AddDeviceModal
-                provinces={provinces}
-                regions={regions}
-                trigger={
-                  <MDBBtn
-                    type="button"
-                    size="sm"
-                    color="primary"
-                  >
-                    <div className={styles.buttonIcon}>
-                      <FontAwesomeIcon icon={faPlus} />
-                    </div>
-                  </MDBBtn>
-                }
-              />
-              <MDBBtn
-                className={styles.actionButton}
-                type="button"
-                size="sm"
-                color="danger"
-                disabled={hasNoRowSelected}
-                onClick={() => deleteDeviceHandler()}
-              >
-                <div className={styles.buttonIcon}>
-                  <FontAwesomeIcon icon={faTrash} />
-                </div>
-              </MDBBtn>
-              <MDBBtn
-                className={styles.actionButton}
-                type="button"
-                size="sm"
-                color="info"
-              >
-                <div className={styles.buttonIcon}>
-                  <FontAwesomeIcon icon={faFileExcel} />
-                </div>
-              </MDBBtn>
-            </div>
-            <div className={styles.pageContent}>
-              {isSuccess && (
-                <DeviceListTable
-                  deviceList={devices}
-                  isSelectAll={isSelectAll}
-                  selectAllToggleFunc={() => dispatch(selectAllToggle())}
-                  selectRowToggleFunc={(ip) => dispatch(selectRowToggle(ip))}
-                  deviceStatus={deviceStatus}
-                  regions={regions}
-                  provinces={provinces}
-                  filters={filters}
-                  setFilter={(value) => dispatch(setFilter(value))}
-                  onRowClickHandler={onRowClickHandler}
-                  currentPage={filters.currentPage}
-                  rowsPerPage={filters.rowsPerPage}
-                  setRowsPerPage={(value) => dispatch(setRowsPerPage(value))}
-                  setCurrentPage={(value) => dispatch(setCurrentPage(value))}
-                  totalRowCount={totalRowCount}
-                />
-              )}
-              {isError && <div>There are no devices.</div>}
-            </div>
-          </MDBCardBody>
-        </MDBCard>
+    <div className={styles.pageWrapper}>
+      <div className={styles.actionsWrapper}>
+        {/* action buttons */}
+        <AddDeviceModal
+          provinces={provinces}
+          regions={regions}
+          trigger={
+            <MDBBtn
+              type="button"
+              size="sm"
+              color="primary"
+            >
+              <div className={styles.buttonIcon}>
+                <FontAwesomeIcon icon={faPlus} />
+              </div>
+            </MDBBtn>
+          }
+        />
+        <MDBBtn
+          className={styles.actionButton}
+          type="button"
+          size="sm"
+          color="danger"
+          disabled={hasNoRowSelected}
+          onClick={() => deleteDeviceHandler()}
+        >
+          <div className={styles.buttonIcon}>
+            <FontAwesomeIcon icon={faTrash} />
+          </div>
+        </MDBBtn>
+        <MDBBtn
+          className={styles.actionButton}
+          type="button"
+          size="sm"
+          color="info"
+        >
+          <div className={styles.buttonIcon}>
+            <FontAwesomeIcon icon={faFileExcel} />
+          </div>
+        </MDBBtn>
+      </div>
+      <div className={styles.pageContent}>
+        {isSuccess && (
+          <DeviceListTable
+            deviceList={devices}
+            isSelectAll={isSelectAll}
+            selectAllToggleFunc={() => dispatch(selectAllToggle())}
+            selectRowToggleFunc={(ip) => dispatch(selectRowToggle(ip))}
+            deviceStatus={deviceStatus}
+            regions={regions}
+            provinces={provinces}
+            filters={filters}
+            setFilter={(value) => dispatch(setFilter(value))}
+            onRowClickHandler={onRowClickHandler}
+            currentPage={filters.currentPage}
+            rowsPerPage={filters.rowsPerPage}
+            setRowsPerPage={(value) => dispatch(setRowsPerPage(value))}
+            setCurrentPage={(value) => dispatch(setCurrentPage(value))}
+            totalRowCount={totalRowCount}
+            className={styles.table}
+          />
+        )}
+        {isError && <div>There are no devices.</div>}
       </div>
       <EditDeviceModal
         provinces={provinces}
@@ -204,7 +199,7 @@ const DeviceManagementPage = (props) => {
         deviceId={editDeviceId}
         device={getDeviceById(editDeviceId)}
       />
-    </>
+    </div>
   );
 };
 

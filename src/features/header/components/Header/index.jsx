@@ -6,12 +6,15 @@ import styles from './Header.module.scss';
 import SideNav from '../SideNav/index.jsx';
 import useDeviceDetect from '../../../../hooks/useDeviceDetect';
 import NavProfile from '../NavProfile/index.jsx';
+import classNames from 'classnames';
+
+const cx = classNames.bind(styles);
 
 const Header = (props) => {
     const { isMobile, isDesktop } = useDeviceDetect();
-    const { logo, navigations, profile } = props;
+    const { logo, navigations, profile, className } = props;
     return (
-        <header className={styles.headerContainer}>
+        <header className={cx(className, styles.headerContainer)}>
             <div className={styles.headerWrapper}>
                 <nav className={styles.nav}>
                     <SideNav trigger={

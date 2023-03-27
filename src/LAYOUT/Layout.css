@@ -1,0 +1,13 @@
+.card-name {
+    position: static;
+    border-radius: 0px;
+    margin: 0px !important;
+    padding: 0px !important;
+}
+
+.headerCard-name {
+    align-items: center;
+    text-align: center;
+    font-size: 24px;
+
+}

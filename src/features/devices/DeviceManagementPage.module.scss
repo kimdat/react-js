@@ -1,6 +1,7 @@
-.pageContainer {
-    padding: 1rem;
-    padding-top: 4rem;
+.pageWrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .actionsWrapper {
@@ -18,7 +19,11 @@
 }
 
 .pageContent {
-    padding-top: .5rem;
+    flex-basis: auto;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .pageTitle {
@@ -26,4 +31,9 @@
     text-transform: uppercase;
     text-align: center;
     margin-bottom: .8rem;
+}
+
+.table {
+    flex-basis: auto;
+    flex-grow: 1;
 }

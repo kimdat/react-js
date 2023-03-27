@@ -69,13 +69,13 @@ const DeviceListTable = (props) => {
         regions,
         provinces,
         onRowClickHandler,
-        filters,
         setFilter,
         currentPage,
         rowsPerPage,
         setRowsPerPage,
         setCurrentPage,
         totalRowCount,
+        className,
     } = props;
 
     const columns = [
@@ -116,7 +116,7 @@ const DeviceListTable = (props) => {
     return (
         <>
             <MDBTable striped small hover
-                    className={cx(styles.deviceListTable, 'w-auto')}
+                    className={cx(styles.deviceListTable, 'w-auto', className)}
                 >
                 <MDBTableHead className={styles.deviceListTableHead}>
                     <tr>
@@ -167,7 +167,7 @@ const DeviceListTable = (props) => {
                 <MDBTableBody>
                     {rows.length === 0 && 
                         <tr>
-                            <td colSpan={columns.length} className={styles.noDevicesMessage}>
+                            <td colSpan={columns.length+1} className={styles.noDevicesMessage}>
                                 There are no devices.
                             </td>
                         </tr>

@@ -59,8 +59,10 @@ const DeviceModal = (props) => {
     //post
     try {
       const res = await actionFunc(data).unwrap();
+      console.log(res);
       alertMessageFire("success",res.message? res.message : "Done!");
     } catch (err) {
+      console.log(err);
       alertMessageFire("error", err.message? err.message : "There was an error.");
     }
   };

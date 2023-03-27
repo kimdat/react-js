@@ -24,7 +24,6 @@ export const deviceApiSlice = apiSlice.injectEndpoints({
         // if (typeof newDevice === "object") {
         //   newDevice = [newDevice];
         // }
-
         return {
           url: "api/devices",
           method: "POST",
