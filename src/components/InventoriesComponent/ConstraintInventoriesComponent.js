@@ -3,8 +3,8 @@ export const FILED_COLUMN_INVENTORIES = {
   No: "No",
 };
 export const TITLE_COLUMN_INVENTORIES = {
-  Name: "Device Name",
-  No: "No",
+  Name: "DEVICE NAME",
+  No: "NO",
 };
 export const WIDTH_COLUMN_INVENTORIES = {
   Selected: "25px",
@@ -23,10 +23,10 @@ export const FILED_COLUMN__FILTER_INVENTORIES = {
   CDESC: "CDESC",
 };
 export const TITLE_COLUMN__FILTER_INVENTORIES = {
-  Name: "Slot",
+  Name: "SLOT",
 
   Pid: "PID",
-  Serial: "Serial",
+  Serial: "SERIAL",
   CDESC: "DESCRIPTION",
 };
 export const NUMBER_ROW_WIDTH_DEFAUL = 3;

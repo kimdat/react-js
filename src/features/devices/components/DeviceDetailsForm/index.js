@@ -4,11 +4,12 @@ import ReactInputMask from "react-input-mask";
 import { deviceType } from "../../data/constants";
 import styles from "./DeviceDetailsForm.module.scss";
 import classNames from "classnames";
+import { fieldNames } from "../../data/constants";
 
 const cx = classNames.bind(styles);
 
 const DeviceDetailsForm = (props) => {
-  const { device, inputChangeHandlers, regions, provinces, errors, texts } =
+  const { inputs, setInputs, regions, provinces, errors, texts } =
     props;
   const formConfigs = [
     {
@@ -16,45 +17,40 @@ const DeviceDetailsForm = (props) => {
       validationRegex: "",
       label: "Device Name",
       id: "device_name_input",
-      name: "DeviceName",
-      value: device.deviceName,
-      onChange: (e) => inputChangeHandlers.setDeviceName(e.target.value),
+      name: fieldNames.DEVICE_NAME,
+      required: true
     },
     {
       type: "text",
       validationRegex: "",
       label: "IP",
       id: "ip_loopback_input",
-      name: "Ip",
-      value: device.ipLoopback,
-      onChange: (e) => inputChangeHandlers.setIpLoopback(e.target.value),
+      name: fieldNames.IP,
+      required: true
     },
     {
       type: "select",
       label: "Device type",
       options: deviceType,
       id: "device_type_select",
-      name: "Device_Type",
-      value: device.deviceType,
-      onChange: (e) => inputChangeHandlers.setDeviceType(e.target.value),
+      name: fieldNames.DEVICE_TYPE,
+      required: true
     },
     {
       type: "select",
       label: "Region",
       options: regions,
       id: "region_select",
-      name: "region_id",
-      value: device.region,
-      onChange: (e) => inputChangeHandlers.setRegion(e.target.value),
+      name: fieldNames.REGION_ID,
+      required: true
     },
     {
       type: "select",
       label: "Province",
       options: provinces,
       id: "province_select",
-      name: "province_id",
-      value: device.province,
-      onChange: (e) => inputChangeHandlers.setProvince(e.target.value),
+      name: fieldNames.PROVINCE_ID,
+      required: true
     },
     {
       type: "text",
@@ -62,9 +58,8 @@ const DeviceDetailsForm = (props) => {
       validationRegex: "",
       label: "Longitude",
       id: "longitude_input",
-      name: "long",
-      value: device.long,
-      onChange: (e) => inputChangeHandlers.setLong(e.target.value),
+      name: fieldNames.LONG,
+      required: false
     },
     {
       type: "text",
@@ -72,17 +67,15 @@ const DeviceDetailsForm = (props) => {
       validationRegex: "",
       label: "Latitude",
       id: "latitude_input",
-      name: "lat",
-      value: device.lat,
-      onChange: (e) => inputChangeHandlers.setLat(e.target.value),
+      name: fieldNames.LAT,
+      required: false
     },
     {
       type: "text",
       label: "Address",
       id: "address_input",
-      name: "address",
-      value: device.address,
-      onChange: (e) => inputChangeHandlers.setAddress(e.target.value),
+      name: fieldNames.ADDRESS,
+      required: false
     },
   ];
   return (
@@ -98,9 +91,10 @@ const DeviceDetailsForm = (props) => {
               name={config.name}
               id={config.id}
               key={idx}
-              value={config.value}
-              onChange={config.onChange}
+              value={inputs(config.name) ? inputs(config.name) : ""}
+              onChange={(e) => setInputs(config.name, e.target.value)}
               isInvalid={errors(config.name)}
+              aria-describedby={config.required?"required-description":""}
             >
               <option>--</option>
               {config.options?.map((option, idx) => (
@@ -120,14 +114,15 @@ const DeviceDetailsForm = (props) => {
               name={config.name}
               size="sm"
               isInvalid={errors(config.name)}
+              value={inputs(config.name) ? inputs(config.name) : ""}
+              aria-describedby={config.required?"required-description":""}
             />
           );
           if (config.mask) {
             element = (
               <ReactInputMask
                 mask={config.mask}
-                value={config.value}
-                onChange={config.onChange}
+                onChange={(e) => setInputs(config.name, e.target.value)}
               >
                 {(inputProps) => createInput(inputProps)}
               </ReactInputMask>
@@ -135,14 +130,17 @@ const DeviceDetailsForm = (props) => {
           } else {
             element = createInput({
               value: config.value,
-              onChange: config.onChange,
+              onChange: (e) => setInputs(config.name, e.target.value),
             });
           }
         }
         return (
           <Form.Group className={styles.formGroup} key={config.id}>
-            <Form.Label className={styles.formLabel} htmlFor={config.id}>
+            <Form.Label className={styles.formLabel} htmlFor={config.id} required={config.required}>
               {config.label}
+              {config.required && 
+                <span className={styles.required}>*</span>
+              }
             </Form.Label>
             {element}
             {texts(config.name) && (
@@ -153,6 +151,9 @@ const DeviceDetailsForm = (props) => {
           </Form.Group>
         );
       })}
+      <p aria-hidden={true} className={styles.requiredDescription} id="required-description">
+        <span className={styles.required}>*</span>Required field
+      </p>
     </Form>
   );
 };

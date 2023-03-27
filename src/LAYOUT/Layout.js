@@ -1,64 +1,29 @@
 import Header from "../features/header/components/Header";
 import Footer from "../features/footer/components/Footer";
 import { MDBCard, MDBCardHeader, MDBContainer } from "mdb-react-ui-kit";
-
+import styles from "./Layout.module.scss";
+import "./Layout.css";
 function Layout(props) {
-  const header = {
-    logo: {
-      url: "https://ctin.vn",
-      title: "CTIN",
-      logoUrl: "/ctin-logo-1.png",
-    },
-    navigations: [
-      {
-        text: "Manage Device",
-        url: "/device-management",
-        hasSubMenu: false,
-      },
-      {
-        text: "Manage Inventories",
-        navigations: [
-          {
-            text: "Online",
-            url: "/managementDeviceInventories",
-          },
-          {
-            text: "Offline",
-            url: "/Inventories",
-          },
-        ],
-        hasSubMenu: true,
-      },
-
-      {
-        text: "Instantaneous check",
-        url: "/InventoriesOnline",
-        hasSubMenu: false,
-      },
-    ],
-    profile: {
-      profileGreeting: (username) => `Hello ${username}`,
-      signOut: "Logout",
-      manageProfile: "Manage account",
-    },
-  };
+  const { header } = props;
   return (
-    <div>
+    <div className={styles.pageWrapper}>
       {/* Include footer or any other common elements */}
+
       <Header
         logo={header.logo}
         navigations={header.navigations}
         profile={header.profile}
+        className={styles.mainHead}
       />
-      <div style={{ marginTop: "3rem", padding: "1rem" }}>
-        <MDBContainer fluid>
-          <MDBCard className="bg-white mx-auto card-name">
-            <MDBCardHeader className="headerCard-name" style={{}}>
+      <div>
+        <MDBContainer fluid style={{ padding: "1rem" }}>
+          <MDBCard className="bg-white mx-auto card-header">
+            <MDBCardHeader className="headerCard-name">
               DEVICE INVENTORY
             </MDBCardHeader>
           </MDBCard>
           <div style={{ marginTop: "10px" }}></div>
-          <div>{props.children}</div>
+          <div className="bodyChildren">{props.children}</div>
         </MDBContainer>
       </div>
 

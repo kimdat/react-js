@@ -59,3 +59,7 @@
 .instanteousCheck .row{
   --mdb-gutter-x:0.55rem
 }
+.inventories > div >.rdt_Table >.rdt_TableBody{
+ height: calc(100vh - 380px);
+  overflow-y: auto;
+}

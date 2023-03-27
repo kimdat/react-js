@@ -1,6 +1,8 @@
-.pageContainer {
-    margin-top: 4rem;
-    padding: 1rem;
+.pageWrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-top: 20px;
 }
 
 .actionsWrapper {
@@ -14,5 +16,19 @@
 
 .buttonIcon {
     display: inline-block;
-    margin-right: .3rem;
+    font-size: 1.2rem;
+}
+
+.pageContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: auto;
+}
+
+.pageTitle {
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: .8rem;
 }

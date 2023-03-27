@@ -2,23 +2,19 @@ import { apiSlice } from "../api/apiSlice";
 
 export const deviceApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getAllDevices: builder.query({
-      query: () => ({
+    getDevices: builder.query({
+      query: (params) => ({
         url: "api/devices",
         method: "GET",
+        params: { ...params },
       }),
       transformResponse: (response) => {
-        return response.devices;
-      },
-      providesTags: ["Devices"],
-    }),
-    getDevicesByFilters: builder.query({
-      query: (filters) => ({
-        url: "api/devices?" + JSON.stringify(filters),
-        method: "GET",
-      }),
-      transformResponse: (response) => {
-        return response.devices;
+        return {
+          devices: response.devices.sort((a, b) => {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+          }),
+          totalRowCount: response.totalRowCount,
+        };
       },
       providesTags: ["Devices"],
     }),
@@ -33,15 +29,35 @@ export const deviceApiSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: ["Devices"],
     }),
+    editDevice: builder.mutation({
+      query: ({ deviceId, data }) => {
+        return {
+          url: `api/devices/${deviceId}`,
+          method: "POST",
+          body: data,
+        };
+      },
+      invalidatesTags: ["Devices"],
+    }),
     checkDuplicate: builder.query({
-      query: ({ name, value }) => {
+      query: ({ ip, deviceName }) => {
         const formData = new FormData();
-        formData.append(name, value);
+        formData.append(
+          "device",
+          JSON.stringify({
+            ip: ip ? ip : "",
+            deviceName: deviceName ? deviceName : "",
+          })
+        );
+        //console.log(formData);
         return {
           url: "checkDuplicate",
           method: "POST",
           body: formData,
         };
+      },
+      transformResponse: (response) => {
+        return response?.duplicate === true;
       },
     }),
     deleteDevices: builder.mutation({
@@ -58,8 +74,9 @@ export const deviceApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
-  useGetAllDevicesQuery,
-  useLazyGetDevicesByFiltersQuery,
+  useLazyGetDevicesQuery,
   useAddNewDeviceMutation,
   useDeleteDevicesMutation,
+  useLazyCheckDuplicateQuery,
+  useEditDeviceMutation,
 } = deviceApiSlice;

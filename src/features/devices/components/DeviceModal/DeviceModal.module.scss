@@ -1,0 +1,21 @@
+.addDeviceModalBody {
+    padding: 1rem;
+    max-width: 550px;
+    width: 550px;
+
+    @media (max-width: 641px) {
+        width: 100%;
+    }
+}
+
+.actionButtonList {
+    display: flex;
+    justify-content: flex-end;
+
+    margin-top: 1rem;
+
+}
+
+.actionButton:nth-child(2) {
+    margin-left: 0.6rem;
+}

@@ -1,5 +1,9 @@
 .deviceListTable {
- 
+    max-width: fit-content;
+    overflow-x: auto;
+    white-space: nowrap;
+    // height: 75vh;
+    margin-bottom: 0 !important;
 
     th {
         font-weight: 700 !important;
@@ -27,9 +31,18 @@
     padding-right: 10px;
 }
 
-.deviceListTableRow {
-    &:hover {
-        cursor: pointer;
+.deviceName {
+    button {
+        width: 100%;
+        background-color: transparent;
+        border: 0;
+        text-align: left;
+        text-decoration: underline;
+        color: var(--bg-primary);
+
+        &:hover {
+            color: var(--bg-secondary);
+        }
     }
 }
 
@@ -48,4 +61,29 @@
 .statusIcon {
     display: inline-block;
     margin-right: .3rem;
+}
+
+.paginationWrapper {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pagination {
+    margin: 0;
+}
+
+.pageSizeSelectorWrapper {
+    font-size: .8rem;
+}
+
+.paginationSelector {
+    margin-left: .3rem;
+}
+
+.noDevicesMessage {
+    text-align: left;
+    font-style: italic;
+    color: var(--mdb-danger) !important;
 }

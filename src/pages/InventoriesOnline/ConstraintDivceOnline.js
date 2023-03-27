@@ -7,9 +7,9 @@ export const FILED_DEVICE_ONLINE = {
   No: "No",
 };
 export const TITLE_DEVICE_ONLINE = {
-  Name: "Device Name",
-  Ip: "Ip Loopback",
-  No: "No",
+  Name: "DEVICE NAME",
+  Ip: "IP LOOPBACK",
+  No: "NO",
 };
 export const WIDTH_COLUMN_DEVICE_ONLINE = {
   Name: "30%",

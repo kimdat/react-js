@@ -319,7 +319,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
   );
 
   return (
-    <MDBCard className="bg-white my-5 mx-auto card-name">
+    <MDBCard className="bg-white  mx-auto card-name">
       <MDBCardBody>
         <div style={{ display: "flex", float: "right" }}>
           {flagOffline && <ImportFile loadData={loadDataChild} />}

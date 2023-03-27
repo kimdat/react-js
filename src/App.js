@@ -1,10 +1,8 @@
 import React, { useEffect, lazy } from "react";
-import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Layout from "./LAYOUT/Layout.js";
 import DeviceManagementPage from "./features/devices/DeviceManagementPage";
-import ResizableDataTable from "./pages/Inventories1";
 
 const Inventories = lazy(() =>
   import("./pages/DEVICEINVENTORY/DeviceInventoryManage")
@@ -15,74 +13,94 @@ const InventoriesOnline = lazy(() =>
 const Login = lazy(() => import("./pages/Login/Login"));
 
 function App() {
+  const header = {
+    logo: {
+      url: "https://ctin.vn",
+      title: "CTIN",
+      logoUrl: "/ctin-logo-1.png",
+    },
+    navigations: [
+      {
+        text: "Manage Device",
+        url: "/device-management",
+        hasSubMenu: false,
+      },
+      {
+        text: "Manage Inventories",
+        navigations: [
+          {
+            text: "Online",
+            url: "/managementDeviceInventories",
+          },
+          {
+            text: "Offline",
+            url: "/Inventories",
+          },
+        ],
+        hasSubMenu: true,
+      },
+      {
+        text: "Instantaneous check",
+        url: "/InventoriesOnline",
+        hasSubMenu: false,
+      },
+    ],
+    profile: {
+      profileGreeting: (username) => `Hello ${username}`,
+      signOut: "Logout",
+      manageProfile: "Manage account",
+    },
+  };
+
   const isLoggedIn = !!localStorage.getItem("email");
   useEffect(() => {
     if (!isLoggedIn && window.location.pathname !== "/") {
       window.location.href = "/";
     }
   }, [isLoggedIn]);
-  return (
-    <div style={{ width: "100%" }}>
-      <Router>
-        <Routes>
-          <Route exact path="/" element={<Login />}></Route>
 
-          <Route
-            exact
-            path="/inventories"
-            element={
-              <Layout>
-                <Inventories flagOffline={true} />
-              </Layout>
-            }
-          ></Route>
-          <Route
-            exact
-            path="/inventoriesOnline"
-            element={
-              <Layout>
-                <div className="inventoriesOnline">
-                  <InventoriesOnline />
-                </div>
-              </Layout>
-            }
-          ></Route>
-          <Route
-            exact
-            path="/managementDeviceInventories"
-            element={
-              <Layout>
-                <div>
-                  <Inventories />
-                </div>
-              </Layout>
-            }
-          ></Route>
-          <Route
-            exact
-            path="/device-management"
-            element={
-              <Layout>
-                <div>
-                  <DeviceManagementPage />
-                </div>
-              </Layout>
-            }
-          ></Route>
-          <Route
-            exact
-            path="/test"
-            element={
-              <Layout>
-                <div>
-                  <ResizableDataTable />
-                </div>
-              </Layout>
-            }
-          ></Route>
-        </Routes>
-      </Router>
-    </div>
+  return (
+    <Router>
+      <Routes>
+        <Route exact path="/" element={<Login />}></Route>
+        <Route
+          exact
+          path="/inventories"
+          element={
+            <Layout header={header}>
+              <Inventories flagOffline={true} />
+            </Layout>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/inventoriesOnline"
+          element={
+            <Layout header={header}>
+              <InventoriesOnline />
+            </Layout>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/managementDeviceInventories"
+          element={
+            <Layout header={header}>
+              <Inventories />
+            </Layout>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/device-management"
+          element={
+            <Layout header={header}>
+              <DeviceManagementPage />{" "}
+            </Layout>
+          }
+        ></Route>
+      </Routes>
+    </Router>
   );
 }
 

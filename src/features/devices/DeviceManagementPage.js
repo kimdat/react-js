@@ -1,20 +1,17 @@
 import React from "react";
 import DeviceListTable from "./components/DeviceListTable";
 import styles from "./DeviceManagementPage.module.scss";
-import "./device.css";
-import {
-  MDBBtn,
-  MDBCard,
-  MDBCardBody,
-  MDBCardHeader,
-  MDBContainer,
-} from "mdb-react-ui-kit";
+import { MDBBtn, MDBCard } from "mdb-react-ui-kit";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAdd, faXmark, faPencil } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFileExcel,
+  faTrash,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
 import AddDeviceModal from "./components/AddDeviceModal";
 import {
   useDeleteDevicesMutation,
-  useGetAllDevicesQuery,
+  useLazyGetDevicesQuery,
 } from "./deviceApiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -22,19 +19,30 @@ import {
   selectFilters,
   selectAllToggle,
   selectRowToggle,
+  setCurrentPage,
+  setRowsPerPage,
+  selectTotalRowCount,
+  setFilter,
 } from "./deviceSlice";
 import { useGetAllProvincesQuery } from "../province/provinceApiSlice";
 import { useGetAllRegionsQuery } from "../region/regionApiSlice";
 import { useGetAllDeviceStatusQuery } from "../deviceStatus/deviceStatusApiSlice";
+import Swal from "sweetalert2";
+import EditDeviceModal from "./components/EditDeviceModal";
+import "../../pages/Datatable.css";
 
 const DeviceManagementPage = (props) => {
+  const [editDeviceModalOpen, setEditDeviceModalOpen] = React.useState(false);
+  const [editDeviceId, setEditDeviceId] = React.useState(null);
   //gọi api trả về các devices
-  const {
-    _,
-    isFetching: devicesFetching,
-    isError: devicesError,
-    isSuccess: devicesSuccess,
-  } = useGetAllDevicesQuery();
+  const [
+    getDevices,
+    {
+      isFetching: devicesFetching,
+      isError: devicesError,
+      isSuccess: devicesSuccess,
+    },
+  ] = useLazyGetDevicesQuery();
   const {
     data: provinces,
     isFetching: provincesFetching,
@@ -54,13 +62,18 @@ const DeviceManagementPage = (props) => {
     isSuccess: deviceStatusSuccess,
   } = useGetAllDeviceStatusQuery();
 
-  const [deleteDevices, {}] = useDeleteDevicesMutation();
+  const [
+    deleteDevices,
+    { isError: deleteDeviceError, isSuccess: deleteDeviceSuccess },
+  ] = useDeleteDevicesMutation();
 
   const isLoading =
     devicesFetching ||
     provincesFetching ||
     regionsFetching ||
     deviceStatusFetching;
+
+  //
   const isSuccess =
     devicesSuccess || provincesSuccess || regionsSuccess || deviceStatusSuccess;
   const isError =
@@ -68,82 +81,73 @@ const DeviceManagementPage = (props) => {
 
   const dispatch = useDispatch();
 
-  //sample data
-  // const devices = [
-  //     {
-  //         deviceName: "ABC-123",
-  //         ip: "10.0.0.1",
-  //         status: "U",
-  //         region: "region",
-  //         province: "province",
-  //         long: "long",
-  //         lat: "lat",
-  //         address: "address",
-  //     },
-  //     {
-  //         deviceName: "ABC-234",
-  //         ip: "10.0.0.2",
-  //         status: "M",
-  //         region: "region",
-  //         province: "province",
-  //         long: "long",
-  //         lat: "lat",
-  //         address: "address",
-  //     },
-  //     {
-  //         deviceName: "ABC-345",
-  //         ip: "10.0.0.3",
-  //         status: "U",
-  //         region: "region",
-  //         province: "province",
-  //         long: "long",
-  //         lat: "lat",
-  //         address: "address",
-  //     },
-  //     {
-  //         deviceName: "ABC-456",
-  //         ip: "10.0.0.4",
-  //         status: "U",
-  //         region: "region",
-  //         province: "province",
-  //         long: "long",
-  //         lat: "lat",
-  //         address: "address",
-  //     },
-  // ]
-
-  //page states
-
-  //reducer
   const devices = useSelector(selectDeviceList);
-  const isSelectAll = useSelector((state) => state);
-  console.log(isSelectAll);
+  const isSelectAll = useSelector((state) => state.device.isSelectAll);
   const hasNoRowSelected = devices
     ? devices.every((device) => device.isSelected === false)
     : true;
+
   const filters = useSelector(selectFilters);
-  const selectedDeviceIdList = devices
-    .filter((device) => device.isSelected === true)
-    .map((device) => device.Id);
+  const totalRowCount = useSelector(selectTotalRowCount);
+
+  React.useEffect(() => {
+    getDevices(filters);
+  }, [filters, getDevices]);
+
+  const selectedDeviceList = devices.filter(
+    (device) => device.isSelected === true
+  );
+  const selectedDeviceIdList = selectedDeviceList.map((device) => device.Id);
+  const selectedDeviceNameList = selectedDeviceList.map(
+    (device) => device.DeviceName
+  );
+  const nameListToHtmlHelper = (list) => list.toString();
+
+  const deleteDeviceHandler = () => {
+    Swal.fire({
+      title: `Do you want to delete these devices?`,
+      text: `${nameListToHtmlHelper(selectedDeviceNameList)}`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      confirmButtonColor: "#d33",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        try {
+          const deleteResult = deleteDevices(selectedDeviceIdList).unwrap();
+        } catch (err) {
+          console.log(err);
+        }
+        if (deleteDeviceSuccess) {
+          Swal.fire("Deleted!", "", "success");
+        }
+        if (deleteDeviceError) {
+          Swal.fire("Error", "");
+        }
+      }
+    });
+  };
+
+  const onRowClickHandler = (id) => {
+    setEditDeviceId(id);
+    setEditDeviceModalOpen(true);
+  };
+
+  const getDeviceById = (id) => devices.find((device) => device.Id === id);
+
   return (
-    <MDBCard className="bg-white card-name">
-      <MDBCardBody>
+    <MDBCard className="bg-white  mx-auto card-name">
+      <div className={styles.pageWrapper}>
         <div className={styles.actionsWrapper}>
           {/* action buttons */}
           <AddDeviceModal
             provinces={provinces}
             regions={regions}
             trigger={
-              <MDBBtn
-                className={styles.actionButton}
-                type="button"
-                size="sm"
-                color="primary"
-              >
+              <MDBBtn type="button" size="sm" color="primary">
                 <div className={styles.buttonIcon}>
-                  <FontAwesomeIcon icon={faAdd} />
+                  <FontAwesomeIcon icon={faPlus} />
                 </div>
-                Add
               </MDBBtn>
             }
           />
@@ -153,12 +157,21 @@ const DeviceManagementPage = (props) => {
             size="sm"
             color="danger"
             disabled={hasNoRowSelected}
-            onClick={() => deleteDevices(selectedDeviceIdList)}
+            onClick={() => deleteDeviceHandler()}
           >
             <div className={styles.buttonIcon}>
-              <FontAwesomeIcon icon={faXmark} />
+              <FontAwesomeIcon icon={faTrash} />
             </div>
-            Delete
+          </MDBBtn>
+          <MDBBtn
+            className={styles.actionButton}
+            type="button"
+            size="sm"
+            color="info"
+          >
+            <div className={styles.buttonIcon}>
+              <FontAwesomeIcon icon={faFileExcel} />
+            </div>
           </MDBBtn>
         </div>
         <div className={styles.pageContent}>
@@ -172,11 +185,27 @@ const DeviceManagementPage = (props) => {
               regions={regions}
               provinces={provinces}
               filters={filters}
+              setFilter={(value) => dispatch(setFilter(value))}
+              onRowClickHandler={onRowClickHandler}
+              currentPage={filters.currentPage}
+              rowsPerPage={filters.rowsPerPage}
+              setRowsPerPage={(value) => dispatch(setRowsPerPage(value))}
+              setCurrentPage={(value) => dispatch(setCurrentPage(value))}
+              totalRowCount={totalRowCount}
+              className={styles.table}
             />
           )}
           {isError && <div>There are no devices.</div>}
         </div>
-      </MDBCardBody>
+        <EditDeviceModal
+          provinces={provinces}
+          regions={regions}
+          open={editDeviceModalOpen}
+          setOpen={setEditDeviceModalOpen}
+          deviceId={editDeviceId}
+          device={getDeviceById(editDeviceId)}
+        />
+      </div>
     </MDBCard>
   );
 };

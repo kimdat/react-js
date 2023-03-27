@@ -8,7 +8,7 @@ export const regionApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
       transformResponse: (response) => {
-        return response.regions;
+        return response.regions.sort((a, b) => a.order - b.order);
       },
       providesTags: ["Regions"],
     }),
