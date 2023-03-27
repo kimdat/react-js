@@ -11,7 +11,37 @@ import Swale from "sweetalert2";
 import LoadingComponent from "../../../../components/LoadingComponent/LoadingComponent";
 import axios from "axios";
 import { FILED_DEVICE_ONLINE } from "./../../ConstraintDivceOnline";
-import { FILED_COLUMN_INVENTORIES } from "../../../../components/InventoriesComponent/ConstraintInventoriesComponent";
+const handleData = (deviceList, data) => {
+  const dataSuccess = [];
+  const dataFail = [];
+  const dataChildren = [];
+  let stt = 1;
+
+  deviceList.forEach((device) => {
+    const ip = device.Ip;
+    const dataInventory = data[ip];
+    const objInventories = {
+      [FILED_DEVICE_ONLINE.id]: device.id,
+      [FILED_DEVICE_ONLINE.Name]: device.DeviceName,
+    };
+
+    if (!dataInventory.Err) {
+      objInventories[FILED_DEVICE_ONLINE.No] = stt++;
+      const newInventory = dataInventory.map((item) => ({
+        ...item,
+        parentId: device.id,
+      }));
+      objInventories["children"] = newInventory;
+      dataChildren.push(...newInventory);
+      dataSuccess.push(objInventories);
+    } else {
+      dataFail.push(objInventories);
+    }
+  });
+
+  return { dataSuccess, dataFail, dataChildren };
+};
+
 const DataExecute = memo(
   forwardRef((props, ref) => {
     const [rowExpand, setRowExpand] = useState([]);
@@ -22,6 +52,7 @@ const DataExecute = memo(
     //tổng data
     const [dataAll, setDataAll] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [children, setChildren] = useState([]);
     const getExecute = async (device_list) => {
       try {
         setIsLoading(true);
@@ -31,31 +62,13 @@ const DataExecute = memo(
           "http://localhost/NETMIKO/home.py",
           formData
         );
-        console.log(data);
+
         setIsLoading(false);
-        const inventory = data;
-        const dataSuccess = [];
-        const dataFail = [];
-        let stt = 1;
-        device_list.forEach((device) => {
-          const ip = device.Ip;
-          const dataInventory = inventory[ip];
-          var children = [];
-          children = dataInventory;
-          const objInventories = {};
 
-          objInventories[FILED_DEVICE_ONLINE.id] = device.id;
-          objInventories[FILED_DEVICE_ONLINE.Name] = device.DeviceName;
-          objInventories["children"] = children;
-
-          //nếu connect success
-          if (!dataInventory.Err) {
-            objInventories[FILED_DEVICE_ONLINE.No] = stt++;
-            dataSuccess.push(objInventories);
-          } else {
-            dataFail.push(objInventories);
-          }
-        });
+        const { dataSuccess, dataFail, dataChildren } = handleData(
+          device_list,
+          data
+        );
 
         if (dataFail.length > 0) {
           const messFail = dataFail.map((i) => i[FILED_DEVICE_ONLINE.Ip]);
@@ -69,10 +82,11 @@ const DataExecute = memo(
         }
         if (dataSuccess.length > 0) {
           setSearchApiData(dataSuccess.slice(0, 10));
-          console.log(dataSuccess);
+
           setRowExpand(dataSuccess.map((item) => item.id));
           setTotalRow(dataSuccess.length);
           setDataAll(dataSuccess);
+          setChildren(dataChildren);
         } else setSearchApiData([]);
       } catch (err) {
         setSearchApiData([]);
@@ -104,6 +118,7 @@ const DataExecute = memo(
                 rowExpand={rowExpand}
                 setRowExpand={setRowExpand}
                 dataAll={dataAll}
+                children={children}
               />
             </div>
           )}

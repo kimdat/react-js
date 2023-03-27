@@ -34,10 +34,10 @@ const InventoriesOnline = () => {
 
     const rowCheck = checkedRow.map((item) => {
       return {
-        id: item[FILED_DEVICE_ONLINE.id],
-        device_type_S: item[FILED_DEVICE_ONLINE.Device_type_S],
-        Ip: item[FILED_DEVICE_ONLINE.Ip],
-        DeviceName: item[FILED_DEVICE_ONLINE.Name],
+        id: item[FILED_DEVICE_ONLINE.id].trim(),
+        device_type_S: item[FILED_DEVICE_ONLINE.Device_type_S].trim(),
+        Ip: item[FILED_DEVICE_ONLINE.Ip].trim(),
+        DeviceName: item[FILED_DEVICE_ONLINE.Name].trim(),
         port: 22,
         username: "epnm",
         password: "epnm@890!",
