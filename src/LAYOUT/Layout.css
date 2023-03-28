@@ -1,6 +1,6 @@
 .card-name,.card-header {
 
-  border-radius: 0px;
+  border-radius: 0px!important;
   margin: 0px !important;
   padding: 0px !important;
 }
