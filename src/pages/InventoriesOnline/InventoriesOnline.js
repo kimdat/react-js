@@ -44,7 +44,7 @@ const InventoriesOnline = () => {
     <div className="instanteousCheck">
       <MDBRow style={{ marginTop: "10px" }}>
         <MDBCol md="4">
-          <MDBCard className="card-name">
+          <MDBCard className="card-name card-body-class">
             <MDBCardBody>
               <div
                 style={{
@@ -63,7 +63,7 @@ const InventoriesOnline = () => {
           </MDBCard>
         </MDBCol>
         <MDBCol md="8">
-          <MDBCard className="card-name">
+          <MDBCard className="card-name card-body-class">
             <MDBCardBody>
               <DataExecute ref={childRef}></DataExecute>
             </MDBCardBody>

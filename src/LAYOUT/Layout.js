@@ -4,28 +4,31 @@ import { MDBCard, MDBCardHeader, MDBContainer } from "mdb-react-ui-kit";
 import styles from "./Layout.module.scss";
 import "./Layout.css";
 function Layout(props) {
-  const { header } = props;
+  const { header, title } = props;
   return (
     <div className={styles.pageWrapper}>
       {/* Include footer or any other common elements */}
-
       <Header
         logo={header.logo}
         navigations={header.navigations}
         profile={header.profile}
         className={styles.mainHead}
       />
-      <div>
-        <MDBContainer fluid style={{ padding: "1rem" }}>
-          <MDBCard className="bg-white mx-auto card-header">
-            <MDBCardHeader className="headerCard-name">
-              DEVICE INVENTORY
-            </MDBCardHeader>
-          </MDBCard>
-          <div style={{ marginTop: "10px" }}></div>
-          <div className="bodyChildren">{props.children}</div>
-        </MDBContainer>
-      </div>
+      {title && (
+        <div className="main">
+          <div className={styles.content}>
+            <MDBContainer fluid style={{ padding: "1rem" }}>
+              <MDBCard className="bg-white mx-auto card-header">
+                <MDBCardHeader className="headerCard-name">
+                  {title}
+                </MDBCardHeader>
+              </MDBCard>
+              <div style={{ marginTop: "10px" }}></div>
+              <div>{props.children}</div>
+            </MDBContainer>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </div>

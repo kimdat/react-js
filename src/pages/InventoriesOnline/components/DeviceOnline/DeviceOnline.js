@@ -235,9 +235,7 @@ const DevicesOnlineChild = memo(
           <DataTable
             dense={true}
             data={data}
-            fixedHeader={true}
             columns={columns}
-            fixedHeaderScrollHeight="400px"
             responsive={true}
             highlightOnHover
             striped

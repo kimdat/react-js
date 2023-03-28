@@ -1,12 +1,12 @@
 .my-custom-data-table .rdt_TableHeadRow {
   font-weight: 700 !important;
     vertical-align: middle !important;
-    position: sticky;
+
 
   }
   .my-custom-data-table .rdt_TableCol,.my-custom-data-table .rdt_TableCell{
     padding: 0 !important;
-    padding-left:10px!important;
+    padding-left:8px!important;
 }
  .my-custom-data-table .rdt_TableCell div {
     white-space: normal!important;
@@ -19,7 +19,6 @@
   }
 
   .my-custom-data-table .tableChild  {
-
     overflow-y: auto!important;
      max-height:300px;
 
@@ -27,8 +26,9 @@
 .my-custom-data-table .rdt_TableCol:not(:first-child) {
    resize: horizontal;
    overflow-x: auto;
-    
+   position: sticky;
   }
+
 .my-custom-data-table {
       font-size: 0.9em;
       flex-wrap: nowrap;
@@ -59,7 +59,12 @@
 .instanteousCheck .row{
   --mdb-gutter-x:0.55rem
 }
-.inventories > div >.rdt_Table >.rdt_TableBody{
- height: calc(100vh - 380px);
+.my-custom-data-table > div >.rdt_Table >.rdt_TableBody{
+  height: calc(100vh - 380px);
   overflow-y: auto;
+}
+
+
+.card-body-class{
+  height: calc(100vh - 180px);
 }

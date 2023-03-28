@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo } from "react";
 import DataTable from "react-data-table-component";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 
 import {
   faChevronDown,
@@ -20,9 +20,37 @@ import {
   TITLE_COLUMN__FILTER_INVENTORIES,
   WIDTH_COLUMN_INVENTORIES,
 } from "./ConstraintInventoriesComponent";
-
+import Pagination from "../common/Pagination";
+import styles from "./../../features/devices/components/DeviceListTable/DeviceListTable.module.scss";
 const resize = (column, width) => {
   column.style.width = `${width}px`;
+};
+const fncResizeColumn = () => {
+  const classTable = document.querySelector(".table-wrapper");
+
+  const resizableColumns = classTable.querySelectorAll(".rdt_TableCol");
+
+  const width = parseInt(window.getComputedStyle(classTable).width);
+  const widthLastCol =
+    (width * parseInt(WIDTH_COLUMN_INVENTORIES.CDESC, 10)) / 100;
+  //resize col cuối
+  resize(resizableColumns[resizableColumns.length - 1], widthLastCol);
+  //Bỏ đi width col cuối cùng
+  let widthOtherCol = width - widthLastCol;
+  const data = WIDTH_COLUMN_INVENTORIES;
+  const emptyKeys = Object.keys(data).reduce(function (acc, key, index) {
+    if (data[key] === "") {
+      acc.push(index);
+    } else {
+      widthOtherCol -= parseInt(data[key]);
+    }
+    return acc;
+  }, []);
+
+  const widthResize = widthOtherCol / emptyKeys.length;
+  emptyKeys.forEach(function (index) {
+    resize(resizableColumns[index], widthResize);
+  });
 };
 const InventoriesComponent = React.memo(
   ({
@@ -46,34 +74,17 @@ const InventoriesComponent = React.memo(
     setIsExpandedAll = () => {},
     rowExpand = [],
     setRowExpand = () => {},
+    setCurrentPage = () => {},
   }) => {
     useEffect(() => {
-      const classTable = document.querySelector(".table-wrapper");
-
-      const resizableColumns = classTable.querySelectorAll(".rdt_TableCol");
-
-      const width = parseInt(window.getComputedStyle(classTable).width);
-      const widthLastCol =
-        (width * parseInt(WIDTH_COLUMN_INVENTORIES.CDESC, 10)) / 100;
-      //resize col cuối
-      resize(resizableColumns[resizableColumns.length - 1], widthLastCol);
-      //Bỏ đi width col cuối cùng
-      let widthOtherCol = width - widthLastCol;
-      const data = WIDTH_COLUMN_INVENTORIES;
-      const emptyKeys = Object.keys(data).reduce(function (acc, key, index) {
-        if (data[key] === "") {
-          acc.push(index);
-        } else {
-          widthOtherCol -= parseInt(data[key]);
-        }
-        return acc;
-      }, []);
-
-      const widthResize = widthOtherCol / emptyKeys.length;
-      emptyKeys.forEach(function (index) {
-        resize(resizableColumns[index], widthResize);
-      });
+      fncResizeColumn();
     }, []);
+    useEffect(() => {
+      const container = document.getElementsByClassName("rdt_TableBody");
+      console.log(container);
+      console.log(container[0].clientHeight);
+      console.log(container[0].scrollHeight);
+    }, [searchApiData]);
     //xử lý đóng/mở  con từng dòng
     const toggleRowDetails = useCallback(
       async (row) => {
@@ -279,7 +290,25 @@ const InventoriesComponent = React.memo(
       ({ data: { children } }) => <ExpandableRowLazyComponent row={children} />,
       []
     );
-
+    const PageSizeSelector = useCallback((props) => {
+      const { onsizeChange, pageSizes } = props;
+      return (
+        <Form.Group className={styles.pageSizeSelectorWrapper}>
+          <label htmlFor="page-selector">Rows per page:</label>
+          <Form.Select
+            id="page-selector"
+            size="sm"
+            onChange={(e) => onsizeChange(e.target.value)}
+          >
+            {pageSizes.map((size, idx) => (
+              <option key={idx} value={size}>
+                {size}
+              </option>
+            ))}
+          </Form.Select>
+        </Form.Group>
+      );
+    }, []);
     return (
       <div>
         <div style={{ marginBottom: "20px" }}>
@@ -316,10 +345,7 @@ const InventoriesComponent = React.memo(
             columns={columns}
             data={searchApiData}
             expandableRows
-            pagination
-            paginationServer
             onChangePage={handlePageChange}
-            onChangeRowsPerPage={handleRowsPerPageChange}
             expandableRowsHideExpander
             expandableRowExpanded={(row) =>
               rowExpand.some((item) => item === row.id)
@@ -329,6 +355,20 @@ const InventoriesComponent = React.memo(
             expandableRowsComponent={expandableRowsComponent}
             className="my-custom-data-table inventories"
             striped
+          />
+        </div>
+        <div className={styles.paginationWrapper} style={{ margin: "0px  " }}>
+          <PageSizeSelector
+            onsizeChange={handleRowsPerPageChange}
+            pageSizes={[10, 15, 20, 25, 30]}
+          />
+          <Pagination
+            className={styles.pagination}
+            onPageChange={setCurrentPage}
+            totalCount={totalRow}
+            siblingCount={0}
+            currentPage={currentPage}
+            pageSize={rowsPerPage}
           />
         </div>
       </div>

@@ -136,7 +136,7 @@ const DeviceManagementPage = (props) => {
   const getDeviceById = (id) => devices.find((device) => device.Id === id);
 
   return (
-    <MDBCard className="bg-white  mx-auto card-name">
+    <MDBCard className="bg-white  mx-auto card-name card-body-class">
       <div className={styles.pageWrapper}>
         <div className={styles.actionsWrapper}>
           {/* action buttons */}

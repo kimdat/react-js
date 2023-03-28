@@ -67,7 +67,7 @@ function App() {
           exact
           path="/inventories"
           element={
-            <Layout header={header}>
+            <Layout header={header} title="DEVICE INVENTORY">
               <Inventories flagOffline={true} />
             </Layout>
           }
@@ -76,7 +76,7 @@ function App() {
           exact
           path="/inventoriesOnline"
           element={
-            <Layout header={header}>
+            <Layout header={header} title="INSTANTANEOUS CHECK">
               <InventoriesOnline />
             </Layout>
           }
@@ -85,7 +85,7 @@ function App() {
           exact
           path="/managementDeviceInventories"
           element={
-            <Layout header={header}>
+            <Layout header={header} title="DEVICE INVENTORY">
               <Inventories />
             </Layout>
           }
@@ -94,8 +94,8 @@ function App() {
           exact
           path="/device-management"
           element={
-            <Layout header={header}>
-              <DeviceManagementPage />{" "}
+            <Layout header={header} title="DEVICE MANAGE">
+              <DeviceManagementPage />
             </Layout>
           }
         ></Route>
