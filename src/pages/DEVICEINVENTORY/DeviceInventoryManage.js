@@ -3,8 +3,6 @@ import React, { useState, useRef, useCallback, useEffect } from "react";
 import Swale from "sweetalert2";
 import { api } from "../../Interceptor";
 
-import { MDBCardHeader, MDBContainer } from "mdb-react-ui-kit";
-
 import { MDBCard } from "mdb-react-ui-kit";
 import { MDBCardBody } from "mdb-react-ui-kit";
 import ExportExcel from "../../components/ExportExcel/ExportExcel";
@@ -58,6 +56,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
   const [checkAll, setCheckAll] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPageRef = useRef(10);
+
   const [totalRow, setToTalRow] = useState(data.total_row);
   const [isLoading, setIsLoading] = useState(false);
   const [rowExpand, setRowExpand] = useState([]);
@@ -104,25 +103,28 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
     setCheckAll(false);
   }, []);
   //api lấy data khi expand all
-  const getExpandAll = useCallback(async () => {
-    // gọi API để lấy dữ liệu con
-    try {
-      setIsLoading(true);
-      const formData = new FormData();
-      formData.append("searchapidata", JSON.stringify(searchApiData));
-      const urlFilterData = `${API_URL}expandAll`;
-      const { data } = await api.post(urlFilterData, formData);
-      if (data.Err) {
-        throw data.Err;
+  const getExpandAll = useCallback(
+    async (dataPar = searchApiData) => {
+      // gọi API để lấy dữ liệu con
+      try {
+        setIsLoading(true);
+        const formData = new FormData();
+        formData.append("searchapidata", JSON.stringify(dataPar));
+        const urlFilterData = `${API_URL}expandAll`;
+        const { data } = await api.post(urlFilterData, formData);
+        if (data.Err) {
+          throw data.Err;
+        }
+        setIsLoading(false);
+        console.log(data);
+        return data;
+      } catch (err) {
+        setIsLoading(false);
+        swaleError(err, "getExpandAll() ");
       }
-      setIsLoading(false);
-      console.log(data);
-      return data;
-    } catch (err) {
-      setIsLoading(false);
-      swaleError(err, "getExpandAll() ");
-    }
-  }, [searchApiData]);
+    },
+    [searchApiData]
+  );
   //api lấy từng thằng con
   const getChildren = useCallback(async (row) => {
     // gọi API để lấy dữ liệu con
@@ -216,25 +218,29 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
   }, [updateState]);
   const debouncedPageChange = useRef(null);
   const handleChangeTable = useCallback(
-    (page, rowPage) => {
+    async (page, rowPage) => {
       const start = (page - 1) * rowPage;
       const end = (page - 1) * rowPage + rowPage;
       const newData = dataFilterNotPag.slice(start, end);
+
       //nếu  được  expandall
       if (!isExpandedAll) {
         const allHaveChildren = newData.every((item) =>
           item.hasOwnProperty("children")
         );
+        setRowExpand(newData.map((item) => item.id));
         //nếu chưa có children thì searh
         if (!allHaveChildren) {
-          dataFilter(filterTextRef.current, inputRef.current, page, rowPage);
+          const dataExpandAll = await getExpandAll(newData);
+          console.log(dataExpandAll);
+          setSearchApiData(dataExpandAll);
           return;
+          // dataFilter(filterTextRef.current, inputRef.current, page, rowPage);
         }
-        setRowExpand(newData.map((item) => item.id));
       }
       setSearchApiData(newData);
     },
-    [dataFilterNotPag, isExpandedAll, dataFilter]
+    [dataFilterNotPag, isExpandedAll, getExpandAll]
   );
   const handlePageChange = useCallback(
     (page) => {
@@ -354,6 +360,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
                   searchApiData={searchApiData}
                   setSearchApiData={setSearchApiData}
                   isExpandedAll={isExpandedAll}
+                  setCurrentPage={setCurrentPage}
                   setIsExpandedAll={setIsExpandedAll}
                   rowExpand={rowExpand}
                   setRowExpand={setRowExpand}

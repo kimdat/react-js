@@ -8,7 +8,6 @@ function Layout(props) {
   return (
     <div className={styles.pageWrapper}>
       {/* Include footer or any other common elements */}
-
       <Header
         logo={header.logo}
         navigations={header.navigations}

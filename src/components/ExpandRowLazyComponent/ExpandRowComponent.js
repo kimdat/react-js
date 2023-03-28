@@ -51,6 +51,7 @@ const ExpandRowComponent = React.memo(({ row }) => {
         data={row}
         responsive={true}
         columns={columnsChild}
+        className="expandRowClass"
       ></DataTable>
     </div>
   );
