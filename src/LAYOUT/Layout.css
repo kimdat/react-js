@@ -1,16 +1,15 @@
-.card-name,.card-header {
-
+.card-name {
+  position: static;
   border-radius: 0px!important;
   margin: 0px !important;
   padding: 0px !important;
+
 }
-.card-name{
-  position: static;
-}
+
 .headerCard-name {
   align-items: center;
   text-align: center;
   font-size: 24px;
  
-
+  border-bottom-color: white!important;
 }

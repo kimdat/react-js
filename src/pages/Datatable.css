@@ -45,7 +45,7 @@
   --mdb-gutter-x:0.55rem
 }
 .my-custom-data-table > div >.rdt_Table >.rdt_TableBody{
-  height: calc(100vh - 380px);
+  height: calc(100vh - 350px);
   overflow-y: auto;
 }
 
@@ -56,4 +56,7 @@
 }
 .inventoriesOnline .rdt_TableCol:first-child ,.inventoriesOnline  .rdt_TableCell:first-child {
   display: none;
+}
+.expandRowClass   .rdt_TableCell:not(:first-child ) {
+  padding-left: 18px!important;
 }

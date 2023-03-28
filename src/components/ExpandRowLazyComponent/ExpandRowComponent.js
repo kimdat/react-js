@@ -1,21 +1,12 @@
 import React, { useMemo } from "react";
-import { useEffect } from "react";
+
 import DataTable from "react-data-table-component";
 import {
   FILED_Expand_Row_Component,
   WIDTH_COLUMN_Expand_Row_Component,
 } from "./ConstraintExpandRowComponent";
-const paddingWhenScroll = () => {
-  const expandRow = document
-    .querySelector(".expandRowClass")
-    .querySelectorAll(".rdt_TableBody")[0];
-  console.log(expandRow.offsetHeight);
-  console.log(expandRow.style.height);
-};
+
 const ExpandRowComponent = React.memo(({ row }) => {
-  useEffect(() => {
-    paddingWhenScroll();
-  }, []);
   const columnsChild = useMemo(
     () => [
       {

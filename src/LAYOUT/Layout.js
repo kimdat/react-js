@@ -18,7 +18,7 @@ function Layout(props) {
         <div className="main">
           <div className={styles.content}>
             <MDBContainer fluid style={{ padding: "1rem" }}>
-              <MDBCard className="bg-white mx-auto card-header">
+              <MDBCard className="bg-white mx-auto card-name">
                 <MDBCardHeader className="headerCard-name">
                   {title}
                 </MDBCardHeader>
