@@ -8,13 +8,13 @@ import useFormValidator from "../../../../hooks/useFormValidator";
 import LoadingComponent from "./../../../../components/LoadingComponent/LoadingComponent";
 import { useInputs } from "../../../../hooks/useInputs";
 import { fieldNames, deviceSchema } from "../../data/constants";
+import { useLazyGetProvincesQuery } from "../../../province/provinceApiSlice";
 
 const DeviceModal = (props) => {
   const {
     open,
     setOpen,
     trigger,
-    provinces,
     regions,
     title,
     actionButton,
@@ -28,6 +28,25 @@ const DeviceModal = (props) => {
   } = props;
 
   const [inputs, setInputs, getAllInputs, resetInputs] = useInputs(Object.values(fieldNames), device);
+
+  const [getProvinces] = useLazyGetProvincesQuery();
+
+  const regionId = inputs(fieldNames.REGION_ID);
+  const [provinces, setProvinces] = React.useState([]);
+  React.useEffect(() => {
+    if (open && regionId) {
+      const fetchData = async () => {
+        let provinces = [];
+        let params = {};
+        if (regionId) {
+          params[fieldNames.REGION_ID] = regionId;
+        }
+        provinces = await getProvinces(params).unwrap();
+        setProvinces(provinces);
+      }
+      fetchData();
+    }
+  }, [regionId, getProvinces, open]);
 
   const [isIpDuplicate, setIsIpDuplicate] = React.useState(false);
   const [isDeviceNameDuplicate, setIsDeviceNameDuplicate] = React.useState(false);

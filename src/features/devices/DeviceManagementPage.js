@@ -98,9 +98,11 @@ const DeviceManagementPage = (props) => {
   React.useEffect(() => {
     const fetchData = async () => {
       let provinces = [];
-      provinces = await getProvinces({
-        [fieldNames.REGION_ID]: regionId
-      }).unwrap();
+      let params = {};
+      if (regionId) {
+        params[fieldNames.REGION_ID] = regionId;
+      }
+      provinces = await getProvinces(params).unwrap();
       setProvinces(provinces);
     }
     fetchData();
@@ -148,7 +150,6 @@ const DeviceManagementPage = (props) => {
       <div className={styles.actionsWrapper}>
         {/* action buttons */}
         <AddDeviceModal
-          provinces={provinces}
           regions={regions}
           trigger={
             <MDBBtn
@@ -209,7 +210,6 @@ const DeviceManagementPage = (props) => {
         {isError && <div>There are no devices.</div>}
       </div>
       <EditDeviceModal
-        provinces={provinces}
         regions={regions}
         open={editDeviceModalOpen}
         setOpen={setEditDeviceModalOpen}

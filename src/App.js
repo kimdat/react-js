@@ -59,7 +59,7 @@ function App() {
       return location.pathname === item.url;
     });
     setPageTitle(title.text);
-  });
+  }, []);
 
   return (
     <Layout header={header} title={pageTitle}>
