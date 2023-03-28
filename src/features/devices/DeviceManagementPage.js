@@ -1,7 +1,7 @@
 import React from "react";
 import DeviceListTable from "./components/DeviceListTable";
 import styles from "./DeviceManagementPage.module.scss";
-import { MDBBtn, MDBCard } from "mdb-react-ui-kit";
+import { MDBBtn } from "mdb-react-ui-kit";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFileExcel,
@@ -11,6 +11,7 @@ import {
 import AddDeviceModal from "./components/AddDeviceModal";
 import {
   useDeleteDevicesMutation,
+  useLazyExportDevicesToFileQuery,
   useLazyGetDevicesQuery,
 } from "./deviceApiSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -68,6 +69,8 @@ const DeviceManagementPage = (props) => {
     deleteDevices,
     { isError: deleteDeviceError, isSuccess: deleteDeviceSuccess },
   ] = useDeleteDevicesMutation();
+
+  const [exportDevicesToFile] = useLazyExportDevicesToFileQuery();
 
   const isLoading =
     devicesFetching ||
@@ -147,8 +150,11 @@ const DeviceManagementPage = (props) => {
 
   const getDeviceById = (id) => devices.find((device) => device.Id === id);
 
+  const onExportDevices = async () => {
+    await exportDevicesToFile().unwrap();
+  }
+
   return (
-    <MDBCard className="bg-white  mx-auto card-name">
       <div className={styles.pageWrapper}>
         <div className={styles.actionsWrapper}>
           {/* action buttons */}
@@ -179,7 +185,8 @@ const DeviceManagementPage = (props) => {
             className={styles.actionButton}
             type="button"
             size="sm"
-            color="info"
+          color="info"
+          onClick={() => onExportDevices()}
           >
             <div className={styles.buttonIcon}>
               <FontAwesomeIcon icon={faFileExcel} />
@@ -218,7 +225,6 @@ const DeviceManagementPage = (props) => {
           device={getDeviceById(editDeviceId)}
         />
       </div>
-    </MDBCard>
   );
 };
 

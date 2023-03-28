@@ -55,9 +55,6 @@ export const deviceApiSlice = apiSlice.injectEndpoints({
       transformResponse: (response) => {
         return response?.duplicate === true;
       },
-      transformResponse: (response) => {
-        return response?.duplicate === true;
-      },
     }),
     deleteDevices: builder.mutation({
       query: (deviceIdList) => ({
@@ -69,6 +66,32 @@ export const deviceApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Devices"],
     }),
+    exportDevicesToFile: builder.query({
+      queryFn: async (_, __, ___, baseQuery) => {
+        const result = await baseQuery({
+          url: 'api/devices/export',
+          responseHandler: ((response) => response.blob()),
+        });
+
+        //create object url
+        var hiddenElement = document.createElement('a');
+        var url = window.URL || window.webkitURL;
+        var blob = url.createObjectURL(result.data);
+        hiddenElement.href = blob;
+        hiddenElement.target = '_blank';
+
+        //get date and time
+        var today = new Date();
+        var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        var time = today.getHours() + "-" + today.getMinutes() + "-" + today.getSeconds();
+        
+        //file name
+        hiddenElement.download = `devices-${date}-${time}.xlsx`;
+
+        hiddenElement.click();
+        return { data: null }
+      }
+    }),
   }),
 });
 
@@ -78,4 +101,5 @@ export const {
   useDeleteDevicesMutation,
   useLazyCheckDuplicateQuery,
   useEditDeviceMutation,
+  useLazyExportDevicesToFileQuery,
 } = deviceApiSlice;

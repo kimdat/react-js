@@ -193,7 +193,6 @@ const DeviceListTable = (props) => {
 
   return (
     <>
-      <MDBCardBody className={styles.cardBody}>
         <MDBTable
           striped
           small
@@ -259,7 +258,7 @@ const DeviceListTable = (props) => {
               ))}
             </tr>
           </MDBTableHead>
-          <MDBTableBody className={styles.tableBody}>
+          <MDBTableBody className={styles.deviceListTableBody}>
             {rows.length === 0 && (
               <tr>
                 <td
@@ -336,7 +335,6 @@ const DeviceListTable = (props) => {
             pageSize={rowsPerPage}
           />
         </div>
-      </MDBCardBody>
     </>
   );
 };

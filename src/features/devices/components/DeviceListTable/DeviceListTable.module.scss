@@ -1,8 +1,8 @@
 .deviceListTable {
-    max-width: fit-content;
+    display: block;
     overflow-x: auto;
+    overflow-y: auto;
     white-space: nowrap;
-    // height: 75vh;
     margin-bottom: 0 !important;
 
     th {
@@ -18,12 +18,9 @@
 .deviceListTableHead {
     height: 5rem;
     vertical-align: middle !important;
-    position: sticky;
-
-    // tr {
-    //     position: fixed;
-    // }
 }
+
+.deviceListTableBody {}
 
 .deviceListTableCol {
     resize: horizontal;
