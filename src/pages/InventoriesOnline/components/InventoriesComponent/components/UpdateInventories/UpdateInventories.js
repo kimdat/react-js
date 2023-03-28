@@ -12,16 +12,16 @@ const UpdateInventories = React.memo((props) => {
     console.log(data);
     const names = data.map((item) => item.Name);
     const result = await Swal.fire({
-      title: "confirmUpdate!Are you sure update  inventories for devices?",
-      icon: "error",
+      title: `Do you want to update these devices?`,
+
+      icon: "question",
       html: `<div style="max-height:300px;overflow-y:auto"><div >${names.join(
         "<br/>"
       )}</div></div>`,
+
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
       confirmButtonText: "Yes",
-      cancelButtonText: "No",
+      confirmButtonColor: "#d33",
     });
     return result.isConfirmed;
   }, [data]);

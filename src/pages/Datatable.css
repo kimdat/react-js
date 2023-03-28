@@ -18,11 +18,7 @@
 
   }
 
-  .my-custom-data-table .tableChild  {
-    overflow-y: auto!important;
-     max-height:300px;
 
-  } 
 .my-custom-data-table .rdt_TableCol:not(:first-child) {
    resize: horizontal;
    overflow-x: auto;
@@ -44,18 +40,7 @@
 .my-custom-data-table  .rdt_TableCol{
   min-width: none!important;
 }
-.card-name{
-  position: static;
-  border-radius: 0px;
-  margin: 0px!important;
-  padding: 0px!important;
-}
-.headerCard-name {
-  align-items: center;
-  text-align: center;
-  font-size: 24px;
-  
-}
+
 .instanteousCheck .row{
   --mdb-gutter-x:0.55rem
 }
@@ -66,5 +51,9 @@
 
 
 .card-body-class{
-  height: calc(100vh - 180px);
+  height: calc(100vh - 150px);
+ 
+}
+.inventoriesOnline .rdt_TableCol:first-child ,.inventoriesOnline  .rdt_TableCell:first-child {
+  display: none;
 }

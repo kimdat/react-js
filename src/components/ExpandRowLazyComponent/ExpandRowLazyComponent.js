@@ -5,7 +5,7 @@ const ExpandableRowLazyComponent = React.memo(({ row }) => {
     () => React.lazy(() => import("./ExpandRowComponent")),
     []
   );
-
+ 
   return (
     <Suspense fallback={<div style={{ textAlign: "center" }}>Loading...</div>}>
       <ExpandRowComponent row={row} />

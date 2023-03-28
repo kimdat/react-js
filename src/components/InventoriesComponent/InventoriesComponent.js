@@ -81,7 +81,7 @@ const InventoriesComponent = React.memo(
     }, []);
     useEffect(() => {
       const container = document.getElementsByClassName("rdt_TableBody");
-      console.log(container);
+
       console.log(container[0].clientHeight);
       console.log(container[0].scrollHeight);
     }, [searchApiData]);

@@ -339,7 +339,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
             <DeleteRow loadData={loadDataChild} rowsId={checkedRows} />
           )}
         </div>
-        <div>
+        <div className={!flagOffline ? "inventoriesOnline" : ""}>
           <LoadingComponent isLoading={isLoading}>
             {searchApiData.length > 0 && (
               <div className="manageDeviceInventory">
