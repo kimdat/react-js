@@ -21,6 +21,7 @@ const handleData = (deviceList, data) => {
     const ip = device.Ip;
     const dataInventory = data[ip];
     const objInventories = {
+      [FILED_DEVICE_ONLINE.Ip]: ip,
       [FILED_DEVICE_ONLINE.id]: device.id,
       [FILED_DEVICE_ONLINE.Name]: device.DeviceName,
     };
