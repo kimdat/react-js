@@ -45,13 +45,13 @@
   --mdb-gutter-x:0.55rem
 }
 .my-custom-data-table > div >.rdt_Table >.rdt_TableBody{
-  height: calc(100vh - 350px);
+  height: calc(100vh - 375px);
   overflow-y: auto;
 }
 
 
 .card-body-class{
-  height: calc(100vh - 150px);
+  height: calc(100vh - 175px);
  
 }
 .inventoriesOnline .rdt_TableCol:first-child ,.inventoriesOnline  .rdt_TableCell:first-child {
