@@ -48,7 +48,7 @@ export const deviceSchema = Yup.object().shape({
     [fieldNames.IP]: Yup.string().required("IP address is required.").matches(ipAddrRegExp, 'IP address is invalid.'),
     [fieldNames.DEVICE_TYPE]: Yup.string().required("Device type is required."),
     [fieldNames.REGION_ID]: Yup.string().required("Region is required."),
-    [fieldNames.PROVINCE_ID]: Yup.string().required("Province type is required."),
+    [fieldNames.PROVINCE_ID]: Yup.string().required("Province is required."),
     [fieldNames.LONG]: Yup.string(),
     [fieldNames.LAT]: Yup.string(),
     [fieldNames.ADDRESS]: Yup.string(),

@@ -1,8 +1,13 @@
-.card-name {
-    position: static;
+.card-name,
+.card-header {
+
     border-radius: 0px;
     margin: 0px !important;
     padding: 0px !important;
+}
+
+.card-name {
+    position: static;
 }
 
 .headerCard-name {

@@ -59,16 +59,20 @@ const DeviceModal = (props) => {
     //validation
     const data = await validate(getAllInputs());
     if (data === null) return;
-    
+
     //duplicate check
     if (hasDuplicateValidation) {
-      const isDeviceNameDuplicate = await checkDuplicate({ deviceName: inputs(fieldNames.DEVICE_NAME) }).unwrap();
+      const isDeviceNameDuplicate = await checkDuplicate({
+        deviceName: inputs(fieldNames.DEVICE_NAME),
+      }).unwrap();
       setIsDeviceNameDuplicate(isDeviceNameDuplicate);
       if (isDeviceNameDuplicate) {
         return;
       }
 
-      const isIpDuplicate = await checkDuplicate({ ip: inputs(fieldNames.IP) }).unwrap();
+      const isIpDuplicate = await checkDuplicate({
+        ip: inputs(fieldNames.IP),
+      }).unwrap();
       setIsIpDuplicate(isIpDuplicate);
       if (isIpDuplicate) {
         return;
@@ -80,18 +84,19 @@ const DeviceModal = (props) => {
       const res = await actionFunc(data).unwrap();
       console.log(res);
       alertMessageFire("success", res.message ? res.message : "Done!");
-      
     } catch (err) {
       console.log(err);
-      alertMessageFire("error", err.message? err.message : "There was an error.");
+      alertMessageFire(
+        "error",
+        err.message ? err.message : "There was an error."
+      );
     }
-    resetValidator();
   };
 
   const setDuplicateStatesToDefault = () => {
     setIsDeviceNameDuplicate(false);
     setIsIpDuplicate(false);
-  }
+  };
 
   React.useEffect(() => {
     resetInputs();
@@ -112,7 +117,7 @@ const DeviceModal = (props) => {
       }
     }
     return errors(fieldName);
-  }
+  };
 
   const deviceTexts = (fieldName) => {
     //check duplicate
@@ -125,7 +130,7 @@ const DeviceModal = (props) => {
       }
     }
     return texts(fieldName);
-  }
+  };
 
   return (
     <LoadingComponent isLoading={isLoading}>

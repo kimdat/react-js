@@ -324,10 +324,6 @@ const InventoriesComponent = React.memo(
             expandableRowExpanded={(row) =>
               rowExpand.some((item) => item === row.id)
             }
-            inputProps={{
-              style: { fontSize: "14px", width: "200px" },
-              className: "custom-search-input",
-            }}
             responsive={true}
             dense={true}
             expandableRowsComponent={expandableRowsComponent}

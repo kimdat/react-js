@@ -1,10 +1,7 @@
-import React from 'react';
+import React from "react";
 
 const Breadcrumb = () => {
-    return (
-        <>
-        </>
-    );
-}
+  return <></>;
+};
 
 export default Breadcrumb;

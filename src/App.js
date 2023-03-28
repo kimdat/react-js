@@ -3,7 +3,6 @@ import { Routes, Route, useLocation } from "react-router-dom";
 
 import Layout from "./LAYOUT/Layout.js";
 import DeviceManagementPage from "./features/devices/DeviceManagementPage";
-import ResizableDataTable from "./pages/Inventories1";
 
 const Inventories = lazy(() =>
   import("./pages/DEVICEINVENTORY/DeviceInventoryManage")
@@ -85,11 +84,11 @@ function App() {
             path="/device-management"
             element={<DeviceManagementPage />}
           ></Route>
-          <Route
+          {/* <Route
             exact
             path="/test"
             element={<ResizableDataTable />}
-          ></Route>
+          ></Route> */}
         </Routes>
     </Layout>
   );

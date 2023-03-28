@@ -6,7 +6,7 @@ export const deviceApiSlice = apiSlice.injectEndpoints({
       query: (params) => ({
         url: "api/devices",
         method: "GET",
-        params: {...params}
+        params: { ...params },
       }),
       transformResponse: (response) => {
         return {
@@ -51,6 +51,9 @@ export const deviceApiSlice = apiSlice.injectEndpoints({
           method: "POST",
           body: formData,
         });
+      },
+      transformResponse: (response) => {
+        return response?.duplicate === true;
       },
       transformResponse: (response) => {
         return response?.duplicate === true;

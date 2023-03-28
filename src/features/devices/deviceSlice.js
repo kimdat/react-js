@@ -61,7 +61,7 @@ const deviceSlice = createSlice({
             isSelected: false,
           };
         });
-        state.totalRowCount = action.payload.totalRowCount
+        state.totalRowCount = action.payload.totalRowCount;
       }
     );
   },

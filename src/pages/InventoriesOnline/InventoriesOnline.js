@@ -1,12 +1,4 @@
-import {
-  MDBBtn,
-  MDBCard,
-  MDBCardBody,
-  MDBCardHeader,
-  MDBCol,
-  MDBContainer,
-  MDBRow,
-} from "mdb-react-ui-kit";
+import { MDBBtn, MDBCard, MDBCardBody, MDBCol, MDBRow } from "mdb-react-ui-kit";
 import React, { createRef } from "react";
 
 import DataExecute from "./components/DataExecute/DataExecute";
