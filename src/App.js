@@ -1,5 +1,5 @@
 import React, { useEffect, lazy } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Outlet } from "react-router-dom";
 
 import Layout from "./LAYOUT/Layout.js";
 import DeviceManagementPage from "./features/devices/DeviceManagementPage";
@@ -57,40 +57,40 @@ function App() {
     const title = header.navigations?.find((item) => {
       return location.pathname === item.url;
     });
-    setPageTitle(title.text);
+    setPageTitle(title?.text);
   }, []);
 
   return (
-    <Layout header={header} title={pageTitle}>
-        <Routes>
-          <Route exact path="/" element={<Login />}></Route>
-          <Route
-            exact
-            path="/inventories"
-            element={<Inventories flagOffline={true} />}
-          ></Route>
-          <Route
-            exact
-            path="/inventoriesOnline"
-            element={<InventoriesOnline />}
-          ></Route>
-          <Route
-            exact
-            path="/managementDeviceInventories"
-            element={<Inventories />}
-          ></Route>
-          <Route
-            exact
-            path="/device-management"
-            element={<DeviceManagementPage />}
-          ></Route>
-          {/* <Route
-            exact
-            path="/test"
-            element={<ResizableDataTable />}
-          ></Route> */}
-        </Routes>
-    </Layout>
+    <Routes>
+      <Route exact path="/" element={<Login />}></Route>
+      <Route element={<Layout header={header} title={pageTitle}><Outlet/></Layout>}>
+        <Route
+          exact
+          path="/inventories"
+          element={<Inventories flagOffline={true} />}
+        ></Route>
+        <Route
+          exact
+          path="/inventoriesOnline"
+          element={<InventoriesOnline />}
+        ></Route>
+        <Route
+          exact
+          path="/managementDeviceInventories"
+          element={<Inventories />}
+        ></Route>
+        <Route
+          exact
+          path="/device-management"
+          element={<DeviceManagementPage />}
+        ></Route>
+        {/* <Route
+          exact
+          path="/test"
+          element={<ResizableDataTable />}
+        ></Route> */}
+      </Route>
+    </Routes>
   );
 }
 

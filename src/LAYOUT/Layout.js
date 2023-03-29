@@ -1,7 +1,7 @@
 import Header from "../features/header/components/Header";
 import Footer from "../features/footer/components/Footer";
 import styles from "./Layout.module.scss";
-import { MDBCard, MDBCardBody, MDBCardHeader } from "mdb-react-ui-kit";
+import { MDBCard, MDBContainer, MDBCardHeader } from "mdb-react-ui-kit";
 import './Layout.css'
 function Layout(props) {
   const { header, title } = props;
@@ -14,16 +14,21 @@ function Layout(props) {
         profile={header.profile}
         className={styles.mainHead}
       />
-      <div className={styles.content}>
-        <MDBCard className={styles.card}>
-          <MDBCardHeader className="headerCard-name">
-            {title}
-          </MDBCardHeader>
-          <MDBCardBody className={styles.cardBody}>
-            {props.children}
-          </MDBCardBody>
-        </MDBCard>
-      </div>
+      {title && (
+        <div className="main">
+          <div className={styles.content}>
+            <MDBContainer fluid style={{ padding: "1rem" }}>
+              <MDBCard className="bg-white mx-auto card-name">
+                <MDBCardHeader className="headerCard-name">
+                  {title}
+                </MDBCardHeader>
+              </MDBCard>
+              <div style={{ marginTop: "10px" }}></div>
+              <div>{props.children}</div>
+            </MDBContainer>
+          </div>
+        </div>
+      )}
 
       <Footer className={styles.mainFooter} />
     </div>

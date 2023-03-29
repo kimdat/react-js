@@ -6,6 +6,7 @@ import DataExecute from "./components/DataExecute/DataExecute";
 import Swal from "sweetalert2";
 import DevicesOnline from "./components/DeviceOnline/DeviceOnline";
 import { FILED_DEVICE_ONLINE } from "./ConstraintDivceOnline";
+import { FaRunning } from "react-icons/fa";
 
 const InventoriesOnline = () => {
   const childRef = createRef();
@@ -53,7 +54,12 @@ const InventoriesOnline = () => {
                   float: "right",
                 }}
               >
-                <MDBBtn size="sm" onClick={handleButtonClick}>
+                <MDBBtn
+                  size="sm"
+                  onClick={handleButtonClick}
+                  style={{ width: "120px" }}
+                >
+                  <FaRunning />
                   Execute
                 </MDBBtn>
               </div>

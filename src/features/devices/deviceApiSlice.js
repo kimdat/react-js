@@ -29,6 +29,16 @@ export const deviceApiSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: ["Devices"],
     }),
+    connectNewDevice: builder.mutation({
+      query: (newDevice) => {
+        return {
+          url: "api/connectDevices",
+          method: "POST",
+          body: newDevice,
+        };
+      },
+      invalidatesTags: ["Devices"],
+    }),
     editDevice: builder.mutation({
       query: ({deviceId, data}) => {
         return {
@@ -40,12 +50,15 @@ export const deviceApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ["Devices"],
     }),
     checkDuplicate: builder.query({
-      query: ({ip, deviceName}) => {
+      query: ({ip, deviceName, id}) => {
         const name = ip ? "Ip" : "DeviceName";
         const value = ip ? ip : deviceName;
         const formData = new FormData();
         formData.append("name", name);
         formData.append("value", value);
+        if (id) {
+          formData.append("id", id);
+        }
         return ({
           url: 'checkDuplicate',
           method: "POST",
@@ -84,7 +97,7 @@ export const deviceApiSlice = apiSlice.injectEndpoints({
         var today = new Date();
         var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
         var time = today.getHours() + "-" + today.getMinutes() + "-" + today.getSeconds();
-        
+
         //file name
         hiddenElement.download = `devices-${date}-${time}.xlsx`;
 
@@ -98,6 +111,7 @@ export const deviceApiSlice = apiSlice.injectEndpoints({
 export const {
   useLazyGetDevicesQuery,
   useAddNewDeviceMutation,
+  useConnectNewDeviceMutation,
   useDeleteDevicesMutation,
   useLazyCheckDuplicateQuery,
   useEditDeviceMutation,

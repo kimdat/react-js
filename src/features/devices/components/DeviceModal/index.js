@@ -20,11 +20,12 @@ const DeviceModal = (props) => {
     actionButton,
     actionFunc,
     isLoading,
+    connectNewDevice,
     isSuccess,
     isError,
     device,
-    hasDuplicateValidation,
     alertMessageFire,
+    deviceId,
   } = props;
 
   const [inputs, setInputs, getAllInputs, resetInputs] = useInputs(Object.values(fieldNames), device);
@@ -61,22 +62,31 @@ const DeviceModal = (props) => {
     if (data === null) return;
 
     //duplicate check
-    if (hasDuplicateValidation) {
-      const isDeviceNameDuplicate = await checkDuplicate({
-        deviceName: inputs(fieldNames.DEVICE_NAME),
-      }).unwrap();
-      setIsDeviceNameDuplicate(isDeviceNameDuplicate);
-      if (isDeviceNameDuplicate) {
-        return;
-      }
 
-      const isIpDuplicate = await checkDuplicate({
-        ip: inputs(fieldNames.IP),
-      }).unwrap();
-      setIsIpDuplicate(isIpDuplicate);
-      if (isIpDuplicate) {
-        return;
-      }
+    let checkingObject = {
+      deviceName: inputs(fieldNames.DEVICE_NAME),
+    }
+    if (deviceId) {
+      checkingObject.id = deviceId;
+    }
+
+    const isDeviceNameDuplicate = await checkDuplicate(checkingObject).unwrap();
+    setIsDeviceNameDuplicate(isDeviceNameDuplicate);
+    if (isDeviceNameDuplicate) {
+      return;
+    }
+
+    checkingObject = {
+      ip: inputs(fieldNames.IP),
+    }
+    if (deviceId) {
+      checkingObject.id = deviceId;
+    }
+
+    const isIpDuplicate = await checkDuplicate(checkingObject).unwrap();
+    setIsIpDuplicate(isIpDuplicate);
+    if (isIpDuplicate) {
+      return;
     }
       
     //post
@@ -84,6 +94,11 @@ const DeviceModal = (props) => {
       const res = await actionFunc(data).unwrap();
       console.log(res);
       alertMessageFire("success", res.message ? res.message : "Done!");
+      //connect api
+      if (connectNewDevice) {
+        const dataConnect = await connectNewDevice(res.devices).unwrap();
+        console.log(dataConnect);
+      }
     } catch (err) {
       console.log(err);
       alertMessageFire(
@@ -101,33 +116,27 @@ const DeviceModal = (props) => {
   React.useEffect(() => {
     resetInputs();
     resetValidator();
-    if (hasDuplicateValidation) {
-      setDuplicateStatesToDefault();
-    }
+    setDuplicateStatesToDefault();
   }, [open]);
 
   const deviceErrors = (fieldName) => {
     //check duplicate
-    if (hasDuplicateValidation) {
-      if (fieldName === fieldNames.IP && isIpDuplicate) {
-        return true;
-      }
-      if (fieldName === fieldNames.DEVICE_NAME && isDeviceNameDuplicate) {
-        return true;
-      }
+    if (fieldName === fieldNames.IP && isIpDuplicate) {
+      return true;
+    }
+    if (fieldName === fieldNames.DEVICE_NAME && isDeviceNameDuplicate) {
+      return true;
     }
     return errors(fieldName);
   };
 
   const deviceTexts = (fieldName) => {
     //check duplicate
-    if (hasDuplicateValidation) {
-      if (fieldName === fieldNames.IP && isIpDuplicate) {
-        return "This ip address already exists.";
-      }
-      if (fieldName === fieldNames.DEVICE_NAME && isDeviceNameDuplicate) {
-        return "This device name already exists.";
-      }
+    if (fieldName === fieldNames.IP && isIpDuplicate) {
+      return "This ip address already exists.";
+    }
+    if (fieldName === fieldNames.DEVICE_NAME && isDeviceNameDuplicate) {
+      return "This device name already exists.";
     }
     return texts(fieldName);
   };

@@ -29,8 +29,8 @@ const EditDeviceModal = (props) => {
       actionButton="Update"
       actionFunc={(data) => editDevice({deviceId, data})}
       device={device}
-      hasDuplicateValidation={false}
       alertMessageFire={alertMessageFire}
+      deviceId={deviceId}
     />
   );
 }

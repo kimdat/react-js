@@ -1,6 +1,6 @@
 import React from 'react';
 import DeviceModal from '../DeviceModal';
-import { useAddNewDeviceMutation } from "../../deviceApiSlice";
+import { useAddNewDeviceMutation, useConnectNewDeviceMutation } from "../../deviceApiSlice";
 import Swal from "sweetalert2";
 
 const AddDeviceModal = (props) => {
@@ -8,7 +8,7 @@ const AddDeviceModal = (props) => {
   const { trigger, provinces, regions } = props;
   const [addNewDevice, { isLoading, isSuccess, isError }] =
     useAddNewDeviceMutation();
-  
+  const [connectNewDevice] =useConnectNewDeviceMutation();
   const alertMessageFire = (status, msg) => {
     Swal.fire({
       icon: status,
@@ -30,6 +30,7 @@ const AddDeviceModal = (props) => {
       title="Add a new device"
       actionButton="Add"
       actionFunc={(data) => addNewDevice(data)}
+      connectNewDevice={(data)=>connectNewDevice(data)}
       hasDuplicateValidation={true}
       alertMessageFire={alertMessageFire}
     />

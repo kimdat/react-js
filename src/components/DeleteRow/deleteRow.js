@@ -24,16 +24,16 @@ const DeleteRow = React.memo(({ rowsId, loadData }) => {
       return;
     }
     const result = await Swal.fire({
-      title: "confirmDelete!Are you sure delete devices!",
-      icon: "error",
+      title: `Do you want to delete these devices?`,
+
+      icon: "question",
       html: `<div style="max-height:300px;overflow-y:auto"><div >${names.join(
         "<br/>"
       )}</div></div>`,
+
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
       confirmButtonText: "Yes",
-      cancelButtonText: "No",
+      confirmButtonColor: "#d33",
     });
     return result.isConfirmed;
   }, [names, rowsId]);
