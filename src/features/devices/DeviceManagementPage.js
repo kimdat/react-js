@@ -28,6 +28,7 @@ import {
 import { useLazyGetProvincesQuery } from "../province/provinceApiSlice";
 import { useGetAllRegionsQuery } from "../region/regionApiSlice";
 import { useGetAllDeviceStatusQuery } from "../deviceStatus/deviceStatusApiSlice";
+import { useGetAllDeviceTypesQuery } from "../deviceType/deviceTypeApiSlice";
 import Swal from "sweetalert2";
 import EditDeviceModal from "./components/EditDeviceModal";
 import "../../pages/Datatable.css";
@@ -64,6 +65,9 @@ const DeviceManagementPage = (props) => {
     isError: deviceStatusError,
     isSuccess: deviceStatusSuccess,
   } = useGetAllDeviceStatusQuery();
+  const {
+    data: deviceTypes,
+  } = useGetAllDeviceTypesQuery();
 
   const [
     deleteDevices,
@@ -201,6 +205,7 @@ const DeviceManagementPage = (props) => {
               selectAllToggleFunc={() => dispatch(selectAllToggle())}
               selectRowToggleFunc={(ip) => dispatch(selectRowToggle(ip))}
               deviceStatus={deviceStatus}
+              deviceTypes={deviceTypes}
               regions={regions}
               provinces={provinces}
               filters={filters}

@@ -8,7 +8,7 @@ export const deviceTypeApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
       transformResponse: (response) => {
-        return response.provinces;
+        return response.types;
       },
       providesTags: ["DeviceTypes"],
     }),
