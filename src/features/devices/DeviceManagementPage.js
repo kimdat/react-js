@@ -165,6 +165,7 @@ const DeviceManagementPage = (props) => {
           <AddDeviceModal
             provinces={provinces}
             regions={regions}
+            deviceTypes={deviceTypes}
             trigger={
               <MDBBtn type="button" size="sm" color="primary">
                 <div className={styles.buttonIcon}>
@@ -228,6 +229,7 @@ const DeviceManagementPage = (props) => {
           setOpen={setEditDeviceModalOpen}
           deviceId={editDeviceId}
           device={getDeviceById(editDeviceId)}
+          deviceTypes={deviceTypes}
         />
       </div>
   );

@@ -26,10 +26,11 @@ const DeviceModal = (props) => {
     device,
     alertMessageFire,
     deviceId,
+    deviceTypes,
   } = props;
 
   const [inputs, setInputs, getAllInputs, resetInputs] = useInputs(Object.values(fieldNames), device);
-
+  console.log(getAllInputs());
   const [getProvinces] = useLazyGetProvincesQuery();
 
   const regionId = inputs(fieldNames.REGION_ID);
@@ -156,6 +157,7 @@ const DeviceModal = (props) => {
               provinces={provinces}
               errors={deviceErrors}
               texts={deviceTexts}
+              deviceTypes={deviceTypes}
             />
             <div className={styles.actionButtonList}>
               <MDBBtn

@@ -4,7 +4,7 @@ import { useEditDeviceMutation } from "../../deviceApiSlice";
 import Swal from 'sweetalert2';
 
 const EditDeviceModal = (props) => {
-  const { provinces, regions, open, setOpen, deviceId, device } = props;
+  const { provinces, regions, open, setOpen, deviceId, device, deviceTypes } = props;
   const [editDevice, { isLoading, isSuccess, isError }] =
     useEditDeviceMutation();
   
@@ -31,6 +31,7 @@ const EditDeviceModal = (props) => {
       device={device}
       alertMessageFire={alertMessageFire}
       deviceId={deviceId}
+      deviceTypes={deviceTypes}
     />
   );
 }

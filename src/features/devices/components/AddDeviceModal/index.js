@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 
 const AddDeviceModal = (props) => {
   const [open, setOpen] = React.useState(false);
-  const { trigger, provinces, regions } = props;
+  const { trigger, provinces, regions, deviceTypes } = props;
   const [addNewDevice, { isLoading, isSuccess, isError }] =
     useAddNewDeviceMutation();
   const [connectNewDevice] =useConnectNewDeviceMutation();
@@ -33,6 +33,7 @@ const AddDeviceModal = (props) => {
       connectNewDevice={(data)=>connectNewDevice(data)}
       hasDuplicateValidation={true}
       alertMessageFire={alertMessageFire}
+      deviceTypes={deviceTypes}
     />
   );
 }

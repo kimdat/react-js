@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Form } from "react-bootstrap";
 import ReactInputMask from "react-input-mask";
-import { deviceType } from "../../data/constants";
 import styles from "./DeviceDetailsForm.module.scss";
 import classNames from "classnames";
 import { fieldNames } from "../../data/constants";
@@ -9,7 +8,7 @@ import { fieldNames } from "../../data/constants";
 const cx = classNames.bind(styles);
 
 const DeviceDetailsForm = (props) => {
-  const { inputs, setInputs, regions, provinces, errors, texts } =
+  const { inputs, setInputs, regions, provinces, deviceTypes, errors, texts } =
     props;
   const formConfigs = [
     {
@@ -31,7 +30,7 @@ const DeviceDetailsForm = (props) => {
     {
       type: "select",
       label: "Device type",
-      options: deviceType,
+      options: deviceTypes,
       id: "device_type_select",
       name: fieldNames.DEVICE_TYPE,
       required: true
@@ -92,11 +91,11 @@ const DeviceDetailsForm = (props) => {
               id={config.id}
               key={idx}
               value={inputs(config.name) ? inputs(config.name) : ""}
-              onChange={(e) => setInputs(config.name, e.target.value)}
+              onChange={(e) => setInputs(config.name, e.target.value?e.target.value:"")}
               isInvalid={errors(config.name)}
               aria-describedby={config.required?"required-description":""}
             >
-              <option>--</option>
+              <option value="">--</option>
               {config.options?.map((option, idx) => (
                 <option value={option.id} key={idx}>
                   {option.name}
