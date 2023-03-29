@@ -28,7 +28,7 @@ const InventoriesOnline = () => {
     const rowCheck = checkedRow.map((item) => {
       return {
         id: item[FILED_DEVICE_ONLINE.id].trim(),
-        device_type_S: item[FILED_DEVICE_ONLINE.Device_type_S].trim(),
+        device_type_S: item[FILED_DEVICE_ONLINE.Device_type_S]?.trim(),
         Ip: item[FILED_DEVICE_ONLINE.Ip].trim(),
         DeviceName: item[FILED_DEVICE_ONLINE.Name].trim(),
         port: 22,
@@ -59,7 +59,7 @@ const InventoriesOnline = () => {
                   onClick={handleButtonClick}
                   style={{ width: "120px" }}
                 >
-                  <FaRunning />
+                  <FaRunning style={{ marginRight: "5px" }}> </FaRunning>
                   Execute
                 </MDBBtn>
               </div>

@@ -76,10 +76,13 @@
 
 .pageSizeSelectorWrapper {
     font-size: .8rem;
+    opacity: 0;
+    pointer-events: none;
 }
 
 .paginationSelector {
     margin-left: .3rem;
+    float:"right"
 }
 
 .noDevicesMessage {

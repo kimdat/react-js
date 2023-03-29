@@ -1,10 +1,5 @@
 import React, { useEffect, lazy } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Outlet,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Layout from "./LAYOUT/Layout.js";
 import DeviceManagementPage from "./features/devices/DeviceManagementPage";
@@ -63,40 +58,26 @@ function App() {
       window.location.href = "/";
     }
   }, [isLoggedIn]);
+  const ProtectedRoute = (props) => {
+    const { path, element } = props;
+    return (
+      <Route
+        exact
+        path="/inventories"
+        element={
+          <Layout header={header} title="">
+            {<Inventories flagOffline={true} />}
+          </Layout>
+        }
+      ></Route>
+    );
+  };
 
   return (
     <Router>
       <Routes>
         <Route exact path="/" element={<Login />}></Route>
-        <Route
-          path="/"
-          element={
-            <Layout header={header} title="DEVICE INVENTORY">
-              <Outlet />
-            </Layout>
-          }
-        >
-          <Route
-            exact
-            path="/inventories"
-            element={<Inventories flagOffline={true} />}
-          />
-          <Route
-            exact
-            path="/inventoriesOnline"
-            element={<InventoriesOnline />}
-          />
-          <Route
-            exact
-            path="/managementDeviceInventories"
-            element={<Inventories />}
-          />
-          <Route
-            exact
-            path="/device-management"
-            element={<DeviceManagementPage />}
-          />
-        </Route>
+        <ProtectedRoute></ProtectedRoute>
       </Routes>
     </Router>
   );

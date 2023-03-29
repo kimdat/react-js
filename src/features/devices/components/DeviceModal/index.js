@@ -3,7 +3,10 @@ import DeviceDetailsForm from "../DeviceDetailsForm";
 import Modal from "../../../../components/common/Modal";
 import { MDBBtn } from "mdb-react-ui-kit";
 import styles from "./DeviceModal.module.scss";
-import { useLazyCheckDuplicateQuery } from "../../deviceApiSlice";
+import {
+  useConnectNewDeviceMutation,
+  useLazyCheckDuplicateQuery,
+} from "../../deviceApiSlice";
 import useFormValidator from "../../../../hooks/useFormValidator";
 import LoadingComponent from "./../../../../components/LoadingComponent/LoadingComponent";
 import { useInputs } from "../../../../hooks/useInputs";
@@ -20,6 +23,7 @@ const DeviceModal = (props) => {
     actionButton,
     actionFunc,
     isLoading,
+    connectNewDevice=()=>{},
     isSuccess,
     isError,
     device,
@@ -28,6 +32,7 @@ const DeviceModal = (props) => {
   } = props;
 
   const [inputs, setInputs, getAllInputs, resetInputs] = useInputs(
+
     Object.values(fieldNames),
     device
   );
@@ -42,8 +47,13 @@ const DeviceModal = (props) => {
     useFormValidator(deviceSchema);
 
   const actionHandler = async () => {
+  
     //validation
-    const data = await validate(getAllInputs());
+   
+    const input=getAllInputs();
+    //trim all value
+    Object.keys(input).forEach(k => input[k] = input[k].trim());
+    const data = await validate(input);
     if (data === null) return;
 
     //duplicate check
@@ -70,6 +80,13 @@ const DeviceModal = (props) => {
       const res = await actionFunc(data).unwrap();
       console.log(res);
       alertMessageFire("success", res.message ? res.message : "Done!");
+      //connect api
+      //neu ham rong return
+      if(typeof connectNewDevice()==="undefined")
+          return;
+      
+      const dataConnect = await connectNewDevice(res.devices).unwrap();
+      console.log(dataConnect);
     } catch (err) {
       console.log(err);
       alertMessageFire(

@@ -29,6 +29,16 @@ export const deviceApiSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: ["Devices"],
     }),
+    connectNewDevice: builder.mutation({
+      query: (newDevice) => {
+        return {
+          url: "api/connectDevices",
+          method: "POST",
+          body: newDevice,
+        };
+      },
+      invalidatesTags: ["Devices"],
+    }),
     editDevice: builder.mutation({
       query: ({ deviceId, data }) => {
         return {
@@ -76,6 +86,7 @@ export const deviceApiSlice = apiSlice.injectEndpoints({
 export const {
   useLazyGetDevicesQuery,
   useAddNewDeviceMutation,
+  useConnectNewDeviceMutation,
   useDeleteDevicesMutation,
   useLazyCheckDuplicateQuery,
   useEditDeviceMutation,
