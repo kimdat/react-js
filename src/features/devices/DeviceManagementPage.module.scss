@@ -15,7 +15,10 @@
 
 .buttonIcon {
     display: inline-block;
-    font-size: 1.2rem;
+
+    svg {
+        margin-right: 3px;
+    }
 }
 
 .pageContent {

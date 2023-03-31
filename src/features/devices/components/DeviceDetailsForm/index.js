@@ -91,7 +91,7 @@ const DeviceDetailsForm = (props) => {
               id={config.id}
               key={idx}
               value={inputs(config.name) ? inputs(config.name) : ""}
-              onChange={(e) => setInputs(config.name, e.target.value?e.target.value:"")}
+              onChange={(e) => setInputs(config.name, e.target.value ? e.target.value : "")}
               isInvalid={errors(config.name)}
               aria-describedby={config.required?"required-description":""}
             >

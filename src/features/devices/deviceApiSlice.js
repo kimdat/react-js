@@ -80,9 +80,11 @@ export const deviceApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ["Devices"],
     }),
     exportDevicesToFile: builder.query({
-      queryFn: async (_, __, ___, baseQuery) => {
+      queryFn: async (ids, __, ___, baseQuery) => {
         const result = await baseQuery({
           url: 'api/devices/export',
+          method: "POST",
+          body: {ids},
           responseHandler: ((response) => response.blob()),
         });
 

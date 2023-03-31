@@ -30,7 +30,7 @@ const DeviceModal = (props) => {
   } = props;
 
   const [inputs, setInputs, getAllInputs, resetInputs] = useInputs(Object.values(fieldNames), device);
-  console.log(getAllInputs());
+
   const [getProvinces] = useLazyGetProvincesQuery();
 
   const regionId = inputs(fieldNames.REGION_ID);
@@ -59,7 +59,10 @@ const DeviceModal = (props) => {
 
   const actionHandler = async () => {
     //validation
-    const data = await validate(getAllInputs());
+    const input = getAllInputs();
+    //trim all input in object
+    Object.keys(input).forEach((k) => (input[k] = input[k].trim()));
+    const data = await validate(input);
     if (data === null) return;
 
     //duplicate check

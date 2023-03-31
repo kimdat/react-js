@@ -155,7 +155,7 @@ const DeviceManagementPage = (props) => {
   const getDeviceById = (id) => devices.find((device) => device.Id === id);
 
   const onExportDevices = async () => {
-    await exportDevicesToFile().unwrap();
+    await exportDevicesToFile(selectedDeviceIdList).unwrap();
   }
 
   return (
@@ -170,6 +170,7 @@ const DeviceManagementPage = (props) => {
               <MDBBtn type="button" size="sm" color="primary">
                 <div className={styles.buttonIcon}>
                   <FontAwesomeIcon icon={faPlus} />
+                  Add
                 </div>
               </MDBBtn>
             }
@@ -184,17 +185,20 @@ const DeviceManagementPage = (props) => {
           >
             <div className={styles.buttonIcon}>
               <FontAwesomeIcon icon={faTrash} />
+              Delete
             </div>
           </MDBBtn>
           <MDBBtn
             className={styles.actionButton}
             type="button"
             size="sm"
-          color="info"
-          onClick={() => onExportDevices()}
+            color="info"
+            onClick={() => onExportDevices()}
+            disabled={hasNoRowSelected}
           >
             <div className={styles.buttonIcon}>
               <FontAwesomeIcon icon={faFileExcel} />
+              Export
             </div>
           </MDBBtn>
         </div>
