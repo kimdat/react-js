@@ -1,7 +1,7 @@
 import React from "react";
 import * as Yup from "yup";
 
-const useFormValidator = (schemas, milliseconds) => {
+const useFormValidator = (schemas, otherValidateFuncsConfig, milliseconds) => {
   const defaultState = {};
   const [state, updateState] = React.useState(defaultState);
 
@@ -12,6 +12,14 @@ const useFormValidator = (schemas, milliseconds) => {
       .validate(value)
       .then((result) => {
         commitResult(field, result);
+        otherValidateFuncsConfig.forEach(async (config) => {
+          if (field === config.inputName) {
+            const isValid = await config.validateFunc(value);
+            const message = isValid ? config.text : null;
+            commitResult(field, { message });
+            return;
+          }
+        });
       })
       .catch((result) => {
         commitResult(field, result);
@@ -20,7 +28,7 @@ const useFormValidator = (schemas, milliseconds) => {
 
   const commitResult = (field, result) => {
     let currentItem = state[field];
-    if (result instanceof Yup.ValidationError) {
+    if (result instanceof Yup.ValidationError || result.message) {
       // Error
       if (currentItem) {
         // First to avoid same result redraw
@@ -74,9 +82,7 @@ const useFormValidator = (schemas, milliseconds) => {
 
   // Return methods for manipulation
   return {
-    blurHandler: (event) => {
-      const { name, value } = event.currentTarget;
-
+    blurHandler: (name, value) => {
       delayChange(name, value);
     },
     changeHandler: (event) => {
@@ -94,6 +100,7 @@ const useFormValidator = (schemas, milliseconds) => {
       try {
         clearSeed();
         Object.keys(data).forEach((k) => (data[k] = data[k].trim()));
+
         return await schemas.validate(data, {
           strict: true,
           abortEarly: false,

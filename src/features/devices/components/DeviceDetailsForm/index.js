@@ -8,7 +8,7 @@ import { fieldNames } from "../../data/constants";
 const cx = classNames.bind(styles);
 
 const DeviceDetailsForm = (props) => {
-  const { inputs, setInputs, regions, provinces, deviceTypes, errors, texts } =
+  const { inputs, setInputs, regions, provinces, deviceTypes, errors, texts, blurHandler } =
     props;
   const formConfigs = [
     {
@@ -94,6 +94,7 @@ const DeviceDetailsForm = (props) => {
               onChange={(e) => setInputs(config.name, e.target.value ? e.target.value : "")}
               isInvalid={errors(config.name)}
               aria-describedby={config.required ? "required-description" : ""}
+              onBlur={() => blurHandler(config.name, inputs(config.name))}
             >
               <option value="">--</option>
               {config.options?.map((option, idx) => (
@@ -122,6 +123,7 @@ const DeviceDetailsForm = (props) => {
               <ReactInputMask
                 mask={config.mask}
                 onChange={(e) => setInputs(config.name, e.target.value)}
+                onBlur={() => blurHandler(config.name, inputs(config.name))}
               >
                 {(inputProps) => createInput(inputProps)}
               </ReactInputMask>
@@ -130,6 +132,7 @@ const DeviceDetailsForm = (props) => {
             element = createInput({
               value: config.value,
               onChange: (e) => setInputs(config.name, e.target.value),
+              onBlur: () => blurHandler(config.name, inputs(config.name))
             });
           }
         }

@@ -15,7 +15,6 @@ function Layout(props) {
         className={styles.mainHead}
       />
       {title && (
-        <div className="main">
           <div className={styles.content}>
             <MDBContainer fluid style={{ padding: "1rem" }}>
               <MDBCard className="bg-white mx-auto card-name">
@@ -27,7 +26,6 @@ function Layout(props) {
               <div>{props.children}</div>
             </MDBContainer>
           </div>
-        </div>
       )}
 
       <Footer className={styles.mainFooter} />

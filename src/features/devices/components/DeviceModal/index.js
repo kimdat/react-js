@@ -58,7 +58,30 @@ const DeviceModal = (props) => {
     
   const [checkDuplicate] = useLazyCheckDuplicateQuery();
 
-  const { errors, texts, validate, resetValidator } = useFormValidator(deviceSchema);
+  const { errors, texts, validate, resetValidator, blurHandler } = useFormValidator(deviceSchema, [
+    {
+      inputName: fieldNames.IP,
+      validateFunc: async (value) => {
+        return await checkDuplicate({
+          name: fieldNames.IP,
+          value,
+          id: deviceId
+        }).unwrap();
+      },
+      text: "This ip address already exists."
+    },
+    {
+      inputName: fieldNames.DEVICE_NAME,
+      validateFunc: async (value) => {
+        return await checkDuplicate({
+          name: fieldNames.DEVICE_NAME,
+          value,
+          id: deviceId
+        }).unwrap();
+      },
+      text: "This device name already exists."
+    }
+  ]);
 
   const actionHandler = async () => {
   
@@ -72,27 +95,21 @@ const DeviceModal = (props) => {
 
     //duplicate check
 
-    let checkingObject = {
-      deviceName: inputs(fieldNames.DEVICE_NAME),
-    }
-    if (deviceId) {
-      checkingObject.id = deviceId;
-    }
-
-    const isDeviceNameDuplicate = await checkDuplicate(checkingObject).unwrap();
+    const isDeviceNameDuplicate = await checkDuplicate({
+      name: fieldNames.DEVICE_NAME,
+      value: inputs(fieldNames.DEVICE_NAME),
+      id: deviceId
+    }).unwrap();
     setIsDeviceNameDuplicate(isDeviceNameDuplicate);
     if (isDeviceNameDuplicate) {
       return;
     }
 
-    checkingObject = {
-      ip: inputs(fieldNames.IP),
-    }
-    if (deviceId) {
-      checkingObject.id = deviceId;
-    }
-
-    const isIpDuplicate = await checkDuplicate(checkingObject).unwrap();
+    const isIpDuplicate = await checkDuplicate({
+        name: fieldNames.IP,
+        value: inputs(fieldNames.IP),
+        id: deviceId
+      }).unwrap();
     setIsIpDuplicate(isIpDuplicate);
     if (isIpDuplicate) {
       return;
@@ -166,6 +183,7 @@ const DeviceModal = (props) => {
               errors={deviceErrors}
               texts={deviceTexts}
               deviceTypes={deviceTypes}
+              blurHandler={blurHandler}
             />
             <div className={styles.actionButtonList}>
               <MDBBtn

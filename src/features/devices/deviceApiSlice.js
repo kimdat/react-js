@@ -50,9 +50,7 @@ export const deviceApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ["Devices"],
     }),
     checkDuplicate: builder.query({
-      query: ({ip, deviceName, id}) => {
-        const name = ip ? "Ip" : "DeviceName";
-        const value = ip ? ip : deviceName;
+      query: ({name, value, id}) => {
         const formData = new FormData();
         formData.append("name", name);
         formData.append("value", value);
