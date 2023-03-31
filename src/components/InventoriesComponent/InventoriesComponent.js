@@ -293,9 +293,10 @@ const InventoriesComponent = React.memo(
     const PageSizeSelector = useCallback((props) => {
       const { onsizeChange, pageSizes } = props;
       return (
+        
         <Form.Group className={styles.pageSizeSelectorWrapper}>
           <label htmlFor="page-selector">Rows per page:</label>
-          <Form.Select
+          <Form.Select 
             id="page-selector"
             size="sm"
             onChange={(e) => onsizeChange(e.target.value)}
@@ -359,6 +360,7 @@ const InventoriesComponent = React.memo(
         </div>
         <div className={styles.paginationWrapper} style={{ margin: "0px  " }}>
           <PageSizeSelector
+          
             onsizeChange={handleRowsPerPageChange}
             pageSizes={[10, 15, 20, 25, 30]}
           />

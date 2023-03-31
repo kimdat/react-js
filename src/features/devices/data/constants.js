@@ -2,20 +2,20 @@
 import * as Yup from 'yup';
 
 export const fieldNames = {
-    ID: "Id",
-    DEVICE_NAME: "DeviceName",
-    IP: "Ip",
-    STATUS: "status",
-    DEVICE_TYPE: "Device_Type",
-    REGION_ID: "region_id",
-    PROVINCE_ID: "province_id",
-    LONG: "long",
-    LAT: "lat",
-    ADDRESS: "address"
-}
+  ID: "Id",
+  DEVICE_NAME: "DeviceName",
+  IP: "Ip",
+  STATUS: "status",
+  DEVICE_TYPE: "Device_Type",
+  REGION_ID: "region_id",
+  PROVINCE_ID: "province_id",
+  LONG: "long",
+  LAT: "lat",
+  ADDRESS: "address",
+};
 
 const ipAddrRegExp =
-    /^(?=\d+\.\d+\.\d+\.\d+$)(?:(?:25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\.?){4}$/;
+  /^(?=\d+\.\d+\.\d+\.\d+$)(?:(?:25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\.?){4}$/;
 export const deviceSchema = Yup.object().shape({
     [fieldNames.DEVICE_NAME]: Yup.string().trim().required("Device name is required."),
     [fieldNames.IP]: Yup.string().trim().required("IP address is required.").matches(ipAddrRegExp, 'IP address is invalid.'),
@@ -26,5 +26,5 @@ export const deviceSchema = Yup.object().shape({
     [fieldNames.LAT]: Yup.string(),
     [fieldNames.ADDRESS]: Yup.string(),
 });
-  
+
 export const pageSizes = [10, 15, 20, 25, 30];

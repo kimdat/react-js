@@ -187,6 +187,7 @@ const InventoriesChild = React.memo(({ data, flagOffline }) => {
         pageRows,
         flagShowChild
       );
+
       if (flagShowChild) {
         setIsExpandedAll(false);
         //RowExpand

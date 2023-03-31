@@ -17,7 +17,7 @@ const DeviceDetailsForm = (props) => {
       label: "Device Name",
       id: "device_name_input",
       name: fieldNames.DEVICE_NAME,
-      required: true
+      required: true,
     },
     {
       type: "text",
@@ -25,7 +25,7 @@ const DeviceDetailsForm = (props) => {
       label: "IP",
       id: "ip_loopback_input",
       name: fieldNames.IP,
-      required: true
+      required: true,
     },
     {
       type: "select",
@@ -33,7 +33,7 @@ const DeviceDetailsForm = (props) => {
       options: deviceTypes,
       id: "device_type_select",
       name: fieldNames.DEVICE_TYPE,
-      required: true
+      required: true,
     },
     {
       type: "select",
@@ -41,7 +41,7 @@ const DeviceDetailsForm = (props) => {
       options: regions,
       id: "region_select",
       name: fieldNames.REGION_ID,
-      required: true
+      required: true,
     },
     {
       type: "select",
@@ -49,7 +49,7 @@ const DeviceDetailsForm = (props) => {
       options: provinces,
       id: "province_select",
       name: fieldNames.PROVINCE_ID,
-      required: true
+      required: true,
     },
     {
       type: "text",
@@ -58,7 +58,7 @@ const DeviceDetailsForm = (props) => {
       label: "Longitude",
       id: "longitude_input",
       name: fieldNames.LONG,
-      required: false
+      required: false,
     },
     {
       type: "text",
@@ -67,14 +67,14 @@ const DeviceDetailsForm = (props) => {
       label: "Latitude",
       id: "latitude_input",
       name: fieldNames.LAT,
-      required: false
+      required: false,
     },
     {
       type: "text",
       label: "Address",
       id: "address_input",
       name: fieldNames.ADDRESS,
-      required: false
+      required: false,
     },
   ];
   return (
@@ -93,7 +93,7 @@ const DeviceDetailsForm = (props) => {
               value={inputs(config.name) ? inputs(config.name) : ""}
               onChange={(e) => setInputs(config.name, e.target.value ? e.target.value : "")}
               isInvalid={errors(config.name)}
-              aria-describedby={config.required?"required-description":""}
+              aria-describedby={config.required ? "required-description" : ""}
             >
               <option value="">--</option>
               {config.options?.map((option, idx) => (
@@ -114,7 +114,7 @@ const DeviceDetailsForm = (props) => {
               size="sm"
               isInvalid={errors(config.name)}
               value={inputs(config.name) ? inputs(config.name) : ""}
-              aria-describedby={config.required?"required-description":""}
+              aria-describedby={config.required ? "required-description" : ""}
             />
           );
           if (config.mask) {
@@ -135,11 +135,13 @@ const DeviceDetailsForm = (props) => {
         }
         return (
           <Form.Group className={styles.formGroup} key={config.id}>
-            <Form.Label className={styles.formLabel} htmlFor={config.id} required={config.required}>
+            <Form.Label
+              className={styles.formLabel}
+              htmlFor={config.id}
+              required={config.required}
+            >
               {config.label}
-              {config.required && 
-                <span className={styles.required}>*</span>
-              }
+              {config.required && <span className={styles.required}>*</span>}
             </Form.Label>
             {element}
             {texts(config.name) && (
@@ -150,7 +152,11 @@ const DeviceDetailsForm = (props) => {
           </Form.Group>
         );
       })}
-      <p aria-hidden={true} className={styles.requiredDescription} id="required-description">
+      <p
+        aria-hidden={true}
+        className={styles.requiredDescription}
+        id="required-description"
+      >
         <span className={styles.required}>*</span>Required field
       </p>
     </Form>

@@ -1,6 +1,9 @@
-import React from 'react';
-import DeviceModal from '../DeviceModal';
-import { useAddNewDeviceMutation, useConnectNewDeviceMutation } from "../../deviceApiSlice";
+import React from "react";
+import DeviceModal from "../DeviceModal";
+import {
+  useAddNewDeviceMutation,
+  useConnectNewDeviceMutation,
+} from "../../deviceApiSlice";
 import Swal from "sweetalert2";
 
 const AddDeviceModal = (props) => {
@@ -8,7 +11,7 @@ const AddDeviceModal = (props) => {
   const { trigger, provinces, regions, deviceTypes } = props;
   const [addNewDevice, { isLoading, isSuccess, isError }] =
     useAddNewDeviceMutation();
-  const [connectNewDevice] =useConnectNewDeviceMutation();
+  const [connectNewDevice] = useConnectNewDeviceMutation();
   const alertMessageFire = (status, msg) => {
     Swal.fire({
       icon: status,
@@ -19,8 +22,8 @@ const AddDeviceModal = (props) => {
 
   return (
     <DeviceModal
-      open={ open}
-      setOpen={ setOpen }
+      open={open}
+      setOpen={setOpen}
       trigger={trigger}
       provinces={provinces}
       regions={regions}
@@ -30,12 +33,12 @@ const AddDeviceModal = (props) => {
       title="Add a new device"
       actionButton="Add"
       actionFunc={(data) => addNewDevice(data)}
-      connectNewDevice={(data)=>connectNewDevice(data)}
+      connectNewDevice={(data) => connectNewDevice(data)}
       hasDuplicateValidation={true}
       alertMessageFire={alertMessageFire}
       deviceTypes={deviceTypes}
     />
   );
-}
+};
 
 export default AddDeviceModal;

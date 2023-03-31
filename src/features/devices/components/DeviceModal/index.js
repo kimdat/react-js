@@ -3,7 +3,10 @@ import DeviceDetailsForm from "../DeviceDetailsForm";
 import Modal from "../../../../components/common/Modal";
 import { MDBBtn } from "mdb-react-ui-kit";
 import styles from "./DeviceModal.module.scss";
-import { useLazyCheckDuplicateQuery } from "../../deviceApiSlice";
+import {
+  useConnectNewDeviceMutation,
+  useLazyCheckDuplicateQuery,
+} from "../../deviceApiSlice";
 import useFormValidator from "../../../../hooks/useFormValidator";
 import LoadingComponent from "./../../../../components/LoadingComponent/LoadingComponent";
 import { useInputs } from "../../../../hooks/useInputs";
@@ -58,10 +61,12 @@ const DeviceModal = (props) => {
   const { errors, texts, validate, resetValidator } = useFormValidator(deviceSchema);
 
   const actionHandler = async () => {
+  
     //validation
-    const input = getAllInputs();
-    //trim all input in object
-    Object.keys(input).forEach((k) => (input[k] = input[k].trim()));
+   
+    const input=getAllInputs();
+    //trim all value
+    Object.keys(input).forEach(k => input[k] = input[k].trim());
     const data = await validate(input);
     if (data === null) return;
 
